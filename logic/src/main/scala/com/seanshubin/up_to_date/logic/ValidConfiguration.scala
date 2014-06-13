@@ -6,8 +6,5 @@ case class ValidConfiguration(pomDirectories: Seq[String],
                               ignore: Seq[Seq[String]],
                               reportDirectory: String,
                               cacheDirectory: String,
-                              expireCache: String)
+                              cacheExpireMilliseconds: Long)
 
-object ValidConfiguration {
-  val Empty = ValidConfiguration(Seq(), Seq(), Seq(), Seq(), ".", ".", "0")
-}

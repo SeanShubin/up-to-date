@@ -2,6 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
+
 import scala.collection.mutable.ArrayBuffer
 
 class NotificationsTest extends FunSuite with EasyMockSugar {
