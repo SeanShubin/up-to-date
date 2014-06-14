@@ -11,5 +11,6 @@ trait LauncherWiring {
   lazy val notifications: Notifications = new LineEmittingNotifications(emitLine)
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl()
   lazy val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(fileSystem, jsonMarshaller)
-  lazy val launcher: Launcher = new LauncherImpl(commandLineArguments, configurationValidator, ???, notifications)
+  lazy val runnerFactory: RunnerFactory = new RunnerFactoryImpl
+  lazy val launcher: Launcher = new LauncherImpl(commandLineArguments, configurationValidator, runnerFactory, notifications)
 }

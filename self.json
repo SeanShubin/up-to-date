@@ -1,0 +1,5 @@
+{
+    "reportDirectory": "generated/self/report",
+    "cacheDirectory": "generated/cache",
+    "cacheExpire": "5 days"
+}
