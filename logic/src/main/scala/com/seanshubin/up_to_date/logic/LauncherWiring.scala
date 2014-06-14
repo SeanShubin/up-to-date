@@ -5,6 +5,11 @@ trait LauncherWiring {
 
   def emitLine: String => Unit
 
+  def fileSystem: FileSystem
+
+  lazy val charsetName: String = "UTF-8"
   lazy val notifications: Notifications = new LineEmittingNotifications(emitLine)
-  lazy val launcher: Launcher = new LauncherImpl(commandLineArguments, ???, ???, notifications)
+  lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl()
+  lazy val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(fileSystem, jsonMarshaller)
+  lazy val launcher: Launcher = new LauncherImpl(commandLineArguments, configurationValidator, ???, notifications)
 }
