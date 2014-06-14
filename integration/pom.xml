@@ -9,6 +9,11 @@
     <name>up_to_date-integration</name>
     <dependencies>
         <dependency>
+            <groupId>com.seanshubin</groupId>
+            <artifactId>up_to_date-logic</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
