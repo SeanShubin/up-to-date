@@ -18,4 +18,8 @@ object SampleData {
     cacheDirectory = "cache directory",
     cacheExpireMilliseconds = DurationFormat.MillisecondsFormat.parse("5 days")
   )
+  val existingDependencies: ExistingDependencies = null
+  val latestDependencies: LatestDependencies = null
+  val outOfDate: OutOfDate = null
+  val automaticUpgradesPerformed: AutomaticUpgradesPerformed = null
 }

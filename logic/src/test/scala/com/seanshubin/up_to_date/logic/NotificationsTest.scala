@@ -21,4 +21,18 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     assert(lines(1) === "line 1")
     assert(lines(2) === "line 2")
   }
+
+  test("time taken") {
+    //given
+    val lines = new ArrayBuffer[String]()
+    def emitLine(line: String) = lines.append(line)
+    val notifications = new LineEmittingNotifications(emitLine)
+
+    //when
+    notifications.timeTaken(4000, 7000)
+
+    //then
+    assert(lines.size === 1)
+    assert(lines(0) === "Total time taken: 3 seconds")
+  }
 }

@@ -1,8 +1,9 @@
 package com.seanshubin.up_to_date.integration
 
-import com.seanshubin.up_to_date.logic.FileSystem
-import java.nio.file.{Files, Paths}
 import java.nio.charset.Charset
+import java.nio.file.{Files, Paths}
+
+import com.seanshubin.up_to_date.logic.FileSystem
 
 class FileSystemImpl(charsetName: String) extends FileSystem {
   private val charset = Charset.forName(charsetName)

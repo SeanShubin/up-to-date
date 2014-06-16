@@ -1,7 +1,8 @@
 package com.seanshubin.up_to_date.integration
 
-import org.scalatest.FunSuite
 import java.nio.file.Paths
+
+import org.scalatest.FunSuite
 
 class FileSystemTest extends FunSuite {
   test("store and load file") {

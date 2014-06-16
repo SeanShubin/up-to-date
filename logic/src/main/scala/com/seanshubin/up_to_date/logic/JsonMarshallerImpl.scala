@@ -1,10 +1,12 @@
 package com.seanshubin.up_to_date.logic
 
-import com.fasterxml.jackson.databind.{SerializationFeature, DeserializationFeature, ObjectMapper}
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.annotation.JsonInclude
 import java.io.StringWriter
+
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper, SerializationFeature}
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+
 import scala.collection.JavaConversions
 
 class JsonMarshallerImpl extends JsonMarshaller {

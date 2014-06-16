@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.console
 
-import com.seanshubin.up_to_date.logic.{FileSystem, LauncherWiring}
 import com.seanshubin.up_to_date.integration.FileSystemImpl
+import com.seanshubin.up_to_date.logic.{FileSystem, LauncherWiring}
 
 object ConsoleApplication extends App {
   val launcherWiring = new LauncherWiring {
