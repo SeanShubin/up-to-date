@@ -8,18 +8,18 @@ class LauncherTest extends FunSuite with EasyMockSugar {
     val commandLineArguments = Seq("some configuration file")
     val configurationValidator = mock[ConfigurationValidator]
     val validConfiguration = SampleData.validConfiguration
-    val runnerFactory = mock[RunnerFactory]
+    val createRunner = mock[ValidConfiguration => Runner]
     val runner = mock[Runner]
     val notifications = mock[Notifications]
-    val launcher = new LauncherImpl(commandLineArguments, configurationValidator, runnerFactory, notifications)
+    val launcher = new LauncherImpl(commandLineArguments, configurationValidator, createRunner, notifications)
 
     expecting {
       configurationValidator.validate(commandLineArguments).andReturn(Right(validConfiguration))
-      runnerFactory.create(validConfiguration).andReturn(runner)
+      createRunner(validConfiguration).andReturn(runner)
       runner.run()
     }
 
-    whenExecuting(configurationValidator, runnerFactory, runner) {
+    whenExecuting(configurationValidator, createRunner, runner) {
       launcher.launch()
     }
   }
@@ -29,8 +29,8 @@ class LauncherTest extends FunSuite with EasyMockSugar {
     val configurationValidator = mock[ConfigurationValidator]
     val errorReport = Seq("error with configuration")
     val notifications = mock[Notifications]
-    val runnerFactory = mock[RunnerFactory]
-    val launcher = new LauncherImpl(commandLineArguments, configurationValidator, runnerFactory, notifications)
+    val createRunner = mock[ValidConfiguration => Runner]
+    val launcher = new LauncherImpl(commandLineArguments, configurationValidator, createRunner, notifications)
 
     expecting {
       configurationValidator.validate(commandLineArguments).andReturn(Left(errorReport))
