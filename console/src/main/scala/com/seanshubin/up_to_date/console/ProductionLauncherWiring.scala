@@ -1,8 +1,7 @@
 package com.seanshubin.up_to_date.console
 
-import com.seanshubin.up_to_date.logic._
 import com.seanshubin.up_to_date.integration.FileSystemImpl
-import com.seanshubin.up_to_date.logic.ValidConfiguration
+import com.seanshubin.up_to_date.logic.{ValidConfiguration, _}
 
 trait ProductionLauncherWiring {
   def commandLineArguments: Seq[String]

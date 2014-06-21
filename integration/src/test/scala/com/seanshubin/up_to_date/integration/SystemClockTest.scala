@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.integration
 
-import org.scalatest.{Matchers, FunSuite}
 import com.seanshubin.up_to_date.logic.SystemClock
+import org.scalatest.{FunSuite, Matchers}
 
 class SystemClockTest extends FunSuite with Matchers {
   test("the clock ticks") {
