@@ -6,9 +6,8 @@ import com.seanshubin.up_to_date.logic._
 trait ProductionLauncherWiring {
   def commandLineArguments: Seq[String]
 
-  def createRunner: ValidConfiguration => Runner =
+  lazy val createRunner: ValidConfiguration => Runner =
     validConfiguration => ProductionRunnerWiring(validConfiguration).runner
-
   lazy val charsetName: String = "UTF-8"
   lazy val emitLine: String => Unit = println
   lazy val fileSystem: FileSystem = new FileSystemImpl(charsetName)
