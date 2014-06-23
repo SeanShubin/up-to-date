@@ -1,14 +1,16 @@
 package com.seanshubin.up_to_date.console
 
 import com.seanshubin.up_to_date.integration.SystemClockImpl
-import com.seanshubin.up_to_date.logic.{ValidConfiguration, _}
+import com.seanshubin.up_to_date.logic._
 
 trait ProductionRunnerWiring {
   def validConfiguration: ValidConfiguration
 
   lazy val systemClock: SystemClock = new SystemClockImpl
   lazy val emitLine: String => Unit = println
-  lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl
+  lazy val pomFileFinder: PomFileFinder = ???
+  lazy val pomParser: PomParser = ???
+  lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
   lazy val upgrader: Upgrader = new UpgraderImpl
