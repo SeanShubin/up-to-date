@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.integration
 
 import java.nio.charset.Charset
-import java.nio.file.{Files, Paths}
+import java.nio.file.{FileVisitor, Path, Files, Paths}
 
 import com.seanshubin.up_to_date.logic.FileSystem
 
@@ -16,6 +16,10 @@ class FileSystemImpl(charsetName: String) extends FileSystem {
     new String(Files.readAllBytes(Paths.get(fileName)), charset)
   }
 
+  override def visit(start: Path, visitor: FileVisitor[Path]): Unit = {
+    Files.walkFileTree(start, visitor)
+  }
+
   def storeStringIntoFile(fileName: String, content: String): Unit = {
     Files.write(Paths.get(fileName), content.getBytes(charset))
   }
@@ -26,5 +30,9 @@ class FileSystemImpl(charsetName: String) extends FileSystem {
 
   def deleteFileIfExists(fileName: String): Unit = {
     Files.deleteIfExists(Paths.get(fileName))
+  }
+
+  def createDirectories(path: Path): Unit = {
+    Files.createDirectories(path)
   }
 }

@@ -1,10 +1,10 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.{FileVisitResult, Path}
+import java.nio.file.{FileVisitor, FileVisitResult, Path}
 import java.io.IOException
 import java.nio.file.attribute.BasicFileAttributes
 
-class PomVisitorImpl(name: String, excludeDirectories: Seq[String], found: String => Unit) extends PomVisitor {
+class PomVisitorImpl(name: String, excludeDirectories: Seq[String], found: String => Unit) extends FileVisitor[Path] {
   override def preVisitDirectory(directory: Path, attributes: BasicFileAttributes): FileVisitResult = {
     if (excludeDirectories.contains(directory.toFile.getName)) FileVisitResult.SKIP_SUBTREE
     else FileVisitResult.CONTINUE

@@ -1,6 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.{Path, Paths, FileVisitResult}
+import java.nio.file.{FileVisitor, Path, Paths, FileVisitResult}
 import org.scalatest.FunSuite
 import java.nio.file.attribute.BasicFileAttributes
 import java.io.{File, IOException}
@@ -13,7 +13,7 @@ class PomVisitorTest extends FunSuite {
 
     def found(file: String) = results.append(file)
 
-    val pomVisitor: PomVisitor = new PomVisitorImpl("pom.xml", Seq("target"), found)
+    val pomVisitor: FileVisitor[Path] = new PomVisitorImpl("pom.xml", Seq("target"), found)
     val stubAttributes: BasicFileAttributes = null
     val stubFile: Path = null
     val stubException: IOException = null

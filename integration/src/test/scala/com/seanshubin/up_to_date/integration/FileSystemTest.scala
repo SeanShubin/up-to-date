@@ -1,8 +1,11 @@
 package com.seanshubin.up_to_date.integration
 
-import java.nio.file.Paths
+import java.nio.file.{FileVisitor, Path, Paths}
 
 import org.scalatest.FunSuite
+import com.seanshubin.up_to_date.logic.PomVisitorImpl
+import scala.collection.mutable.ArrayBuffer
+import java.io.File
 
 class FileSystemTest extends FunSuite {
   test("store and load file") {
@@ -22,5 +25,20 @@ class FileSystemTest extends FunSuite {
 
     fileSystem.deleteFile(fileName)
     assert(fileSystem.fileExists(fileName) === false)
+  }
+
+  test("find pom files") {
+    val charsetName: String = "utf-8"
+    val fileSystem = new FileSystemImpl(charsetName)
+    val baseDir = Paths.get("target", "test-find-pom")
+    val samplePomFile = baseDir.resolve("pom.xml").toString
+    fileSystem.createDirectories(baseDir)
+    fileSystem.storeStringIntoFile(samplePomFile, "<xml/>")
+    val actual = new ArrayBuffer[String]()
+    def found(pomName: String) = actual.append(pomName)
+    val pomVisitor: FileVisitor[Path] = new PomVisitorImpl("pom.xml", Seq(), found)
+    val expected = Seq("target" + File.separator + "test-find-pom" + File.separator + "pom.xml")
+    fileSystem.visit(baseDir, pomVisitor)
+    assert(actual === expected)
   }
 }
