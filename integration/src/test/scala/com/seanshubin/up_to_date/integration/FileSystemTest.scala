@@ -1,11 +1,12 @@
 package com.seanshubin.up_to_date.integration
 
+import java.io.File
 import java.nio.file.{FileVisitor, Path, Paths}
 
-import org.scalatest.FunSuite
 import com.seanshubin.up_to_date.logic.PomVisitorImpl
+import org.scalatest.FunSuite
+
 import scala.collection.mutable.ArrayBuffer
-import java.io.File
 
 class FileSystemTest extends FunSuite {
   test("store and load file") {

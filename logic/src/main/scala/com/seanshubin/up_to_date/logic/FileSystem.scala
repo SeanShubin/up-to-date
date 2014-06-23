@@ -1,6 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.{Path, FileVisitor}
+import java.nio.file.{FileVisitor, Path}
 
 trait FileSystem {
   def fileExists(fileName: String): Boolean

@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.integration
 
 import java.nio.charset.Charset
-import java.nio.file.{FileVisitor, Path, Files, Paths}
+import java.nio.file.{FileVisitor, Files, Path, Paths}
 
 import com.seanshubin.up_to_date.logic.FileSystem
 

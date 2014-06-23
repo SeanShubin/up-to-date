@@ -1,9 +1,11 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.{FileVisitor, Path, Paths, FileVisitResult}
-import org.scalatest.FunSuite
-import java.nio.file.attribute.BasicFileAttributes
 import java.io.{File, IOException}
+import java.nio.file.attribute.BasicFileAttributes
+import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
+
+import org.scalatest.FunSuite
+
 import scala.collection.mutable.ArrayBuffer
 
 class PomVisitorTest extends FunSuite {

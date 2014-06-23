@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
-import java.security.MessageDigest
 import java.nio.charset.Charset
+import java.security.MessageDigest
 
 class Sha256(charsetName: String) extends OneWayHash {
   private val messageDigest = MessageDigest.getInstance("sha-256")

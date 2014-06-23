@@ -1,8 +1,8 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.{FileVisitor, FileVisitResult, Path}
 import java.io.IOException
 import java.nio.file.attribute.BasicFileAttributes
+import java.nio.file.{FileVisitResult, FileVisitor, Path}
 
 class PomVisitorImpl(name: String, excludeDirectories: Seq[String], found: String => Unit) extends FileVisitor[Path] {
   override def preVisitDirectory(directory: Path, attributes: BasicFileAttributes): FileVisitResult = {
