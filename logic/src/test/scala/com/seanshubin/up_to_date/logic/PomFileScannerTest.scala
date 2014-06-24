@@ -15,11 +15,11 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
     val samplePom2 = Paths.get("bar", "pom.xml")
     val samplePomFiles = Seq(samplePom1, samplePom2)
     val sampleDependencies1 = Seq(
-      Dependency.create("group 1", "artifact 1", "version 1"),
-      Dependency.create("group 2", "artifact 2", "version 2"))
+      Dependency("group 1", "artifact 1", "version 1"),
+      Dependency("group 2", "artifact 2", "version 2"))
     val sampleDependencies2 = Seq(
-      Dependency.create("group 3", "artifact 3", "version 3"),
-      Dependency.create("group 4", "artifact 4", "version 4"))
+      Dependency("group 3", "artifact 3", "version 3"),
+      Dependency("group 4", "artifact 4", "version 4"))
     val expected = ExistingDependencies(sampleDependencies1 ++ sampleDependencies2)
 
     expecting {
