@@ -7,5 +7,5 @@ trait FileSystem {
 
   def loadFileIntoString(fileName: String): String
 
-  def visit(start: Path, visitor: FileVisitor[Path])
+  def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path])
 }

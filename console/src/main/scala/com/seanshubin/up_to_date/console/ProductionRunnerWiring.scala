@@ -1,14 +1,20 @@
 package com.seanshubin.up_to_date.console
 
-import com.seanshubin.up_to_date.integration.SystemClockImpl
+import java.nio.charset.Charset
+
+import com.seanshubin.up_to_date.integration.{FileSystemImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic._
 
 trait ProductionRunnerWiring {
   def validConfiguration: ValidConfiguration
 
+  lazy val charsetName: String = "utf-8"
+  lazy val charset: Charset = Charset.forName(charsetName)
   lazy val systemClock: SystemClock = new SystemClockImpl
   lazy val emitLine: String => Unit = println
-  lazy val pomFileFinder: PomFileFinder = ???
+  lazy val fileSystem: FileSystem = new FileSystemImpl(charset)
+  lazy val pomFileFinder: PomFileFinder = new PomFileFinderImpl(
+    fileSystem, validConfiguration.pomFileName, validConfiguration.directoryNamesToSkip)
   lazy val pomParser: PomParser = ???
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl

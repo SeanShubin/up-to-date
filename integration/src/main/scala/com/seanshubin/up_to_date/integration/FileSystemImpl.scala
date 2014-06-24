@@ -5,9 +5,7 @@ import java.nio.file.{FileVisitor, Files, Path, Paths}
 
 import com.seanshubin.up_to_date.logic.FileSystem
 
-class FileSystemImpl(charsetName: String) extends FileSystem {
-  private val charset = Charset.forName(charsetName)
-
+class FileSystemImpl(charset: Charset) extends FileSystem {
   override def fileExists(fileName: String): Boolean = {
     Files.exists(Paths.get(fileName))
   }
@@ -16,7 +14,7 @@ class FileSystemImpl(charsetName: String) extends FileSystem {
     new String(Files.readAllBytes(Paths.get(fileName)), charset)
   }
 
-  override def visit(start: Path, visitor: FileVisitor[Path]): Unit = {
+  override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
     Files.walkFileTree(start, visitor)
   }
 
