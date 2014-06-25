@@ -14,14 +14,14 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(stubFileSystem, stubJsonMarshaller)
     val actual = configurationValidator.validate(Seq())
     val expected = Left(Seq("at least one command line argument required"))
-    assert(expected === actual)
+    assert(actual === expected)
   }
 
   test("no more than one command line argument allowed") {
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(stubFileSystem, stubJsonMarshaller)
     val actual = configurationValidator.validate(Seq("too", "many"))
     val expected = Left(Seq("no more than one command line argument allowed"))
-    assert(expected === actual)
+    assert(actual === expected)
   }
 
   test("configuration file must exist") {
@@ -35,7 +35,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     whenExecuting(fileSystem) {
       val actual = configurationValidator.validate(Seq("file name"))
       val expected = Left(Seq(s"file 'file name' does not exist"))
-      assert(expected === actual)
+      assert(actual === expected)
     }
   }
 
@@ -45,17 +45,22 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(fileSystem, jsonMarshaller)
     val malformedJsonString = "{  what! "
     val jsonError = new RuntimeException("Malformed json string")
+    val sampleConfigString = "some sample config"
 
     expecting {
       fileSystem.fileExists(fakeFile).andReturn(true)
       fileSystem.loadFileIntoString(fakeFile).andReturn(malformedJsonString)
       jsonMarshaller.fromJson(malformedJsonString, classOf[ConfigurationJson]).andThrow(jsonError)
+      jsonMarshaller.toJson(ConfigurationJson.sample).andReturn(sampleConfigString)
     }
 
     whenExecuting(fileSystem, jsonMarshaller) {
       val actual = configurationValidator.validate(Seq("file name"))
-      val expected = Left(Seq(s"Unable to read json from 'file name': Malformed json string"))
-      assert(expected === actual)
+      val expected = Left(Seq(
+        s"Unable to read json from 'file name': Malformed json string",
+        "A valid configuration might look something like this:",
+        sampleConfigString))
+      assert(actual === expected)
     }
   }
 
@@ -74,8 +79,8 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
 
     whenExecuting(fileSystem, jsonMarshaller) {
       val actual = configurationValidator.validate(Seq("file name"))
-      val expected = Left(List("reportDirectory must be specified"))
-      assert(expected === actual)
+      val expected = Left(List("reportDirectory is required"))
+      assert(actual === expected)
     }
   }
 
@@ -95,7 +100,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     whenExecuting(fileSystem, jsonMarshaller) {
       val actual = configurationValidator.validate(Seq("file name"))
       val expected = Right(SampleData.validConfiguration)
-      assert(expected === actual)
+      assert(actual === expected)
     }
   }
 }

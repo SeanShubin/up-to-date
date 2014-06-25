@@ -6,21 +6,21 @@ class ConfigurationJsonTest extends FunSuite {
 
   import com.seanshubin.up_to_date.logic.SampleData._
 
-  test("report directory must be specified") {
+  test("report directory is required") {
     val actual = configurationJsonComplete.copy(reportDirectory = None).validate()
-    val expected = Left(Seq("reportDirectory must be specified"))
+    val expected = Left(Seq("reportDirectory is required"))
     assert(expected === actual)
   }
 
-  test("cache directory must be specified") {
+  test("cache directory is required") {
     val actual = configurationJsonComplete.copy(cacheDirectory = None).validate()
-    val expected = Left(Seq("cacheDirectory must be specified"))
+    val expected = Left(Seq("cacheDirectory is required"))
     assert(expected === actual)
   }
 
-  test("cache expire must be specified") {
+  test("cache expire is required") {
     val actual = configurationJsonComplete.copy(cacheExpire = None).validate()
-    val expected = Left(Seq("cacheExpire must be specified"))
+    val expected = Left(Seq("cacheExpire is required"))
     assert(expected === actual)
   }
 
@@ -34,5 +34,14 @@ class ConfigurationJsonTest extends FunSuite {
     val actual = configurationJsonComplete.validate()
     val expected = Right(validConfiguration)
     assert(expected === actual)
+  }
+
+  test("directoryNamesToSkip is required") {
+    val parsedFromJson = SampleData.configurationJsonComplete.copy(directoryNamesToSkip = None)
+
+    val actual = parsedFromJson.validate()
+    val expected = Left(Seq("directoryNamesToSkip is required"))
+
+    assert(actual === expected)
   }
 }

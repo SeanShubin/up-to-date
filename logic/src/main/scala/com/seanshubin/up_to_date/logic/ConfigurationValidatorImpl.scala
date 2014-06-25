@@ -28,7 +28,13 @@ class ConfigurationValidatorImpl(fileSystem: FileSystem,
       val configurationJson = jsonMarshaller.fromJson(json, classOf[ConfigurationJson])
       configurationJson.validate()
     } catch {
-      case ex: RuntimeException => Left(Seq("Unable to read json from 'file name': " + ex.getMessage))
+      case ex: Exception =>
+        val sampleConfigString = jsonMarshaller.toJson(ConfigurationJson.sample)
+        Left(Seq(
+          "Unable to read json from 'file name': " + ex.getMessage,
+          "A valid configuration might look something like this:",
+          sampleConfigString
+        ))
     }
   }
 }
