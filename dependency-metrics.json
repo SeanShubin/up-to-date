@@ -24,7 +24,7 @@
     },
     "packageLimits": {
         "depth": 3,
-        "complexity": 2,
+        "complexity": 10,
         "cycleCount": 0
     },
     "failIfAnyLimitExceeded": true

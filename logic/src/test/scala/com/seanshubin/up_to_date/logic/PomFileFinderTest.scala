@@ -6,6 +6,7 @@ import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
 
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
+import org.w3c.dom.Document
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -15,9 +16,11 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
   val stubException: IOException = null
 
   abstract class FakeFileSystem extends FileSystem {
-    override def fileExists(fileName: String): Boolean = ???
+    override def fileExists(path: Path): Boolean = ???
 
-    override def loadFileIntoString(fileName: String): String = ???
+    override def loadFileIntoString(path: Path): String = ???
+
+    override def loadFileIntoDocument(path: Path): Document = ???
   }
 
   test("trigger found if matches") {

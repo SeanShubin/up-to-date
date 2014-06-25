@@ -1,12 +1,16 @@
 package com.seanshubin.up_to_date.logic
 
+import java.nio.file.{Path, Paths}
+
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
 class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
+  val stubFileSystem: FileSystem = null
+  val stubJsonMarshaller: JsonMarshaller = null
+  val fakeFile: Path = Paths.get("file name")
+
   test("at least one command line argument required") {
-    val stubFileSystem: FileSystem = null
-    val stubJsonMarshaller: JsonMarshaller = null
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(stubFileSystem, stubJsonMarshaller)
     val actual = configurationValidator.validate(Seq())
     val expected = Left(Seq("at least one command line argument required"))
@@ -14,8 +18,6 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
   }
 
   test("no more than one command line argument allowed") {
-    val stubFileSystem: FileSystem = null
-    val stubJsonMarshaller: JsonMarshaller = null
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(stubFileSystem, stubJsonMarshaller)
     val actual = configurationValidator.validate(Seq("too", "many"))
     val expected = Left(Seq("no more than one command line argument allowed"))
@@ -23,12 +25,11 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
   }
 
   test("configuration file must exist") {
-    val stubJsonMarshaller: JsonMarshaller = null
     val fileSystem: FileSystem = mock[FileSystem]
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(fileSystem, stubJsonMarshaller)
 
     expecting {
-      fileSystem.fileExists("file name").andReturn(false)
+      fileSystem.fileExists(fakeFile).andReturn(false)
     }
 
     whenExecuting(fileSystem) {
@@ -46,8 +47,8 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val jsonError = new RuntimeException("Malformed json string")
 
     expecting {
-      fileSystem.fileExists("file name").andReturn(true)
-      fileSystem.loadFileIntoString("file name").andReturn(malformedJsonString)
+      fileSystem.fileExists(fakeFile).andReturn(true)
+      fileSystem.loadFileIntoString(fakeFile).andReturn(malformedJsonString)
       jsonMarshaller.fromJson(malformedJsonString, classOf[ConfigurationJson]).andThrow(jsonError)
     }
 
@@ -66,8 +67,8 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val parsedFromJson = SampleData.configurationJsonComplete.copy(reportDirectory = None)
 
     expecting {
-      fileSystem.fileExists("file name").andReturn(true)
-      fileSystem.loadFileIntoString("file name").andReturn(jsonString)
+      fileSystem.fileExists(fakeFile).andReturn(true)
+      fileSystem.loadFileIntoString(fakeFile).andReturn(jsonString)
       jsonMarshaller.fromJson(jsonString, classOf[ConfigurationJson]).andReturn(parsedFromJson)
     }
 
@@ -86,8 +87,8 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val parsedFromJson = SampleData.configurationJsonComplete
 
     expecting {
-      fileSystem.fileExists("file name").andReturn(true)
-      fileSystem.loadFileIntoString("file name").andReturn(jsonString)
+      fileSystem.fileExists(fakeFile).andReturn(true)
+      fileSystem.loadFileIntoString(fakeFile).andReturn(jsonString)
       jsonMarshaller.fromJson(jsonString, classOf[ConfigurationJson]).andReturn(parsedFromJson)
     }
 

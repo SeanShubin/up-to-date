@@ -1,5 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
+import java.nio.file.{Path, Paths}
+
 class ConfigurationValidatorImpl(fileSystem: FileSystem,
                                  jsonMarshaller: JsonMarshaller) extends ConfigurationValidator {
   override def validate(commandLineArguments: Seq[String]): Either[Seq[String], ValidConfiguration] = {
@@ -8,16 +10,16 @@ class ConfigurationValidatorImpl(fileSystem: FileSystem,
     } else if (commandLineArguments.size > 1) {
       Left(Seq("no more than one command line argument allowed"))
     } else {
-      validateFile(commandLineArguments(0))
+      validateFile(Paths.get(commandLineArguments(0)))
     }
   }
 
-  private def validateFile(fileName: String): Either[Seq[String], ValidConfiguration] = {
-    if (fileSystem.fileExists(fileName)) {
-      val json = fileSystem.loadFileIntoString(fileName)
+  private def validateFile(path: Path): Either[Seq[String], ValidConfiguration] = {
+    if (fileSystem.fileExists(path)) {
+      val json = fileSystem.loadFileIntoString(path)
       validateJson(json)
     } else {
-      Left(Seq(s"file '$fileName' does not exist"))
+      Left(Seq(s"file '$path' does not exist"))
     }
   }
 

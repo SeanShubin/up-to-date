@@ -4,9 +4,9 @@ import java.nio.file.Path
 
 import org.w3c.dom.{Element, Node, NodeList}
 
-class PomParserImpl(xmlParser: XmlParser) extends PomParser {
+class PomParserImpl(fileSystem: FileSystem) extends PomParser {
   override def parseDependencies(path: Path): Seq[Dependency] = {
-    val document = xmlParser.parse(path)
+    val document = fileSystem.loadFileIntoDocument(path)
     val nodeList = document.getElementsByTagName("dependency")
     val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
     val nodeToDependency: Node => Option[Dependency] = pathAndNodeToDependency(path, _: Node)

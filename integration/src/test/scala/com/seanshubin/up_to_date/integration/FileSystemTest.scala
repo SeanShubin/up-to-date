@@ -6,6 +6,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
 
 import org.scalatest.FunSuite
+import org.w3c.dom.Document
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -19,26 +20,46 @@ class FileSystemTest extends FunSuite {
 
   test("store and load file") {
     val fileSystem = createFileSystem()
-    val fileName: String = Paths.get("target", "test-store-and-load-file.txt").toFile.getPath
+    val file: Path = Paths.get("target", "test-store-and-load-file.txt")
     val content: String = "Hello, world!"
-    fileSystem.deleteFileIfExists(fileName)
+    fileSystem.deleteFileIfExists(file)
 
-    assert(fileSystem.fileExists(fileName) === false)
+    assert(fileSystem.fileExists(file) === false)
 
-    fileSystem.storeStringIntoFile(fileName, content)
-    assert(fileSystem.fileExists(fileName) === true)
+    fileSystem.storeStringIntoFile(file, content)
+    assert(fileSystem.fileExists(file) === true)
 
-    val actual = fileSystem.loadFileIntoString(fileName)
+    val actual = fileSystem.loadFileIntoString(file)
     assert(content === actual)
 
-    fileSystem.deleteFile(fileName)
-    assert(fileSystem.fileExists(fileName) === false)
+    fileSystem.deleteFile(file)
+    assert(fileSystem.fileExists(file) === false)
+  }
+
+  test("store and load xml file") {
+    val fileSystem = createFileSystem()
+    val file: Path = Paths.get("target", "test-store-and-load-file.xml")
+    val content: String = "<xml>aaa</xml>"
+    fileSystem.deleteFileIfExists(file)
+
+    assert(fileSystem.fileExists(file) === false)
+
+    fileSystem.storeStringIntoFile(file, content)
+    assert(fileSystem.fileExists(file) === true)
+
+    val actual: Document = fileSystem.loadFileIntoDocument(file)
+    println(actual)
+    assert(actual.getDocumentElement.getNodeName === "xml")
+    assert(actual.getDocumentElement.getTextContent === "aaa")
+
+    fileSystem.deleteFile(file)
+    assert(fileSystem.fileExists(file) === false)
   }
 
   test("walk file tree") {
     val fileSystem = createFileSystem()
     val baseDir = Paths.get("target", "test-find-pom")
-    val samplePomFile = baseDir.resolve("pom.xml").toString
+    val samplePomFile = baseDir.resolve("pom.xml")
     fileSystem.createDirectories(baseDir)
     fileSystem.storeStringIntoFile(samplePomFile, "<xml/>")
     val found = new ArrayBuffer[Path]()

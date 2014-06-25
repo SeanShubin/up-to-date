@@ -2,10 +2,14 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.{FileVisitor, Path}
 
-trait FileSystem {
-  def fileExists(fileName: String): Boolean
+import org.w3c.dom.Document
 
-  def loadFileIntoString(fileName: String): String
+trait FileSystem {
+  def fileExists(path: Path): Boolean
+
+  def loadFileIntoString(path: Path): String
+
+  def loadFileIntoDocument(path: Path): Document
 
   def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path])
 }
