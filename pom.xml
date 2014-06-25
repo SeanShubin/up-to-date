@@ -10,6 +10,7 @@
     </properties>
     <modules>
         <module>logic</module>
+        <module>conversion</module>
         <module>integration</module>
         <module>console</module>
     </modules>
