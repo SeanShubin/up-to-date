@@ -17,7 +17,10 @@ trait ProductionRunnerWiring {
     fileSystem, validConfiguration.pomFileName, validConfiguration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(fileSystem)
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
-  lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl
+  lazy val http: Http = ???
+  lazy val metadataParser: MetadataParser = ???
+  lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
+    validConfiguration.mavenRepositories, http, metadataParser)
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
   lazy val upgrader: Upgrader = new UpgraderImpl
   lazy val reporter: Reporter = new ReporterImpl

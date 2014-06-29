@@ -22,8 +22,10 @@ object SampleData {
     cacheDirectory = "cache directory",
     cacheExpireMilliseconds = DurationFormat.MillisecondsFormat.parse("5 days")
   )
-  val existingDependencies: ExistingDependencies = null
-  val latestDependencies: LatestDependencies = null
+  val dependency1:Dependency = Dependency(".", "org.scala-lang", "scala-library", "2.11.1")
+  val dependency2:Dependency = Dependency(".", "joda-time", "joda-time", "2.3")
+  val existingDependencies: ExistingDependencies = ExistingDependencies(Set(dependency1, dependency2))
+  val latestDependencies: DependencyVersions = null
   val outOfDate: OutOfDate = null
   val automaticUpgradesPerformed: AutomaticUpgradesPerformed = null
 }

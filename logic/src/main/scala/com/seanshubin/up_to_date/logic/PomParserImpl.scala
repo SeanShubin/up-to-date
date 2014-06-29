@@ -5,12 +5,12 @@ import java.nio.file.Path
 import org.w3c.dom.{Element, Node, NodeList}
 
 class PomParserImpl(fileSystem: FileSystem) extends PomParser {
-  override def parseDependencies(path: Path): Seq[Dependency] = {
+  override def parseDependencies(path: Path): Set[Dependency] = {
     val document = fileSystem.loadFileIntoDocument(path)
     val nodeList = document.getElementsByTagName("dependency")
     val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
     val nodeToDependency: Node => Option[Dependency] = pathAndNodeToDependency(path, _: Node)
-    val dependencies = traversableNodeList.map(nodeToDependency).toSeq.flatten.toSeq
+    val dependencies = traversableNodeList.map(nodeToDependency).toSeq.flatten.toSet
     dependencies
   }
 

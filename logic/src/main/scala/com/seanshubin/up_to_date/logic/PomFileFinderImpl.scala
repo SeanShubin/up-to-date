@@ -7,7 +7,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import scala.collection.mutable.ArrayBuffer
 
 class PomFileFinderImpl(fileSystem: FileSystem, pomFileName: String, excludedDirectories: Seq[String]) extends PomFileFinder {
-  override def relevantPomFiles(): Seq[Path] = {
+  override def relevantPomFiles(): Set[Path] = {
     val files = new ArrayBuffer[Path]()
     fileSystem.walkFileTree(Paths.get("."), new FileVisitor[Path] {
       override def preVisitDirectory(directory: Path, attributes: BasicFileAttributes): FileVisitResult =
@@ -23,6 +23,6 @@ class PomFileFinderImpl(fileSystem: FileSystem, pomFileName: String, excludedDir
 
       override def postVisitDirectory(directory: Path, exception: IOException): FileVisitResult = FileVisitResult.CONTINUE
     })
-    files
+    files.toSet
   }
 }

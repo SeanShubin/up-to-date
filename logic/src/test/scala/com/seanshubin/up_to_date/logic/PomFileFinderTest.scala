@@ -33,7 +33,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Seq(file))
+    assert(found === Set(file))
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -47,7 +47,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Seq())
+    assert(found === Set())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -61,7 +61,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Seq())
+    assert(found === Set())
     assert(visitResults === Seq(FileVisitResult.SKIP_SUBTREE))
   }
 
@@ -74,7 +74,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Seq())
+    assert(found === Set())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -88,7 +88,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Seq())
+    assert(found === Set())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -101,7 +101,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Seq())
+    assert(found === Set())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 }
