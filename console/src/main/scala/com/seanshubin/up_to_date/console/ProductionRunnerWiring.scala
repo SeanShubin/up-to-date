@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.console
 
 import java.nio.charset.Charset
 
-import com.seanshubin.up_to_date.integration.{FileSystemImpl, SystemClockImpl}
+import com.seanshubin.up_to_date.integration.{HttpImpl, FileSystemImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic._
 
 trait ProductionRunnerWiring {
@@ -17,7 +17,7 @@ trait ProductionRunnerWiring {
     fileSystem, validConfiguration.pomFileName, validConfiguration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(fileSystem)
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
-  lazy val http: Http = ???
+  lazy val http: Http = new HttpImpl(charset)
   lazy val metadataParser: MetadataParser = ???
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
     validConfiguration.mavenRepositories, http, metadataParser)
