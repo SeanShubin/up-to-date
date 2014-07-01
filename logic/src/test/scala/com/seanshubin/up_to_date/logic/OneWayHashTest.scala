@@ -1,8 +1,11 @@
 package com.seanshubin.up_to_date.logic
 
+import java.nio.charset.StandardCharsets
+
 import org.scalatest.FunSuite
 
 class OneWayHashTest extends FunSuite {
+  val charset = StandardCharsets.UTF_8
   test("byte array to hex string") {
     val bytes: Array[Byte] = Array[Byte](-128, -127, -1, 0, 1, 127)
     val actual = OneWayHash.byteArrayToHexString(bytes)
@@ -11,7 +14,7 @@ class OneWayHashTest extends FunSuite {
   }
 
   test("same values have same hash") {
-    val oneWayHash: OneWayHash = new Sha256("utf-8")
+    val oneWayHash: OneWayHash = new Sha256(charset)
     val s1 = "foo"
     val s2 = "foo"
     val s1Hash = oneWayHash.toHexString(s1)
@@ -20,7 +23,7 @@ class OneWayHashTest extends FunSuite {
   }
 
   test("different values have different hash") {
-    val oneWayHash: OneWayHash = new Sha256("utf-8")
+    val oneWayHash: OneWayHash = new Sha256(charset)
     val s1 = "foo"
     val s2 = "bar"
     val s1Hash = oneWayHash.toHexString(s1)

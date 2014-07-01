@@ -6,7 +6,7 @@ import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemCl
 import com.seanshubin.up_to_date.logic._
 
 trait ProductionRunnerWiring {
-  def validConfiguration: ValidConfiguration
+  def configuration: ValidConfiguration
 
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
@@ -14,13 +14,16 @@ trait ProductionRunnerWiring {
   lazy val emitLine: String => Unit = println
   lazy val fileSystem: FileSystem = new FileSystemImpl(charset)
   lazy val pomFileFinder: PomFileFinder = new PomFileFinderImpl(
-    fileSystem, validConfiguration.pomFileName, validConfiguration.directoryNamesToSkip)
+    fileSystem, configuration.pomFileName, configuration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(fileSystem)
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
-  lazy val http: Http = new HttpImpl(charset, notifications)
+  lazy val httpDelegate: Http = new HttpImpl(charset, notifications)
+  lazy val oneWayHash: OneWayHash = new Sha256(charset)
+  lazy val http: Http = new HttpCache(
+    httpDelegate, oneWayHash, fileSystem, configuration.cacheDirectory, configuration.cacheExpireMilliseconds, systemClock, notifications)
   lazy val metadataParser: MetadataParser = new MetadataParserImpl(charset)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
-    validConfiguration.mavenRepositories, http, metadataParser)
+    configuration.mavenRepositories, http, metadataParser)
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
   lazy val upgrader: Upgrader = new UpgraderImpl
   lazy val reporter: Reporter = new ReporterImpl
@@ -31,6 +34,6 @@ trait ProductionRunnerWiring {
 
 object ProductionRunnerWiring {
   def apply(theValidConfiguration: ValidConfiguration) = new ProductionRunnerWiring {
-    override def validConfiguration: ValidConfiguration = theValidConfiguration
+    override def configuration: ValidConfiguration = theValidConfiguration
   }
 }

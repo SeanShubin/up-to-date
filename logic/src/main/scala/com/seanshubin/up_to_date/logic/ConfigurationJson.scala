@@ -1,5 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
+import java.nio.file.{Path, Paths}
+
 case class ConfigurationJson(pomFileName: Option[String],
                              directoriesToSearch: Option[Seq[String]],
                              directoryNamesToSkip: Option[Seq[String]],
@@ -24,13 +26,13 @@ case class ConfigurationJson(pomFileName: Option[String],
           val expireMilliseconds = DurationFormat.MillisecondsFormat.parse(theCacheExpire)
           Right(ValidConfiguration(
             thePomFileName,
-            theDirectoriesToSearch,
+            theDirectoriesToSearch.map(nameToPath),
             theDirectoryNamesToSkip,
             theMavenRepositories,
             theAutomaticallyUpdate,
             theIgnore,
-            theReportDirectory,
-            theCacheDirectory,
+            nameToPath(theReportDirectory),
+            nameToPath(theCacheDirectory),
             expireMilliseconds))
         } catch {
           case ex: RuntimeException => Left(Seq("unable to parse milliseconds for cacheExpire: " + ex.getMessage))
@@ -54,6 +56,8 @@ case class ConfigurationJson(pomFileName: Option[String],
       case None => Seq(message + " is required")
     }
   }
+
+  private def nameToPath(name: String): Path = Paths.get(name)
 }
 
 object ConfigurationJson {
