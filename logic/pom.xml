@@ -9,12 +9,6 @@
     <name>up_to_date-logic</name>
     <dependencies>
         <dependency>
-            <groupId>com.seanshubin</groupId>
-            <artifactId>up_to_date-conversion</artifactId>
-            <version>${parent.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
