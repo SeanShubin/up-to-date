@@ -15,7 +15,6 @@ class TestWebServer {
   var fakeCharset: Charset = _
   var actualMethod: String = _
   var actualPath: String = _
-  var port: Int = _
 
   class TestHandler extends AbstractHandler {
     override def handle(target: String,
@@ -31,14 +30,15 @@ class TestWebServer {
     }
   }
 
-  def start() {
+  def start(): Int = {
     val testHandler = new TestHandler()
     val serverSocket: ServerSocket = new ServerSocket(0)
-    port = serverSocket.getLocalPort
+    val port = serverSocket.getLocalPort
     serverSocket.close()
     server = new Server(port)
     server.setHandler(testHandler)
     server.start()
+    port
   }
 
   def stop() {

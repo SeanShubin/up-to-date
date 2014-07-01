@@ -3,19 +3,31 @@ package com.seanshubin.up_to_date.logic
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
+import scala.collection.mutable.ArrayBuffer
+
 class RunnerImplTest extends FunSuite with EasyMockSugar {
+
+  class FakeNotifications extends Notifications {
+    val timeTakenCalls = new ArrayBuffer[String]()
+
+    override def errorWithConfiguration(errorReport: Seq[String]): Unit = ???
+
+    override def timeTaken[T](caption: String)(block: => T): T = {
+      timeTakenCalls.append(caption)
+      block
+    }
+
+    override def httpGet(uriString: String): Unit = ???
+  }
+
   test("application flow") {
-    val arbitraryStartTime = 12345L
-    val arbitraryEndTime = 67890L
-    val systemClock: SystemClock = mock[SystemClock]
     val pomFileScanner = mock[PomFileScanner]
     val mavenRepositoryScanner = mock[MavenRepositoryScanner]
     val dependencyUpgradeAnalyzer = mock[DependencyUpgradeAnalyzer]
     val upgrader = mock[Upgrader]
     val reporter = mock[Reporter]
-    val notifications = mock[Notifications]
+    val notifications = new FakeNotifications
     val runner: Runner = new RunnerImpl(
-      systemClock,
       pomFileScanner,
       mavenRepositoryScanner,
       dependencyUpgradeAnalyzer,
@@ -23,18 +35,16 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       reporter,
       notifications)
     expecting {
-      systemClock.currentTimeMillis.andReturn(arbitraryStartTime)
       pomFileScanner.scanExistingDependencies().andReturn(SampleData.existingDependencies)
       mavenRepositoryScanner.scanLatestDependencies(SampleData.existingDependencies.toGroupAndArtifactSet).andReturn(SampleData.latestDependencies)
       dependencyUpgradeAnalyzer.outOfDate(SampleData.existingDependencies, SampleData.latestDependencies).andReturn(SampleData.outOfDate)
       upgrader.performAutomaticUpgrades(SampleData.outOfDate).andReturn(SampleData.automaticUpgradesPerformed)
-      systemClock.currentTimeMillis.andReturn(arbitraryEndTime)
-      reporter.reportAutomaticUpgradesPerformed(SampleData.automaticUpgradesPerformed, arbitraryEndTime)
+      reporter.reportAutomaticUpgradesPerformed(SampleData.automaticUpgradesPerformed)
       reporter.reportOutOfDate(SampleData.outOfDate)
-      notifications.timeTaken(arbitraryStartTime, arbitraryEndTime)
     }
-    whenExecuting(systemClock, pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications) {
+    whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()
     }
+    assert(notifications.timeTakenCalls === Seq("Total Time Taken"))
   }
 }

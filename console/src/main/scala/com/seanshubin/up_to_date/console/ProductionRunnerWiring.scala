@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.console
 
 import java.nio.charset.Charset
 
-import com.seanshubin.up_to_date.integration.{HttpImpl, FileSystemImpl, SystemClockImpl}
+import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic._
 
 trait ProductionRunnerWiring {
@@ -17,16 +17,16 @@ trait ProductionRunnerWiring {
     fileSystem, validConfiguration.pomFileName, validConfiguration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(fileSystem)
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
-  lazy val http: Http = new HttpImpl(charset)
-  lazy val metadataParser: MetadataParser = ???
+  lazy val http: Http = new HttpImpl(charset, notifications)
+  lazy val metadataParser: MetadataParser = new MetadataParserImpl(charset)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
     validConfiguration.mavenRepositories, http, metadataParser)
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
   lazy val upgrader: Upgrader = new UpgraderImpl
   lazy val reporter: Reporter = new ReporterImpl
-  lazy val notifications: Notifications = new LineEmittingNotifications(emitLine)
+  lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: RunnerImpl = new RunnerImpl(
-    systemClock, pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)
+    pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)
 }
 
 object ProductionRunnerWiring {
