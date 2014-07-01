@@ -1,11 +1,11 @@
 package com.seanshubin.up_to_date.integration
 
-import java.nio.charset.Charset
 import java.net.ServerSocket
-import org.eclipse.jetty.server.{Request, Server}
-import com.seanshubin.up_to_date.conversion.Conversion
+import java.nio.charset.Charset
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
+
 import org.eclipse.jetty.server.handler.AbstractHandler
-import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import org.eclipse.jetty.server.{Request, Server}
 
 class TestWebServer {
   private var server: Server = _
@@ -27,7 +27,7 @@ class TestWebServer {
       baseRequest.setHandled(true)
       httpServletResponse.setStatus(fakeStatus)
       httpServletResponse.setCharacterEncoding(fakeCharset.name())
-      Conversion.stringToWriter(fakeContent, httpServletResponse.getWriter)
+      IoUtil.stringToWriter(fakeContent, httpServletResponse.getWriter)
     }
   }
 
