@@ -1,5 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
+import java.nio.file.Path
+
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
@@ -18,6 +20,8 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     }
 
     override def httpGet(uriString: String): Unit = ???
+
+    override def httpGetFromCache(uriString: String, path: Path): Unit = ???
   }
 
   test("application flow") {

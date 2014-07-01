@@ -4,7 +4,7 @@ import java.io.{Closeable, InputStream}
 import java.nio.charset.Charset
 import java.nio.file.{FileVisitor, Files, Path}
 
-import com.seanshubin.up_to_date.logic.{DocumentUtil, FileSystem}
+import com.seanshubin.up_to_date.logic.{DataInputStreamWrapper, DataOutputStreamWrapper, DocumentUtil, FileSystem}
 import org.w3c.dom.Document
 
 class FileSystemImpl(charset: Charset) extends FileSystem {
@@ -16,13 +16,19 @@ class FileSystemImpl(charset: Charset) extends FileSystem {
 
   override def loadFileIntoDocument(path: Path): Document = closeAfter(pathToInputStream(path))(DocumentUtil.inputStreamToDocument)
 
+  override def ensureDirectoriesExist(path: Path): Unit = Files.createDirectories(path)
+
+  override def lastModified(path: Path): Long = ???
+
+  override def dataInputFor(path: Path): DataInputStreamWrapper = ???
+
+  override def dataOutputFor(path: Path): DataOutputStreamWrapper = ???
+
   def storeStringIntoFile(path: Path, content: String): Unit = storeStringToPath(content, path, charset)
 
   def deleteFile(path: Path): Unit = Files.delete(path)
 
   def deleteFileIfExists(path: Path): Unit = Files.deleteIfExists(path)
-
-  def createDirectories(path: Path): Unit = Files.createDirectories(path)
 
   private def loadPathToBytes(path: Path): Array[Byte] = Files.readAllBytes(path)
 

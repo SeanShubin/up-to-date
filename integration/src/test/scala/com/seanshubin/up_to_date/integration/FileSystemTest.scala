@@ -60,7 +60,7 @@ class FileSystemTest extends FunSuite {
     val fileSystem = createFileSystem()
     val baseDir = Paths.get("target", "test-find-pom")
     val samplePomFile = baseDir.resolve("pom.xml")
-    fileSystem.createDirectories(baseDir)
+    fileSystem.ensureDirectoriesExist(baseDir)
     fileSystem.storeStringIntoFile(samplePomFile, "<xml/>")
     val found = new ArrayBuffer[Path]()
     fileSystem.walkFileTree(baseDir, new FileVisitor[Path] {

@@ -1,6 +1,7 @@
 package com.seanshubin.up_to_date.integration
 
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 
 import com.seanshubin.up_to_date.logic.{Http, Notifications}
 import org.scalatest.FunSuite
@@ -24,6 +25,8 @@ class HttpTest extends FunSuite with EasyMockSugar {
     override def httpGet(uriString: String): Unit = {
       getCalls.append(uriString)
     }
+
+    override def httpGetFromCache(uriString: String, path: Path): Unit = ???
   }
 
   test("get") {

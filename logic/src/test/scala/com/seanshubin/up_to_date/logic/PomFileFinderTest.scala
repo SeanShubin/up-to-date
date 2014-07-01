@@ -18,9 +18,17 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
   abstract class FakeFileSystem extends FileSystem {
     override def fileExists(path: Path): Boolean = ???
 
+    override def ensureDirectoriesExist(path: Path): Unit = ???
+
     override def loadFileIntoString(path: Path): String = ???
 
     override def loadFileIntoDocument(path: Path): Document = ???
+
+    override def lastModified(path: Path): Long = ???
+
+    override def dataInputFor(path: Path): DataInputStreamWrapper = ???
+
+    override def dataOutputFor(path: Path): DataOutputStreamWrapper = ???
   }
 
   test("trigger found if matches") {

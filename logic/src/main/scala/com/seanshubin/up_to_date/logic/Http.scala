@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
 trait Http {
-  def get(url: String): (Int, String)
+  def get(uri: String): (Int, String)
 }
 
 object Http {

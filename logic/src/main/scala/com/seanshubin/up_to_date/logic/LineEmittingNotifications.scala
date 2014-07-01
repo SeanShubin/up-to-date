@@ -1,5 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
+import java.nio.file.Path
+
 class LineEmittingNotifications(systemClock: SystemClock, emitLine: String => Unit) extends Notifications {
   override def errorWithConfiguration(errorReport: Seq[String]): Unit = {
     emitLine("Unable to launch application due to configuration validation errors")
@@ -18,5 +20,10 @@ class LineEmittingNotifications(systemClock: SystemClock, emitLine: String => Un
 
   override def httpGet(uriString: String): Unit = {
     emitLine(s"GET: $uriString")
+  }
+
+  override def httpGetFromCache(uriString: String, path: Path): Unit = {
+    httpGet(uriString)
+    emitLine(s"GET(cache): $path")
   }
 }
