@@ -5,6 +5,8 @@ import scala.util.matching.Regex
 
 object DurationFormat {
 
+  object SecondsFormat extends TimeUnitFormat(TimeUnitAndQuantity.SecondToDay)
+
   object MillisecondsFormat extends TimeUnitFormat(TimeUnitAndQuantity.MillisecondToDay)
 
   object NanosecondsFormat extends TimeUnitFormat(TimeUnitAndQuantity.NanosecondToDay)
@@ -68,13 +70,15 @@ object DurationFormat {
   private case class TimeUnitAndQuantity(timeUnit: TimeUnit, maybeQuantity: Option[Int])
 
   private object TimeUnitAndQuantity {
-    val MillisecondToDay =
-      TimeUnitAndQuantity(TimeUnit.Millisecond, Some(1000)) ::
-        TimeUnitAndQuantity(TimeUnit.Second, Some(60)) ::
+    val SecondToDay =
+      TimeUnitAndQuantity(TimeUnit.Second, Some(60)) ::
         TimeUnitAndQuantity(TimeUnit.Minute, Some(60)) ::
         TimeUnitAndQuantity(TimeUnit.Hour, Some(24)) ::
         TimeUnitAndQuantity(TimeUnit.Day, None) ::
         Nil
+    val MillisecondToDay =
+      TimeUnitAndQuantity(TimeUnit.Millisecond, Some(1000)) ::
+        SecondToDay
     val NanosecondToDay =
       TimeUnitAndQuantity(TimeUnit.Nanosecond, Some(1000)) ::
         TimeUnitAndQuantity(TimeUnit.Microsecond, Some(1000)) ::

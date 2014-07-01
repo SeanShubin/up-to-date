@@ -19,7 +19,7 @@
     "generatedReportDirectory": [ "console", "target", "dependency-report" ],
     "classLimits": {
         "depth": 6,
-        "complexity": 50,
+        "complexity": 100,
         "cycleCount": 0
     },
     "packageLimits": {

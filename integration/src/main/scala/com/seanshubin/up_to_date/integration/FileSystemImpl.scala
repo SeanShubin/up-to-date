@@ -18,11 +18,11 @@ class FileSystemImpl(charset: Charset) extends FileSystem {
 
   override def ensureDirectoriesExist(path: Path): Unit = Files.createDirectories(path)
 
-  override def lastModified(path: Path): Long = ???
+  override def lastModifiedSeconds(path: Path): Long = Files.getLastModifiedTime(path).toMillis / 1000
 
-  override def dataInputFor(path: Path): DataInputStreamWrapper = ???
+  override def dataInputFor(path: Path): DataInputStreamWrapper = new DataInputStreamWrapperImpl(path)
 
-  override def dataOutputFor(path: Path): DataOutputStreamWrapper = ???
+  override def dataOutputFor(path: Path): DataOutputStreamWrapper = new DataOutputStreamWrapperImpl(path)
 
   def storeStringIntoFile(path: Path, content: String): Unit = storeStringToPath(content, path, charset)
 

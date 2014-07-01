@@ -6,7 +6,6 @@ import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
 
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
-import org.w3c.dom.Document
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -14,22 +13,6 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
   val stubAttributes: BasicFileAttributes = null
   val stubFile: Path = null
   val stubException: IOException = null
-
-  abstract class FakeFileSystem extends FileSystem {
-    override def fileExists(path: Path): Boolean = ???
-
-    override def ensureDirectoriesExist(path: Path): Unit = ???
-
-    override def loadFileIntoString(path: Path): String = ???
-
-    override def loadFileIntoDocument(path: Path): Document = ???
-
-    override def lastModified(path: Path): Long = ???
-
-    override def dataInputFor(path: Path): DataInputStreamWrapper = ???
-
-    override def dataOutputFor(path: Path): DataOutputStreamWrapper = ???
-  }
 
   test("trigger found if matches") {
     val file = Paths.get("blah", "pom.xml")

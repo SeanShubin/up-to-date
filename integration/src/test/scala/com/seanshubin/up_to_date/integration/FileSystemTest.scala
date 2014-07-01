@@ -5,12 +5,12 @@ import java.nio.charset.Charset
 import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 import org.w3c.dom.Document
 
 import scala.collection.mutable.ArrayBuffer
 
-class FileSystemTest extends FunSuite {
+class FileSystemTest extends FunSuite with Matchers {
   def createFileSystem(): FileSystemImpl = {
     val charsetName: String = "utf-8"
     val charset: Charset = Charset.forName(charsetName)
@@ -77,4 +77,53 @@ class FileSystemTest extends FunSuite {
     })
     assert(found.map(_.toString).contains(samplePomFile.toString))
   }
+
+  test("data io") {
+    val fileSystem = createFileSystem()
+    val file: Path = Paths.get("target", "test-data-io.txt")
+    val intWritten = 12345
+    val stringWritten = "Hello, world!"
+    fileSystem.deleteFileIfExists(file)
+
+    assert(fileSystem.fileExists(file) === false)
+
+    val dataOutput = fileSystem.dataOutputFor(file)
+    dataOutput.writeInt(intWritten)
+    dataOutput.writeUTF(stringWritten)
+    dataOutput.close()
+
+    assert(fileSystem.fileExists(file) === true)
+
+    val dataInput = fileSystem.dataInputFor(file)
+    val intRead = dataInput.readInt()
+    val stringRead = dataInput.readUTF()
+
+    assert(intRead === intWritten)
+    assert(stringRead === stringWritten)
+
+    fileSystem.deleteFile(file)
+    assert(fileSystem.fileExists(file) === false)
+  }
+
+  test("last modified") {
+    val fileSystem = createFileSystem()
+    val file: Path = Paths.get("target", "test-last-modified.txt")
+    val content: String = "Hello, world!"
+    fileSystem.deleteFileIfExists(file)
+
+    assert(fileSystem.fileExists(file) === false)
+
+    val beforeCreateSeconds = System.currentTimeMillis() / 1000
+    fileSystem.storeStringIntoFile(file, content)
+    val afterCreateSeconds = System.currentTimeMillis() / 1000
+    assert(fileSystem.fileExists(file) === true)
+
+    val lastModifiedSeconds = fileSystem.lastModifiedSeconds(file)
+    lastModifiedSeconds should be >= beforeCreateSeconds
+    lastModifiedSeconds should be <= afterCreateSeconds
+
+    fileSystem.deleteFile(file)
+    assert(fileSystem.fileExists(file) === false)
+  }
+
 }

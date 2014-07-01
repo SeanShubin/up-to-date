@@ -13,8 +13,8 @@ class HttpCache(delegate: Http,
     val fileName = oneWayHash.toHexString(uri)
     val filePath = cacheDirectory.resolve(Paths.get(fileName))
     if (fileSystem.fileExists(filePath)) {
-      val lastModified = fileSystem.lastModified(filePath)
-      val now = systemClock.currentTimeMillis
+      val lastModified = fileSystem.lastModifiedSeconds(filePath)
+      val now = systemClock.currentTimeSeconds
       if (now - lastModified > expireCache) {
         val (statusCode, content) = delegate.get(uri)
         val dataOutput = fileSystem.dataOutputFor(filePath)
