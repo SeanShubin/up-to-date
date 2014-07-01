@@ -3,7 +3,6 @@ package com.seanshubin.up_to_date.logic
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
-import com.seanshubin.up_to_date.conversion.Conversion
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
@@ -22,7 +21,7 @@ class PomParserTest extends FunSuite with EasyMockSugar {
         |        <version>2.3</version>
         |    </dependency>
         |</xml>""".stripMargin
-    val sampleDocument = Conversion.stringToDocument(sampleData, StandardCharsets.UTF_8)
+    val sampleDocument = DocumentUtil.stringToDocument(sampleData, StandardCharsets.UTF_8)
     val fileSystem = mock[FileSystem]
     val pomParser = new PomParserImpl(fileSystem)
     val path = Paths.get("foo", "bar", "pom.xml")
