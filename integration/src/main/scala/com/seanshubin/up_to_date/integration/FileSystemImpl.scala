@@ -1,10 +1,10 @@
 package com.seanshubin.up_to_date.integration
 
-import java.io.{Closeable, InputStream}
+import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.{FileVisitor, Files, Path}
 
-import com.seanshubin.up_to_date.logic.{DataInputStreamWrapper, DataOutputStreamWrapper, DocumentUtil, FileSystem}
+import com.seanshubin.up_to_date.logic._
 import org.w3c.dom.Document
 
 class FileSystemImpl(charset: Charset) extends FileSystem {
@@ -14,11 +14,11 @@ class FileSystemImpl(charset: Charset) extends FileSystem {
 
   override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = Files.walkFileTree(start, visitor)
 
-  override def loadFileIntoDocument(path: Path): Document = closeAfter(pathToInputStream(path))(DocumentUtil.inputStreamToDocument)
+  override def loadFileIntoDocument(path: Path): Document = CloseableUtil.closeAfter(pathToInputStream(path))(DocumentUtil.inputStreamToDocument)
 
   override def ensureDirectoriesExist(path: Path): Unit = Files.createDirectories(path)
 
-  override def lastModifiedSeconds(path: Path): Long = Files.getLastModifiedTime(path).toMillis / 1000
+  override def lastModified(path: Path): Long = Files.getLastModifiedTime(path).toMillis
 
   override def dataInputFor(path: Path): DataInputStreamWrapper = new DataInputStreamWrapperImpl(path)
 
@@ -39,13 +39,4 @@ class FileSystemImpl(charset: Charset) extends FileSystem {
   private def stringToBytes(s: String, charset: Charset): Array[Byte] = s.getBytes(charset)
 
   private def pathToInputStream(path: Path): InputStream = Files.newInputStream(path)
-
-  private def closeAfter[ResultType, ClosableType <: Closeable](closable: ClosableType)(block: ClosableType => ResultType): ResultType = {
-    val result = try {
-      block(closable)
-    } finally {
-      closable.close()
-    }
-    result
-  }
 }

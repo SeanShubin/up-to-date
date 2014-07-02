@@ -26,7 +26,7 @@ class TestWebServer {
       baseRequest.setHandled(true)
       httpServletResponse.setStatus(fakeStatus)
       httpServletResponse.setCharacterEncoding(fakeCharset.name())
-      IoUtil.stringToWriter(fakeContent, httpServletResponse.getWriter)
+      httpServletResponse.getWriter.write(fakeContent)
     }
   }
 

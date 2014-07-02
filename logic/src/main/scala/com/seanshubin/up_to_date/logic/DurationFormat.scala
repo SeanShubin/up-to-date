@@ -5,8 +5,6 @@ import scala.util.matching.Regex
 
 object DurationFormat {
 
-  object SecondsFormat extends TimeUnitFormat(TimeUnitAndQuantity.SecondToDay)
-
   object MillisecondsFormat extends TimeUnitFormat(TimeUnitAndQuantity.MillisecondToDay)
 
   object NanosecondsFormat extends TimeUnitFormat(TimeUnitAndQuantity.NanosecondToDay)

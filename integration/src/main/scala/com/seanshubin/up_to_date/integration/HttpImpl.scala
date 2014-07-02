@@ -1,9 +1,10 @@
 package com.seanshubin.up_to_date.integration
 
+import java.io.InputStreamReader
 import java.net.URI
 import java.nio.charset.Charset
 
-import com.seanshubin.up_to_date.logic.{Http, Notifications}
+import com.seanshubin.up_to_date.logic.{Http, Notifications, ReaderIterator}
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClients
 
@@ -17,7 +18,8 @@ class HttpImpl(charset: Charset, notifications: Notifications) extends Http {
       val httpResponse = httpClient.execute(request)
       val statusCode = httpResponse.getStatusLine.getStatusCode
       val inputStream = httpResponse.getEntity.getContent
-      val content = IoUtil.inputStreamToString(inputStream, charset)
+      val reader = new InputStreamReader(inputStream, charset)
+      val content = new ReaderIterator(reader).toSeq.mkString
       (statusCode, content)
     }
   }

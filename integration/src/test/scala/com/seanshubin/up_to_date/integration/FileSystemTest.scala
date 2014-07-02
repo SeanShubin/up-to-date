@@ -118,7 +118,7 @@ class FileSystemTest extends FunSuite with Matchers {
     val afterCreateSeconds = System.currentTimeMillis() / 1000
     assert(fileSystem.fileExists(file) === true)
 
-    val lastModifiedSeconds = fileSystem.lastModifiedSeconds(file)
+    val lastModifiedSeconds = fileSystem.lastModified(file) / 1000
     lastModifiedSeconds should be >= beforeCreateSeconds
     lastModifiedSeconds should be <= afterCreateSeconds
 

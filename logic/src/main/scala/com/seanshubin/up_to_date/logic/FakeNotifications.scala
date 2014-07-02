@@ -1,8 +1,6 @@
-package com.seanshubin.up_to_date.integration
+package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Path
-
-import com.seanshubin.up_to_date.logic.Notifications
 
 import scala.collection.mutable.ArrayBuffer
 

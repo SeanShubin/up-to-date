@@ -15,7 +15,7 @@ trait FileSystem {
 
   def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path])
 
-  def lastModifiedSeconds(path: Path): Long
+  def lastModified(path: Path): Long
 
   def dataInputFor(path: Path): DataInputStreamWrapper
 
