@@ -5,6 +5,7 @@ import java.nio.file.Paths
 
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
+import java.io.ByteArrayInputStream
 
 class PomParserTest extends FunSuite with EasyMockSugar {
   test("parse dependencies") {
@@ -21,7 +22,7 @@ class PomParserTest extends FunSuite with EasyMockSugar {
         |        <version>2.3</version>
         |    </dependency>
         |</xml>""".stripMargin
-    val sampleDocument = DocumentUtil.stringToDocument(sampleData, StandardCharsets.UTF_8)
+    val sampleDocumentInputStream = new ByteArrayInputStream(sampleData.getBytes(StandardCharsets.UTF_8))
     val fileSystem = mock[FileSystem]
     val pomParser = new PomParserImpl(fileSystem)
     val path = Paths.get("foo", "bar", "pom.xml")
@@ -29,7 +30,7 @@ class PomParserTest extends FunSuite with EasyMockSugar {
     val expectedDependency2 = Dependency(path.toString, "joda-time", "joda-time", "2.3")
     val expected = Set(expectedDependency1, expectedDependency2)
     expecting {
-      fileSystem.loadFileIntoDocument(path).andReturn(sampleDocument)
+      fileSystem.pathToInputStream(path).andReturn(sampleDocumentInputStream)
     }
     whenExecuting(fileSystem) {
       val actual = pomParser.parseDependencies(path)

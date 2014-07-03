@@ -1,8 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
 import java.nio.file.{FileVisitor, Path}
-
-import org.w3c.dom.Document
+import java.io.{Reader, InputStream}
 
 trait FileSystem {
   def fileExists(path: Path): Boolean
@@ -11,7 +10,9 @@ trait FileSystem {
 
   def loadFileIntoString(path: Path): String
 
-  def loadFileIntoDocument(path: Path): Document
+  def pathToInputStream(path: Path): InputStream
+
+  def pathToReader(path: Path): Reader
 
   def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path])
 

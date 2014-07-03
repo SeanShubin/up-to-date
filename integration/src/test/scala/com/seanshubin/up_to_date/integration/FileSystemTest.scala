@@ -1,16 +1,17 @@
 package com.seanshubin.up_to_date.integration
 
 import java.io.IOException
-import java.nio.charset.Charset
+import java.nio.charset.{StandardCharsets, Charset}
 import java.nio.file.attribute.BasicFileAttributes
-import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
+import java.nio.file._
 
 import org.scalatest.{FunSuite, Matchers}
-import org.w3c.dom.Document
 
 import scala.collection.mutable.ArrayBuffer
 
 class FileSystemTest extends FunSuite with Matchers {
+  val charset = StandardCharsets.UTF_8
+
   def createFileSystem(): FileSystemImpl = {
     val charsetName: String = "utf-8"
     val charset: Charset = Charset.forName(charsetName)
@@ -22,37 +23,17 @@ class FileSystemTest extends FunSuite with Matchers {
     val fileSystem = createFileSystem()
     val file: Path = Paths.get("target", "test-store-and-load-file.txt")
     val content: String = "Hello, world!"
-    fileSystem.deleteFileIfExists(file)
+    deleteFileIfExists(file)
 
     assert(fileSystem.fileExists(file) === false)
 
-    fileSystem.storeStringIntoFile(file, content)
+    storeStringIntoFile(file, content)
     assert(fileSystem.fileExists(file) === true)
 
     val actual = fileSystem.loadFileIntoString(file)
     assert(content === actual)
 
-    fileSystem.deleteFile(file)
-    assert(fileSystem.fileExists(file) === false)
-  }
-
-  test("store and load xml file") {
-    val fileSystem = createFileSystem()
-    val file: Path = Paths.get("target", "test-store-and-load-file.xml")
-    val content: String = "<xml>aaa</xml>"
-    fileSystem.deleteFileIfExists(file)
-
-    assert(fileSystem.fileExists(file) === false)
-
-    fileSystem.storeStringIntoFile(file, content)
-    assert(fileSystem.fileExists(file) === true)
-
-    val actual: Document = fileSystem.loadFileIntoDocument(file)
-    println(actual)
-    assert(actual.getDocumentElement.getNodeName === "xml")
-    assert(actual.getDocumentElement.getTextContent === "aaa")
-
-    fileSystem.deleteFile(file)
+    deleteFile(file)
     assert(fileSystem.fileExists(file) === false)
   }
 
@@ -61,12 +42,12 @@ class FileSystemTest extends FunSuite with Matchers {
     val baseDir = Paths.get("target", "test-find-pom")
     val samplePomFile = baseDir.resolve("pom.xml")
     fileSystem.ensureDirectoriesExist(baseDir)
-    fileSystem.storeStringIntoFile(samplePomFile, "<xml/>")
+    storeStringIntoFile(samplePomFile, "<xml/>")
     val found = new ArrayBuffer[Path]()
     fileSystem.walkFileTree(baseDir, new FileVisitor[Path] {
       override def visitFileFailed(file: Path, exc: IOException): FileVisitResult = ???
 
-      override def visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult = {
+      override def visitFile(file: Path, attributes: BasicFileAttributes): FileVisitResult = {
         found.append(file)
         FileVisitResult.CONTINUE
       }
@@ -83,7 +64,7 @@ class FileSystemTest extends FunSuite with Matchers {
     val file: Path = Paths.get("target", "test-data-io.txt")
     val intWritten = 12345
     val stringWritten = "Hello, world!"
-    fileSystem.deleteFileIfExists(file)
+    deleteFileIfExists(file)
 
     assert(fileSystem.fileExists(file) === false)
 
@@ -101,7 +82,7 @@ class FileSystemTest extends FunSuite with Matchers {
     assert(intRead === intWritten)
     assert(stringRead === stringWritten)
 
-    fileSystem.deleteFile(file)
+    deleteFile(file)
     assert(fileSystem.fileExists(file) === false)
   }
 
@@ -109,12 +90,12 @@ class FileSystemTest extends FunSuite with Matchers {
     val fileSystem = createFileSystem()
     val file: Path = Paths.get("target", "test-last-modified.txt")
     val content: String = "Hello, world!"
-    fileSystem.deleteFileIfExists(file)
+    deleteFileIfExists(file)
 
     assert(fileSystem.fileExists(file) === false)
 
     val beforeCreateSeconds = System.currentTimeMillis() / 1000
-    fileSystem.storeStringIntoFile(file, content)
+    storeStringIntoFile(file, content)
     val afterCreateSeconds = System.currentTimeMillis() / 1000
     assert(fileSystem.fileExists(file) === true)
 
@@ -122,8 +103,17 @@ class FileSystemTest extends FunSuite with Matchers {
     lastModifiedSeconds should be >= beforeCreateSeconds
     lastModifiedSeconds should be <= afterCreateSeconds
 
-    fileSystem.deleteFile(file)
+    deleteFile(file)
     assert(fileSystem.fileExists(file) === false)
   }
 
+  def storeStringIntoFile(path: Path, content: String): Unit = storeStringToPath(content, path, charset)
+
+  def deleteFile(path: Path): Unit = Files.delete(path)
+
+  def deleteFileIfExists(path: Path): Unit = Files.deleteIfExists(path)
+
+  def storeStringToPath(s: String, path: Path, charset: Charset): Unit = Files.write(path, stringToBytes(s, charset))
+
+  def stringToBytes(s: String, charset: Charset): Array[Byte] = s.getBytes(charset)
 }

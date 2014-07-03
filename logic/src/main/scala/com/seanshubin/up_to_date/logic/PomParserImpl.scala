@@ -6,7 +6,7 @@ import org.w3c.dom.{Element, Node, NodeList}
 
 class PomParserImpl(fileSystem: FileSystem) extends PomParser {
   override def parseDependencies(path: Path): Set[Dependency] = {
-    val document = fileSystem.loadFileIntoDocument(path)
+    val document = DocumentUtil.inputStreamToDocument(fileSystem.pathToInputStream(path))
     val nodeList = document.getElementsByTagName("dependency")
     val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
     val nodeToDependency: Node => Option[Dependency] = pathAndNodeToDependency(path, _: Node)
