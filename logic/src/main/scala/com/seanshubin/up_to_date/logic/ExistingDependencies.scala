@@ -1,11 +1,13 @@
 package com.seanshubin.up_to_date.logic
 
-case class ExistingDependencies(dependencies: Set[Dependency]) {
+case class ExistingDependencies(byPom: Map[String, Seq[PomDependency]]) {
   def toGroupAndArtifactSet: Set[GroupAndArtifact] = {
-    for {
-      Dependency(location, group, artifact, version) <- dependencies
+    val groupAndArtifactSeq = for {
+      (pom, pomDependencySeq) <- byPom
+      pomDependency <- pomDependencySeq
     } yield {
-      GroupAndArtifact(group, artifact)
+      GroupAndArtifact(pomDependency.group, pomDependency.artifact)
     }
+    groupAndArtifactSeq.toSet
   }
 }

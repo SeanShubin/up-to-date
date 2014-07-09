@@ -14,13 +14,13 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
     val samplePom1 = Paths.get("foo", "pom.xml")
     val samplePom2 = Paths.get("bar", "pom.xml")
     val samplePomFiles = Set(samplePom1, samplePom2)
-    val sampleDependencies1 = Set(
-      Dependency(samplePom1.toString, "group 1", "artifact 1", "version 1"),
-      Dependency(samplePom1.toString, "group 2", "artifact 2", "version 2"))
-    val sampleDependencies2 = Set(
-      Dependency(samplePom2.toString, "group 3", "artifact 3", "version 3"),
-      Dependency(samplePom2.toString, "group 4", "artifact 4", "version 4"))
-    val expected = ExistingDependencies(sampleDependencies1 ++ sampleDependencies2)
+    val sampleDependencies1 = samplePom1.toString -> Seq(
+      PomDependency("group 1", "artifact 1", "version 1"),
+      PomDependency("group 2", "artifact 2", "version 2"))
+    val sampleDependencies2 = samplePom2.toString -> Seq(
+      PomDependency("group 3", "artifact 3", "version 3"),
+      PomDependency("group 4", "artifact 4", "version 4"))
+    val expected = ExistingDependencies(Seq(sampleDependencies1, sampleDependencies2).toMap)
 
     expecting {
       pomFileFinder.relevantPomFiles().andReturn(samplePomFiles)

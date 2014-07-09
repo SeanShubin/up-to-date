@@ -1,11 +1,11 @@
 package com.seanshubin.up_to_date.logic
 
+import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
-import java.io.ByteArrayInputStream
 
 class PomParserTest extends FunSuite with EasyMockSugar {
   test("parse dependencies") {
@@ -26,9 +26,9 @@ class PomParserTest extends FunSuite with EasyMockSugar {
     val fileSystem = mock[FileSystem]
     val pomParser = new PomParserImpl(fileSystem)
     val path = Paths.get("foo", "bar", "pom.xml")
-    val expectedDependency1 = Dependency(path.toString, "org.scala-lang", "scala-library", "2.11.1")
-    val expectedDependency2 = Dependency(path.toString, "joda-time", "joda-time", "2.3")
-    val expected = Set(expectedDependency1, expectedDependency2)
+    val expectedDependency1 = PomDependency("org.scala-lang", "scala-library", "2.11.1")
+    val expectedDependency2 = PomDependency("joda-time", "joda-time", "2.3")
+    val expected = path.toString -> Seq(expectedDependency1, expectedDependency2)
     expecting {
       fileSystem.pathToInputStream(path).andReturn(sampleDocumentInputStream)
     }
