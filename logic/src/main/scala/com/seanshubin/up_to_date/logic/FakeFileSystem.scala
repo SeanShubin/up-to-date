@@ -1,8 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
+import java.io.{InputStream, Reader}
 import java.nio.file.{FileVisitor, Path}
-
-import java.io.{Reader, InputStream}
 
 abstract class FakeFileSystem extends FileSystem {
   override def fileExists(path: Path): Boolean = ???
@@ -11,7 +10,9 @@ abstract class FakeFileSystem extends FileSystem {
 
   override def pathToInputStream(path: Path): InputStream = ???
 
-  override def loadFileIntoString(path: Path): String = ???
+  override def loadString(path: Path): String = ???
+
+  override def storeString(path: Path, content: String): Unit = ???
 
   override def lastModified(path: Path): Long = ???
 

@@ -27,7 +27,34 @@ object SampleData {
   val dependency1: PomDependency = PomDependency("org.scala-lang", "scala-library", "2.11.1")
   val dependency2: PomDependency = PomDependency("joda-time", "joda-time", "2.3")
   val existingDependencies: ExistingDependencies = ExistingDependencies(Map("pom.xml" -> Seq(dependency1, dependency2)))
-  val latestDependencies: DependencyVersions = null
+  val dependencyVersions: DependencyVersions = DependencyVersions(Map(
+    GroupAndArtifact("org.scala-lang", "scala-library") -> LocationAndVersions("repo1", Set("1", "2", "3")),
+    GroupAndArtifact("joda-time", "joda-time") -> LocationAndVersions("repo2", Set("4", "5", "6"))
+  ))
+  val observationsReport =
+    """{
+      |  "existingDependencies" : {
+      |    "pom.xml" : [ {
+      |      "group" : "org.scala-lang",
+      |      "artifact" : "scala-library",
+      |      "version" : "2.11.1"
+      |    }, {
+      |      "group" : "joda-time",
+      |      "artifact" : "joda-time",
+      |      "version" : "2.3"
+      |    } ]
+      |  },
+      |  "dependencyVersions" : {
+      |    "GroupAndArtifact(org.scala-lang,scala-library)" : {
+      |      "location" : "repo1",
+      |      "versions" : [ "1", "2", "3" ]
+      |    },
+      |    "GroupAndArtifact(joda-time,joda-time)" : {
+      |      "location" : "repo2",
+      |      "versions" : [ "4", "5", "6" ]
+      |    }
+      |  }
+      |}""".stripMargin
   val outOfDate: OutOfDate = null
   val automaticUpgradesPerformed: AutomaticUpgradesPerformed = null
   val sampleMetadataContents =

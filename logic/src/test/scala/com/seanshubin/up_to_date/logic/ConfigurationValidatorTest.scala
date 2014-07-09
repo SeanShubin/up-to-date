@@ -49,7 +49,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
 
     expecting {
       fileSystem.fileExists(fakeFile).andReturn(true)
-      fileSystem.loadFileIntoString(fakeFile).andReturn(malformedJsonString)
+      fileSystem.loadString(fakeFile).andReturn(malformedJsonString)
       jsonMarshaller.fromJson(malformedJsonString, classOf[ConfigurationJson]).andThrow(jsonError)
       jsonMarshaller.toJson(ConfigurationJson.sample).andReturn(sampleConfigString)
     }
@@ -73,7 +73,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
 
     expecting {
       fileSystem.fileExists(fakeFile).andReturn(true)
-      fileSystem.loadFileIntoString(fakeFile).andReturn(jsonString)
+      fileSystem.loadString(fakeFile).andReturn(jsonString)
       jsonMarshaller.fromJson(jsonString, classOf[ConfigurationJson]).andReturn(parsedFromJson)
     }
 
@@ -93,7 +93,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
 
     expecting {
       fileSystem.fileExists(fakeFile).andReturn(true)
-      fileSystem.loadFileIntoString(fakeFile).andReturn(jsonString)
+      fileSystem.loadString(fakeFile).andReturn(jsonString)
       jsonMarshaller.fromJson(jsonString, classOf[ConfigurationJson]).andReturn(parsedFromJson)
     }
 

@@ -1,9 +1,9 @@
 package com.seanshubin.up_to_date.integration
 
 import java.io.IOException
-import java.nio.charset.{StandardCharsets, Charset}
-import java.nio.file.attribute.BasicFileAttributes
+import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file._
+import java.nio.file.attribute.BasicFileAttributes
 
 import org.scalatest.{FunSuite, Matchers}
 
@@ -27,10 +27,10 @@ class FileSystemTest extends FunSuite with Matchers {
 
     assert(fileSystem.fileExists(file) === false)
 
-    storeStringIntoFile(file, content)
+    fileSystem.storeString(file, content)
     assert(fileSystem.fileExists(file) === true)
 
-    val actual = fileSystem.loadFileIntoString(file)
+    val actual = fileSystem.loadString(file)
     assert(content === actual)
 
     deleteFile(file)
@@ -42,7 +42,7 @@ class FileSystemTest extends FunSuite with Matchers {
     val baseDir = Paths.get("target", "test-find-pom")
     val samplePomFile = baseDir.resolve("pom.xml")
     fileSystem.ensureDirectoriesExist(baseDir)
-    storeStringIntoFile(samplePomFile, "<xml/>")
+    fileSystem.storeString(samplePomFile, "<xml/>")
     val found = new ArrayBuffer[Path]()
     fileSystem.walkFileTree(baseDir, new FileVisitor[Path] {
       override def visitFileFailed(file: Path, exc: IOException): FileVisitResult = ???
@@ -95,7 +95,7 @@ class FileSystemTest extends FunSuite with Matchers {
     assert(fileSystem.fileExists(file) === false)
 
     val beforeCreateSeconds = System.currentTimeMillis() / 1000
-    storeStringIntoFile(file, content)
+    fileSystem.storeString(file, content)
     val afterCreateSeconds = System.currentTimeMillis() / 1000
     assert(fileSystem.fileExists(file) === true)
 
@@ -107,13 +107,9 @@ class FileSystemTest extends FunSuite with Matchers {
     assert(fileSystem.fileExists(file) === false)
   }
 
-  def storeStringIntoFile(path: Path, content: String): Unit = storeStringToPath(content, path, charset)
-
   def deleteFile(path: Path): Unit = Files.delete(path)
 
   def deleteFileIfExists(path: Path): Unit = Files.deleteIfExists(path)
-
-  def storeStringToPath(s: String, path: Path, charset: Charset): Unit = Files.write(path, stringToBytes(s, charset))
 
   def stringToBytes(s: String, charset: Charset): Array[Byte] = s.getBytes(charset)
 }

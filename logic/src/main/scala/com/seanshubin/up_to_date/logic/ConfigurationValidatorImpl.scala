@@ -16,7 +16,7 @@ class ConfigurationValidatorImpl(fileSystem: FileSystem,
 
   private def validateFile(path: Path): Either[Seq[String], ValidConfiguration] = {
     if (fileSystem.fileExists(path)) {
-      val json = fileSystem.loadFileIntoString(path)
+      val json = fileSystem.loadString(path)
       validateJson(json)
     } else {
       Left(Seq(s"file '$path' does not exist"))
