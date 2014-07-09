@@ -4,4 +4,6 @@ trait Reporter {
   def reportAutomaticUpgradesPerformed(automaticUpgradesPerformed: AutomaticUpgradesPerformed)
 
   def reportOutOfDate(outOfDate: OutOfDate)
+
+  def reportObservations(existingDependencies: ExistingDependencies, dependencyVersions: DependencyVersions)
 }

@@ -12,18 +12,19 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       new MavenRepositoryScannerImpl(repositories, http, metadataParser)
     val dependency1 = GroupAndArtifact("group1", "artifact1")
     val dependency2 = GroupAndArtifact("group2", "artifact2")
+    val versions1 = Set("version1a", "version1b", "version1c")
+    val versions2 = Set("version2a", "version2b", "version2c")
     val groupAndArtifactSet = Set(dependency1, dependency2)
     val expected = DependencyVersions(
-      map = Map(
-        dependency1 -> Set("version1a", "version1b", "version1c"),
-        dependency2 -> Set("version2a", "version2b", "version2c")),
-      notFound = Set()
+      Map(
+        dependency1 -> LocationAndVersions("repo1", versions1),
+        dependency2 -> LocationAndVersions("repo1", versions2))
     )
     expecting {
       http.get("repo1/group1/artifact1/maven-metadata.xml").andReturn((200, "content1"))
       http.get("repo1/group2/artifact2/maven-metadata.xml").andReturn((200, "content2"))
-      metadataParser.parseVersions("content1").andReturn(Set("version1a", "version1b", "version1c"))
-      metadataParser.parseVersions("content2").andReturn(Set("version2a", "version2b", "version2c"))
+      metadataParser.parseVersions("content1").andReturn(versions1)
+      metadataParser.parseVersions("content2").andReturn(versions2)
     }
     whenExecuting(http, metadataParser) {
       val actual = mavenRepositoryScanner.scanLatestDependencies(groupAndArtifactSet)
@@ -38,13 +39,13 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       new MavenRepositoryScannerImpl(repositories, http, metadataParser)
     val dependency = GroupAndArtifact("group", "artifact")
     val groupAndArtifactSet = Set(dependency)
+    val versions = Set("version-a", "version-b", "version-c")
     val expected = DependencyVersions(
-      map = Map(dependency -> Set("version-a", "version-b", "version-c")),
-      notFound = Set()
+      Map(dependency -> LocationAndVersions("repo1", versions))
     )
     expecting {
       http.get("repo1/group/artifact/maven-metadata.xml").andReturn((200, "content"))
-      metadataParser.parseVersions("content").andReturn(Set("version-a", "version-b", "version-c"))
+      metadataParser.parseVersions("content").andReturn(versions)
     }
     whenExecuting(http, metadataParser) {
       val actual = mavenRepositoryScanner.scanLatestDependencies(groupAndArtifactSet)
@@ -59,14 +60,14 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       new MavenRepositoryScannerImpl(repositories, http, metadataParser)
     val dependency = GroupAndArtifact("group", "artifact")
     val groupAndArtifactSet = Set(dependency)
+    val versions = Set("version-a", "version-b", "version-c")
     val expected = DependencyVersions(
-      map = Map(dependency -> Set("version-a", "version-b", "version-c")),
-      notFound = Set()
+      Map(dependency -> LocationAndVersions("repo2", versions))
     )
     expecting {
       http.get("repo1/group/artifact/maven-metadata.xml").andReturn((404, "not found"))
       http.get("repo2/group/artifact/maven-metadata.xml").andReturn((200, "content"))
-      metadataParser.parseVersions("content").andReturn(Set("version-a", "version-b", "version-c"))
+      metadataParser.parseVersions("content").andReturn(versions)
     }
     whenExecuting(http, metadataParser) {
       val actual = mavenRepositoryScanner.scanLatestDependencies(groupAndArtifactSet)
@@ -81,10 +82,7 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       new MavenRepositoryScannerImpl(repositories, http, metadataParser)
     val dependency = GroupAndArtifact("group", "artifact")
     val groupAndArtifactSet = Set(dependency)
-    val expected = DependencyVersions(
-      map = Map(),
-      notFound = groupAndArtifactSet
-    )
+    val expected = DependencyVersions(Map())
     expecting {
       http.get("repo1/group/artifact/maven-metadata.xml").andReturn((404, "not found"))
       http.get("repo2/group/artifact/maven-metadata.xml").andReturn((404, "not found"))
