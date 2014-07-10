@@ -93,15 +93,13 @@ class VersionTest extends FunSuite with ShouldMatchers {
     assert(Version("1.2").shouldUpgradeTo("1.3-rc1") === false)
 
     assert(Version("1.2-rc3").shouldUpgradeTo("1.1") === false)
-    //todo: A bit tricky to figure out when to upgrade a release candidate to its corresponding version
-    //assert(Version("1.2-rc3").shouldUpgradeTo("1.2") === true)
+    assert(Version("1.2-rc3").shouldUpgradeTo("1.2") === true)
     assert(Version("1.2-rc3").shouldUpgradeTo("1.2-rc3") === false)
     assert(Version("1.2-rc3").shouldUpgradeTo("1.2-rc4") === true)
     assert(Version("1.2-rc3").shouldUpgradeTo("1.3-rc1") === true)
 
     assert(Version("1.2-rc4").shouldUpgradeTo("1.1") === false)
-    //todo: A bit tricky to figure out when to upgrade a release candidate to its corresponding version
-    //assert(Version("1.2-rc4").shouldUpgradeTo("1.2") === true)
+    assert(Version("1.2-rc4").shouldUpgradeTo("1.2") === true)
     assert(Version("1.2-rc4").shouldUpgradeTo("1.2-rc3") === false)
     assert(Version("1.2-rc4").shouldUpgradeTo("1.2-rc4") === false)
     assert(Version("1.2-rc4").shouldUpgradeTo("1.3-rc1") === true)

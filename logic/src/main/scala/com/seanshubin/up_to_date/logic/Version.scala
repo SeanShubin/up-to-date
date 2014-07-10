@@ -19,10 +19,18 @@ case class Version(words: List[String]) extends Ordered[Version] {
         false
       }
     } else {
-      if (this < that) {
-        true
+      if (that.isRelease) {
+        if (this.dropReleaseCandidateParts > that) {
+          false
+        } else {
+          true
+        }
       } else {
-        false
+        if (this < that) {
+          true
+        } else {
+          false
+        }
       }
     }
   }
@@ -32,6 +40,10 @@ case class Version(words: List[String]) extends Ordered[Version] {
   override def compare(that: Version): Int = {
     val compareResult = Version.compareWordLists(this.words, that.words)
     compareResult
+  }
+
+  def dropReleaseCandidateParts: Version = {
+    Version(words.takeWhile(Version.notReleaseCandidate))
   }
 }
 
@@ -47,6 +59,9 @@ object Version {
   private def capture(pattern: String) = "(" + pattern + ")"
 
   private val releaseWords = Set("ga", "final", "patch", "java", "groovy", "r", "v")
+  private val releaseCandidateWords = Set("rc")
+
+  def notReleaseCandidate(word: String): Boolean = !releaseCandidateWords.contains(word)
 
   @tailrec
   def compareWordLists(leftVersionWords: List[String], rightVersionWords: List[String]): Int = {
