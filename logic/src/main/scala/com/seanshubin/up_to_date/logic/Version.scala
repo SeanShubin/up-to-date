@@ -27,7 +27,11 @@ case class Version(words: List[String]) extends Ordered[Version] {
         }
       } else {
         if (this < that) {
-          true
+          if(this.dropReleaseCandidateParts < that.dropReleaseCandidateParts) {
+            false
+          } else {
+            true
+          }
         } else {
           false
         }
@@ -44,6 +48,11 @@ case class Version(words: List[String]) extends Ordered[Version] {
 
   def dropReleaseCandidateParts: Version = {
     Version(words.takeWhile(Version.notReleaseCandidate))
+  }
+
+  def selectUpgrade(versions:Set[Version]):Option[Version] = {
+    def shouldUpgrade(that:Version) = shouldUpgradeTo(that)
+    versions.filter(shouldUpgrade).toSeq.sorted.headOption
   }
 }
 

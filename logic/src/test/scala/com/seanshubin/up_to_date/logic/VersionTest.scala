@@ -96,18 +96,33 @@ class VersionTest extends FunSuite with ShouldMatchers {
     assert(Version("1.2-rc3").shouldUpgradeTo("1.2") === true)
     assert(Version("1.2-rc3").shouldUpgradeTo("1.2-rc3") === false)
     assert(Version("1.2-rc3").shouldUpgradeTo("1.2-rc4") === true)
-    assert(Version("1.2-rc3").shouldUpgradeTo("1.3-rc1") === true)
+    assert(Version("1.2-rc3").shouldUpgradeTo("1.3-rc1") === false)
 
     assert(Version("1.2-rc4").shouldUpgradeTo("1.1") === false)
     assert(Version("1.2-rc4").shouldUpgradeTo("1.2") === true)
     assert(Version("1.2-rc4").shouldUpgradeTo("1.2-rc3") === false)
     assert(Version("1.2-rc4").shouldUpgradeTo("1.2-rc4") === false)
-    assert(Version("1.2-rc4").shouldUpgradeTo("1.3-rc1") === true)
+    assert(Version("1.2-rc4").shouldUpgradeTo("1.3-rc1") === false)
 
     assert(Version("1.3-rc1").shouldUpgradeTo("1.1") === false)
     assert(Version("1.3-rc1").shouldUpgradeTo("1.2") === false)
     assert(Version("1.3-rc1").shouldUpgradeTo("1.2-rc3") === false)
     assert(Version("1.3-rc1").shouldUpgradeTo("1.2-rc4") === false)
     assert(Version("1.3-rc1").shouldUpgradeTo("1.3-rc1") === false)
+  }
+
+  test("select upgrade") {
+    val allVersionStrings = Set("1.1", "1.2", "1.2-rc3", "1.2-rc4", "1.3-rc1", "1.3-rc2", "1.4-rc1")
+    val allVersions = allVersionStrings.map(Version.apply)
+    checkUpgradePath(allVersions, "1.1", Some("1.2"))
+    checkUpgradePath(allVersions, "1.2", None)
+    checkUpgradePath(allVersions, "1.2-rc3", Some("1.2"))
+    checkUpgradePath(allVersions, "1.2-rc4", Some("1.2"))
+    checkUpgradePath(allVersions, "1.3-rc1", Some("1.3-rc2"))
+    checkUpgradePath(allVersions, "1.3-rc2", None)
+  }
+
+  def checkUpgradePath(allVersions: Set[Version], from: String, to: Option[String]) {
+    assert(Version(from).selectUpgrade(allVersions) === to.map(Version.apply))
   }
 }
