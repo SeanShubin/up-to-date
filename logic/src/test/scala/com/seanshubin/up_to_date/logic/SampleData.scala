@@ -55,7 +55,7 @@ object SampleData {
       |    }
       |  }
       |}""".stripMargin
-  val outOfDate: OutOfDate = null
+  val outOfDate: OutOfDateReport = null
   val automaticUpgradesPerformed: AutomaticUpgradesPerformed = null
   val sampleMetadataContents =
     """<?xml version="1.0" encoding="UTF-8"?>

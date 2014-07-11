@@ -1,3 +1,3 @@
 package com.seanshubin.up_to_date.logic
 
-class OutOfDate
+case class OutOfDate(byPom: Map[String, UpgradeInfo])
