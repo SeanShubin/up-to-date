@@ -21,11 +21,11 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     expecting {
       pomFileScanner.scanExistingDependencies().andReturn(SampleData.existingDependencies)
       mavenRepositoryScanner.scanLatestDependencies(SampleData.existingDependencies.toGroupAndArtifactSet).andReturn(SampleData.dependencyVersions)
-      dependencyUpgradeAnalyzer.outOfDate(SampleData.existingDependencies, SampleData.dependencyVersions).andReturn(SampleData.outOfDate)
-      upgrader.performAutomaticUpgrades(SampleData.outOfDate).andReturn(SampleData.automaticUpgradesPerformed)
+      dependencyUpgradeAnalyzer.recommend(SampleData.existingDependencies, SampleData.dependencyVersions).andReturn(SampleData.recommendations)
+      upgrader.performAutomaticUpgrades(SampleData.recommendations).andReturn(SampleData.automaticUpgradesPerformed)
       reporter.reportObservations(SampleData.existingDependencies, SampleData.dependencyVersions)
       reporter.reportAutomaticUpgradesPerformed(SampleData.automaticUpgradesPerformed)
-      reporter.reportOutOfDate(SampleData.outOfDate)
+      reporter.reportRecommendations(SampleData.recommendations)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()

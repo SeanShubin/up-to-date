@@ -5,7 +5,7 @@ import java.nio.file.Path
 class ReporterImpl(observationPath: Path, fileSystem: FileSystem, jsonMarshaller: JsonMarshaller) extends Reporter {
   override def reportAutomaticUpgradesPerformed(automaticUpgradesPerformed: AutomaticUpgradesPerformed): Unit = ???
 
-  override def reportOutOfDate(outOfDate: OutOfDateReport): Unit = ???
+  override def reportRecommendations(recommendations: Recommendations): Unit = ???
 
   override def reportObservations(existingDependencies: ExistingDependencies,
                                   dependencyVersions: DependencyVersions): Unit = {

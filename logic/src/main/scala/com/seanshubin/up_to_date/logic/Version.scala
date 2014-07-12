@@ -2,8 +2,8 @@ package com.seanshubin.up_to_date.logic
 
 import scala.annotation.tailrec
 
-case class Version(words: List[String]) extends Ordered[Version] {
-  def this(version: String) = this(Version.breakIntoWords(version))
+case class Version(originalString:String, words: List[String]) extends Ordered[Version] {
+  def this(version: String) = this(version, Version.breakIntoWords(version))
 
   def isRelease: Boolean = words.forall(Version.isNumberOrReleaseWord)
 
@@ -47,7 +47,7 @@ case class Version(words: List[String]) extends Ordered[Version] {
   }
 
   def dropReleaseCandidateParts: Version = {
-    Version(words.takeWhile(Version.notReleaseCandidate))
+    copy(words = words.takeWhile(Version.notReleaseCandidate))
   }
 
   def selectUpgrade(versions: Set[Version]): Option[Version] = {
@@ -109,5 +109,16 @@ object Version {
     val isReleaseWord = releaseWords.contains(s.toLowerCase)
     val isNumber = s.matches(WholeNumberPattern)
     isReleaseWord || isNumber
+  }
+
+  def bestAvailableVersionFrom(versionStrings: Set[String]): String = {
+    def isRelease(versionString: String) = Version(versionString).isRelease
+    val releaseVersionStrings = versionStrings.filter(isRelease)
+    val availableVersionStrings = if (releaseVersionStrings.isEmpty) {
+      versionStrings
+    } else {
+      releaseVersionStrings
+    }
+    availableVersionStrings.map(Version.apply).toSeq.sorted.reverse.head.originalString
   }
 }

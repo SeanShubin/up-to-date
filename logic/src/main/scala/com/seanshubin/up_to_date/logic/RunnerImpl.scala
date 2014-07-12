@@ -11,10 +11,10 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
       val existingDependencies = pomFileScanner.scanExistingDependencies()
       val latestDependencies = mavenRepositoryScanner.scanLatestDependencies(existingDependencies.toGroupAndArtifactSet)
       reporter.reportObservations(existingDependencies, latestDependencies)
-      val outOfDate = dependencyUpgradeAnalyzer.outOfDate(existingDependencies, latestDependencies)
-      val automaticUpgradesPerformed = upgrader.performAutomaticUpgrades(outOfDate)
+      val recommendations = dependencyUpgradeAnalyzer.recommend(existingDependencies, latestDependencies)
+      val automaticUpgradesPerformed = upgrader.performAutomaticUpgrades(recommendations)
       reporter.reportAutomaticUpgradesPerformed(automaticUpgradesPerformed)
-      reporter.reportOutOfDate(outOfDate)
+      reporter.reportRecommendations(recommendations)
     }
   }
 }
