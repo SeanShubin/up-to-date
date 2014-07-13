@@ -55,22 +55,25 @@ object SampleData {
       |    }
       |  }
       |}""".stripMargin
+  val jacksonId = GroupAndArtifact("com.fasterxml.jackson.module", "jackson-module-scala_2.11")
+  val scalaId = GroupAndArtifact("org.scala-lang", "scala-library")
+  val jodaId = GroupAndArtifact("joda-time", "joda-time")
   val recommendations = Recommendations(
     totalDependencies = 3,
     dependenciesToUpgrade = 2,
     versionEntriesToUpgrade = 4,
     byGroupAndArtifact = Map(
-      GroupAndArtifact("com.fasterxml.jackson.module", "jackson-module-scala_2.11") ->
+      jacksonId ->
         RecommendationBySource(bestAvailable = "1.3.0", repositoryLocation = "http://repo1/jackson", Map(
           "pom.xml" -> RecommendedVersionBump("1.2.3", Some("1.3.0")),
           "logic/pom.xml" -> RecommendedVersionBump("1.3-rc1", Some("1.3.0")),
           "integration/pom.xml" -> RecommendedVersionBump("1.4-rc1", None))),
-      GroupAndArtifact("org.scala-lang", "scala-library") ->
+      scalaId ->
         RecommendationBySource(bestAvailable = "2.11.1", repositoryLocation = "http://repo1/scala", Map(
           "pom.xml" -> RecommendedVersionBump("2.11.1", None),
           "logic/pom.xml" -> RecommendedVersionBump("2.10", Some("2.11.1")),
           "integration/pom.xml" -> RecommendedVersionBump("2.11.0", Some("2.11.1")))),
-      GroupAndArtifact("joda-time", "joda-time") ->
+      jodaId ->
         RecommendationBySource(bestAvailable = "2.3", repositoryLocation = "http://repo2/joda", Map(
           "pom.xml" -> RecommendedVersionBump("2.3", None),
           "logic/pom.xml" -> RecommendedVersionBump("2.3", None),

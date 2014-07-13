@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import scala.annotation.tailrec
 
-case class Version(originalString:String, words: List[String]) extends Ordered[Version] {
+case class Version(originalString: String, words: List[String]) extends Ordered[Version] {
   def this(version: String) = this(version, Version.breakIntoWords(version))
 
   def isRelease: Boolean = words.forall(Version.isNumberOrReleaseWord)
@@ -52,7 +52,13 @@ case class Version(originalString:String, words: List[String]) extends Ordered[V
 
   def selectUpgrade(versions: Set[Version]): Option[Version] = {
     def shouldUpgrade(that: Version) = shouldUpgradeTo(that)
-    versions.filter(shouldUpgrade).toSeq.sorted.headOption
+    val releases = versions.filter(shouldUpgrade).filter(_.isRelease)
+    val potentialUpgrades = if (releases.isEmpty) {
+      versions.filter(shouldUpgrade)
+    } else {
+      releases
+    }
+    potentialUpgrades.toSeq.sorted.reverse.headOption
   }
 }
 
@@ -111,14 +117,13 @@ object Version {
     isReleaseWord || isNumber
   }
 
-  def bestAvailableVersionFrom(versionStrings: Set[String]): String = {
-    def isRelease(versionString: String) = Version(versionString).isRelease
-    val releaseVersionStrings = versionStrings.filter(isRelease)
-    val availableVersionStrings = if (releaseVersionStrings.isEmpty) {
-      versionStrings
+  def bestAvailableVersionFrom(versions: Set[Version]): Version = {
+    val releaseVersions = versions.filter(_.isRelease)
+    val availableVersions = if (releaseVersions.isEmpty) {
+      versions
     } else {
-      releaseVersionStrings
+      releaseVersions
     }
-    availableVersionStrings.map(Version.apply).toSeq.sorted.reverse.head.originalString
+    availableVersions.toSeq.sorted.reverse.head
   }
 }

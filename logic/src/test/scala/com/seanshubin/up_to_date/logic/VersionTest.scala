@@ -122,14 +122,20 @@ class VersionTest extends FunSuite with ShouldMatchers {
     checkUpgradePath(allVersions, "1.3-rc2", None)
   }
 
+  test("select upgrade 2") {
+    val allVersionStrings = Set("2.11.1", "2.10", "2.11.0")
+    val allVersions = allVersionStrings.map(Version.apply)
+    checkUpgradePath(allVersions, "2.10", Some("2.11.1"))
+  }
+
   test("best available") {
-    val allVersionStrings = Set("1.1", "1.2", "1.2-rc3", "1.2-rc4", "1.3-rc1", "1.3-rc2", "1.4-rc1")
-    assert(Version.bestAvailableVersionFrom(allVersionStrings) === "1.2")
+    val allVersions = Set("1.1", "1.2", "1.2-rc3", "1.2-rc4", "1.3-rc1", "1.3-rc2", "1.4-rc1").map(Version.apply)
+    assert(Version.bestAvailableVersionFrom(allVersions).originalString === "1.2")
   }
 
   test("best available when no release versions") {
-    val allVersionStrings = Set("1.2-rc3", "1.2-rc4", "1.3-rc1", "1.3-rc2", "1.4-rc1")
-    assert(Version.bestAvailableVersionFrom(allVersionStrings) === "1.4-rc1")
+    val allVersions = Set("1.2-rc3", "1.2-rc4", "1.3-rc1", "1.3-rc2", "1.4-rc1").map(Version.apply)
+    assert(Version.bestAvailableVersionFrom(allVersions).originalString === "1.4-rc1")
   }
 
   def checkUpgradePath(allVersions: Set[Version], from: String, to: Option[String]) {
