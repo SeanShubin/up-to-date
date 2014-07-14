@@ -29,9 +29,9 @@ class DependencyUpgradeAnalyzerTest extends FunSuite {
 
     val dependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
     val actual = dependencyUpgradeAnalyzer.recommend(existingDependencies, latestDependencies)
-    //    assert(actual.totalDependencies === expected.totalDependencies)
-    //    assert(actual.dependenciesToUpgrade === expected.dependenciesToUpgrade)
-    //    assert(actual.versionEntriesToUpgrade === expected.versionEntriesToUpgrade)
+    assert(actual.totalDependencies === 3)
+    assert(actual.dependenciesToUpgrade === 2)
+    assert(actual.versionEntriesToUpgrade === 4)
     val actualJackson: RecommendationBySource = actual.byGroupAndArtifact(SampleData.jacksonId)
     assert(actualJackson.bestAvailable === "1.3.0")
     assert(actualJackson.repositoryLocation === "http://repo1/jackson")

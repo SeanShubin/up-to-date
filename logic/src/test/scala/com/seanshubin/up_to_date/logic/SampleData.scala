@@ -59,9 +59,6 @@ object SampleData {
   val scalaId = GroupAndArtifact("org.scala-lang", "scala-library")
   val jodaId = GroupAndArtifact("joda-time", "joda-time")
   val recommendations = Recommendations(
-    totalDependencies = 3,
-    dependenciesToUpgrade = 2,
-    versionEntriesToUpgrade = 4,
     byGroupAndArtifact = Map(
       jacksonId ->
         RecommendationBySource(bestAvailable = "1.3.0", repositoryLocation = "http://repo1/jackson", Map(

@@ -7,11 +7,17 @@ case class RecommendationPart(group: String,
                               repositoryLocation: String,
                               repositoryVersions: Set[String])
 
-case class RecommendedVersionBump(fromVersion: String, maybeToVersion: Option[String])
+case class RecommendedVersionBump(fromVersion: String, maybeToVersion: Option[String]) {
+  def hasRecommendation: Boolean = maybeToVersion.isDefined
+}
 
 case class RecommendationBySource(bestAvailable: String,
                                   repositoryLocation: String,
                                   byPomLocation: Map[String, RecommendedVersionBump]) {
+  def hasRecommendation: Boolean = byPomLocation.values.exists(_.hasRecommendation)
+
+  def versionEntriesToUpgrade: Int = byPomLocation.values.count(_.hasRecommendation)
+
   def recommendVersionBump(pomLocation: String, pomVersion: Version, versions: Set[Version]) = {
     val maybeUpgrade = pomVersion.selectUpgrade(versions).map(_.originalString)
     val recommendedVersionBump = RecommendedVersionBump(pomVersion.originalString, maybeUpgrade)
@@ -19,10 +25,13 @@ case class RecommendationBySource(bestAvailable: String,
   }
 }
 
-case class Recommendations(totalDependencies: Int,
-                           dependenciesToUpgrade: Int,
-                           versionEntriesToUpgrade: Int,
-                           byGroupAndArtifact: Map[GroupAndArtifact, RecommendationBySource]) {
+case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, RecommendationBySource]) {
+  def totalDependencies: Int = byGroupAndArtifact.size
+
+  def dependenciesToUpgrade: Int = byGroupAndArtifact.values.count(_.hasRecommendation)
+
+  def versionEntriesToUpgrade: Int = byGroupAndArtifact.values.map(_.versionEntriesToUpgrade).sum
+
   def addPart(part: RecommendationPart): Recommendations = {
     val groupAndArtifact = GroupAndArtifact(part.group, part.artifact)
     val repositoryLocation = part.repositoryLocation
@@ -37,5 +46,5 @@ case class Recommendations(totalDependencies: Int,
 }
 
 object Recommendations {
-  val Empty = Recommendations(0, 0, 0, Map())
+  val Empty = Recommendations(Map())
 }
