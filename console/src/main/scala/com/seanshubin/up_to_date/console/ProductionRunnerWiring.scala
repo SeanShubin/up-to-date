@@ -1,7 +1,6 @@
 package com.seanshubin.up_to_date.console
 
 import java.nio.charset.Charset
-import java.nio.file.Path
 
 import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic._
@@ -9,7 +8,8 @@ import com.seanshubin.up_to_date.logic._
 trait ProductionRunnerWiring {
   def configuration: ValidConfiguration
 
-  lazy val observationPath: Path = configuration.reportDirectory.resolve("observations.json")
+  lazy val observationReportName: String = "observations.json"
+  lazy val recommendationReportName: String = "recommendations.json"
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
   lazy val systemClock: SystemClock = new SystemClockImpl
@@ -29,7 +29,12 @@ trait ProductionRunnerWiring {
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
   lazy val upgrader: Upgrader = new UpgraderImpl
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
-  lazy val reporter: Reporter = new ReporterImpl(observationPath, fileSystem, jsonMarshaller)
+  lazy val reporter: Reporter = new ReporterImpl(
+    configuration.reportDirectory,
+    observationReportName,
+    recommendationReportName,
+    fileSystem,
+    jsonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: RunnerImpl = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)
