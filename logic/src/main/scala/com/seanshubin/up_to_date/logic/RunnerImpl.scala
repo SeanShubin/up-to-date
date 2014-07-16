@@ -10,7 +10,8 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
     notifications.timeTaken("Total Time Taken") {
       val existingDependencies = pomFileScanner.scanExistingDependencies()
       val latestDependencies = mavenRepositoryScanner.scanLatestDependencies(existingDependencies.toGroupAndArtifactSet)
-      reporter.reportObservations(existingDependencies, latestDependencies)
+      reporter.reportPom(existingDependencies)
+      reporter.reportRepository(latestDependencies)
       val recommendations = dependencyUpgradeAnalyzer.recommend(existingDependencies, latestDependencies)
       val automaticUpgradesPerformed = upgrader.performAutomaticUpgrades(recommendations)
       reporter.reportAutomaticUpgradesPerformed(automaticUpgradesPerformed)

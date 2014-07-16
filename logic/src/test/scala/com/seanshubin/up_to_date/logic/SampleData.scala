@@ -31,28 +31,27 @@ object SampleData {
     GroupAndArtifact("org.scala-lang", "scala-library") -> LocationAndVersions("repo1", Set("1", "2", "3")),
     GroupAndArtifact("joda-time", "joda-time") -> LocationAndVersions("repo2", Set("4", "5", "6"))
   ))
-  val observationsReport =
+  val pomReport =
     """{
-      |  "existingDependencies" : {
-      |    "pom.xml" : [ {
-      |      "group" : "org.scala-lang",
-      |      "artifact" : "scala-library",
-      |      "version" : "2.11.1"
-      |    }, {
-      |      "group" : "joda-time",
-      |      "artifact" : "joda-time",
-      |      "version" : "2.3"
-      |    } ]
+      |  "pom.xml" : [ {
+      |    "group" : "org.scala-lang",
+      |    "artifact" : "scala-library",
+      |    "version" : "2.11.1"
+      |  }, {
+      |    "group" : "joda-time",
+      |    "artifact" : "joda-time",
+      |    "version" : "2.3"
+      |  } ]
+      |}""".stripMargin
+  val repositoryReport =
+    """{
+      |  "GroupAndArtifact(org.scala-lang,scala-library)" : {
+      |    "location" : "repo1",
+      |    "versions" : [ "1", "2", "3" ]
       |  },
-      |  "dependencyVersions" : {
-      |    "GroupAndArtifact(org.scala-lang,scala-library)" : {
-      |      "location" : "repo1",
-      |      "versions" : [ "1", "2", "3" ]
-      |    },
-      |    "GroupAndArtifact(joda-time,joda-time)" : {
-      |      "location" : "repo2",
-      |      "versions" : [ "4", "5", "6" ]
-      |    }
+      |  "GroupAndArtifact(joda-time,joda-time)" : {
+      |    "location" : "repo2",
+      |    "versions" : [ "4", "5", "6" ]
       |  }
       |}""".stripMargin
   val recommendationsReport =

@@ -5,5 +5,7 @@ trait Reporter {
 
   def reportRecommendations(recommendations: Recommendations)
 
-  def reportObservations(existingDependencies: ExistingDependencies, dependencyVersions: DependencyVersions)
+  def reportPom(existingDependencies: ExistingDependencies)
+
+  def reportRepository(dependencyVersions: DependencyVersions)
 }

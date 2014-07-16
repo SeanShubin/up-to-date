@@ -3,7 +3,8 @@ package com.seanshubin.up_to_date.logic
 import java.nio.file.Path
 
 class ReporterImpl(reportPath: Path,
-                   observationReportName: String,
+                   pomReportName: String,
+                   repositoryReportName: String,
                    recommendationReportName: String,
                    fileSystem: FileSystem,
                    jsonMarshaller: JsonMarshaller) extends Reporter {
@@ -17,11 +18,15 @@ class ReporterImpl(reportPath: Path,
     fileSystem.storeString(reportPath.resolve(recommendationReportName), jsonReport)
   }
 
-  override def reportObservations(existingDependencies: ExistingDependencies,
-                                  dependencyVersions: DependencyVersions): Unit = {
-    val observations = Observations(existingDependencies.byPom, dependencyVersions.map)
-    val jsonReport = jsonMarshaller.toJson(observations)
+  override def reportPom(existingDependencies: ExistingDependencies): Unit = {
+    val jsonReport = jsonMarshaller.toJson(existingDependencies.byPom)
     fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(reportPath.resolve(observationReportName), jsonReport)
+    fileSystem.storeString(reportPath.resolve(pomReportName), jsonReport)
+  }
+
+  override def reportRepository(dependencyVersions: DependencyVersions): Unit = {
+    val jsonReport = jsonMarshaller.toJson(dependencyVersions.map)
+    fileSystem.ensureDirectoriesExist(reportPath)
+    fileSystem.storeString(reportPath.resolve(repositoryReportName), jsonReport)
   }
 }

@@ -8,7 +8,8 @@ import com.seanshubin.up_to_date.logic._
 trait ProductionRunnerWiring {
   def configuration: ValidConfiguration
 
-  lazy val observationReportName: String = "observations.json"
+  lazy val pomReportName: String = "pom.json"
+  lazy val repositoryReportName: String = "repository.json"
   lazy val recommendationReportName: String = "recommendations.json"
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
@@ -31,7 +32,8 @@ trait ProductionRunnerWiring {
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
   lazy val reporter: Reporter = new ReporterImpl(
     configuration.reportDirectory,
-    observationReportName,
+    pomReportName,
+    repositoryReportName,
     recommendationReportName,
     fileSystem,
     jsonMarshaller)
