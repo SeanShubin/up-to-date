@@ -17,7 +17,7 @@ trait ProductionRunnerWiring {
   lazy val emitLine: String => Unit = println
   lazy val fileSystem: FileSystem = new FileSystemImpl(charset)
   lazy val pomFileFinder: PomFileFinder = new PomFileFinderImpl(
-    fileSystem, configuration.pomFileName, configuration.directoryNamesToSkip)
+    fileSystem, configuration.directoriesToSearch, configuration.pomFileName, configuration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(fileSystem)
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
   lazy val httpDelegate: Http = new HttpImpl(charset, notifications)
