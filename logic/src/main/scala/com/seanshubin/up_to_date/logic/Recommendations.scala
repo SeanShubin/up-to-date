@@ -32,6 +32,12 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
 
   def versionEntriesToUpgrade: Int = byGroupAndArtifact.values.map(_.versionEntriesToUpgrade).sum
 
+  def filterWithRecommendation: Map[GroupAndArtifact, RecommendationBySource] =
+    for {
+      (key, value) <- byGroupAndArtifact
+      if value.hasRecommendation
+    } yield (key, value)
+
   def addPart(part: RecommendationPart): Recommendations = {
     val groupAndArtifact = GroupAndArtifact(part.group, part.artifact)
     val repositoryLocation = part.repositoryLocation

@@ -13,7 +13,7 @@ class ReporterImpl(reportPath: Path,
   }
 
   override def reportRecommendations(recommendations: Recommendations): Unit = {
-    val jsonReport = jsonMarshaller.toJson(recommendations)
+    val jsonReport = jsonMarshaller.toJson(recommendations.filterWithRecommendation)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(recommendationReportName), jsonReport)
   }
