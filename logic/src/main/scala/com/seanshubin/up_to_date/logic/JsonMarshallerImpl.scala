@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.io.StringWriter
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.core.{JsonFactory, JsonParseException}
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper, SerializationFeature}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
@@ -55,6 +55,15 @@ class JsonMarshallerImpl extends JsonMarshaller {
       case (a, b) => b
     }
     merged
+  }
+
+  def toDynamicJsonObject(rawJson: String): DynamicJson = {
+    val jsonFactory = new JsonFactory
+    val parser = jsonFactory.createParser(rawJson)
+    val abstractSyntaxTree = new JsonAbstractSyntaxTree(parser)
+    val value = abstractSyntaxTree.parseValue()
+    val dynamic: DynamicJson = DynamicJson(value)
+    dynamic
   }
 
   private def mergeEntry(aMap: Map[AnyRef, AnyRef], bEntry: (AnyRef, AnyRef)): Map[AnyRef, AnyRef] = {

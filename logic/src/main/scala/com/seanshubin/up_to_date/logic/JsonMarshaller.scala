@@ -10,4 +10,6 @@ trait JsonMarshaller {
   def normalize(json: String): String
 
   def merge(aObject: AnyRef, bObject: AnyRef): AnyRef
+
+  def toDynamicJsonObject(rawJson: String): DynamicJson
 }
