@@ -6,8 +6,8 @@ case class ConfigurationJson(pomFileName: Option[String],
                              directoriesToSearch: Option[Seq[String]],
                              directoryNamesToSkip: Option[Seq[String]],
                              mavenRepositories: Option[Seq[String]],
-                             dependenciesToAutomaticallyUpdate: Option[Seq[Seq[String]]],
-                             ignore: Option[Seq[Seq[String]]],
+                             doNotUpgradeFrom: Option[Seq[Seq[String]]],
+                             doNotUpgradeTo: Option[Seq[Seq[String]]],
                              reportDirectory: Option[String],
                              cacheDirectory: Option[String],
                              cacheExpire: Option[String]) {
@@ -17,8 +17,8 @@ case class ConfigurationJson(pomFileName: Option[String],
       Some(theDirectoriesToSearch),
       Some(theDirectoryNamesToSkip),
       Some(theMavenRepositories),
-      Some(theAutomaticallyUpdate),
-      Some(theIgnore),
+      Some(theDoNotUpgradeFrom),
+      Some(theDoNotUpgradeTo),
       Some(theReportDirectory),
       Some(theCacheDirectory),
       Some(theCacheExpire)) =>
@@ -29,8 +29,8 @@ case class ConfigurationJson(pomFileName: Option[String],
             theDirectoriesToSearch.map(nameToPath),
             theDirectoryNamesToSkip,
             theMavenRepositories,
-            theAutomaticallyUpdate,
-            theIgnore,
+            theDoNotUpgradeFrom,
+            theDoNotUpgradeTo,
             nameToPath(theReportDirectory),
             nameToPath(theCacheDirectory),
             expireMilliseconds))
@@ -42,8 +42,8 @@ case class ConfigurationJson(pomFileName: Option[String],
           errorIfMissing(x.directoriesToSearch, "directoriesToSearch") ++
           errorIfMissing(x.directoryNamesToSkip, "directoryNamesToSkip") ++
           errorIfMissing(x.mavenRepositories, "mavenRepositories") ++
-          errorIfMissing(x.dependenciesToAutomaticallyUpdate, "dependenciesToAutomaticallyUpdate") ++
-          errorIfMissing(x.ignore, "ignore") ++
+          errorIfMissing(x.doNotUpgradeTo, "doNotUpgradeTo") ++
+          errorIfMissing(x.doNotUpgradeFrom, "doNotUpgradeFrom") ++
           errorIfMissing(x.reportDirectory, "reportDirectory") ++
           errorIfMissing(x.cacheDirectory, "cacheDirectory") ++
           errorIfMissing(x.cacheExpire, "cacheExpire"))
@@ -69,8 +69,8 @@ object ConfigurationJson {
       "http://repo.maven.apache.org/maven2",
       "http://onejar-maven-plugin.googlecode.com/svn/mavenrepo",
       "http://oss.sonatype.org/content/groups/scala-tools")),
-    dependenciesToAutomaticallyUpdate = Some(Seq(Seq("org.scala-lang", "scala-library"), Seq("joda-time", "joda-time"))),
-    ignore = Some(Seq(Seq("groupIdToIgnore", "artifactIdToIgnore"))),
+    doNotUpgradeFrom = Some(Seq(Seq("groupIdToIgnore", "artifactIdToIgnore", "1.2.3"))),
+    doNotUpgradeTo = Some(Seq(Seq("groupIdToIgnore", "artifactIdToIgnore", "1.2.3"))),
     reportDirectory = Some("generated/sample/report"),
     cacheDirectory = Some("generated/cache"),
     cacheExpire = Some("5 days")

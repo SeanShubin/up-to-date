@@ -8,8 +8,8 @@ object SampleData {
     directoriesToSearch = Some(Seq("pom directory 1", "pom directory 2")),
     directoryNamesToSkip = Some(Seq("skip this directory")),
     mavenRepositories = Some(Seq("maven repository 1", "maven repository 2")),
-    dependenciesToAutomaticallyUpdate = Some(Seq(Seq("group 1", "artifact 1", "version 1"), Seq("group 2", "artifact 2", "version 2"))),
-    ignore = Some(Seq(Seq("group 3", "artifact 3", "version 3"), Seq("group 4", "artifact 4", "version 4"))),
+    doNotUpgradeFrom = Some(Seq(Seq("group 3", "artifact 3", "version 3"), Seq("group 4", "artifact 4", "version 4"))),
+    doNotUpgradeTo = Some(Seq(Seq("group 5", "artifact 5", "version 5"), Seq("group 6", "artifact 6", "version 6"))),
     reportDirectory = Some("report directory"),
     cacheDirectory = Some("cache directory"),
     cacheExpire = Some("5 days"))
@@ -18,8 +18,8 @@ object SampleData {
     directoriesToSearch = Seq(Paths.get("pom directory 1"), Paths.get("pom directory 2")),
     directoryNamesToSkip = Seq("skip this directory"),
     mavenRepositories = Seq("maven repository 1", "maven repository 2"),
-    dependenciesToAutomaticallyUpdate = Seq(Seq("group 1", "artifact 1", "version 1"), Seq("group 2", "artifact 2", "version 2")),
-    ignore = Seq(Seq("group 3", "artifact 3", "version 3"), Seq("group 4", "artifact 4", "version 4")),
+    doNotUpgradeFrom = Seq(Seq("group 3", "artifact 3", "version 3"), Seq("group 4", "artifact 4", "version 4")),
+    doNotUpgradeTo = Seq(Seq("group 5", "artifact 5", "version 5"), Seq("group 6", "artifact 6", "version 6")),
     reportDirectory = Paths.get("report directory"),
     cacheDirectory = Paths.get("cache directory"),
     cacheExpireMilliseconds = DurationFormat.MillisecondsFormat.parse("5 days")

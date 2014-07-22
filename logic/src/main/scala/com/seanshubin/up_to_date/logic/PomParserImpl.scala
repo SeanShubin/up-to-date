@@ -36,12 +36,12 @@ class PomParserImpl(fileSystem: FileSystem) extends PomParser {
   }
 
   private def hasNecessaryFields(fields: Map[String, String]): Boolean = {
-    fields.contains("groupId") && fields.contains("artifactId") && fields.contains("version")
+    def containsValid(name: String): Boolean = fields.contains(name) && !fields(name).startsWith("$")
+    containsValid("groupId") && containsValid("artifactId") && containsValid("version")
   }
 
   private def pathAndFieldsToDependency(path: Path, fields: Map[String, String]): PomDependency = {
     val dependency = PomDependency(fields("groupId"), fields("artifactId"), fields("version"))
     dependency
   }
-
 }
