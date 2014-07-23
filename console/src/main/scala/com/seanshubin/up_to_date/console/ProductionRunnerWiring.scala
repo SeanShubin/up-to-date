@@ -24,7 +24,8 @@ trait ProductionRunnerWiring {
   lazy val httpDelegate: Http = new HttpImpl(charset, notifications)
   lazy val oneWayHash: OneWayHash = new Sha256(charset)
   lazy val http: Http = new HttpCache(
-    httpDelegate, oneWayHash, fileSystem, configuration.cacheDirectory, configuration.cacheExpireMilliseconds, systemClock, notifications)
+    httpDelegate, oneWayHash, fileSystem, configuration.cacheDirectory, configuration.cacheExpireMilliseconds,
+    systemClock, notifications)
   lazy val metadataParser: MetadataParser = new MetadataParserImpl(charset)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
     configuration.mavenRepositories, http, metadataParser)
@@ -32,13 +33,8 @@ trait ProductionRunnerWiring {
   lazy val upgrader: Upgrader = new UpgraderImpl
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
   lazy val reporter: Reporter = new ReporterImpl(
-    configuration.reportDirectory,
-    pomReportName,
-    repositoryReportName,
-    recommendationReportName,
-    inconsistencyReportName,
-    fileSystem,
-    jsonMarshaller)
+    configuration.reportDirectory, pomReportName, repositoryReportName, recommendationReportName,
+    inconsistencyReportName, fileSystem, jsonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: RunnerImpl = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)
