@@ -6,6 +6,7 @@ class ReporterImpl(reportPath: Path,
                    pomReportName: String,
                    repositoryReportName: String,
                    recommendationReportName: String,
+                   inconsistencyReportName: String,
                    fileSystem: FileSystem,
                    jsonMarshaller: JsonMarshaller) extends Reporter {
   override def reportAutomaticUpgradesPerformed(automaticUpgradesPerformed: AutomaticUpgradesPerformed): Unit = {
@@ -16,6 +17,12 @@ class ReporterImpl(reportPath: Path,
     val jsonReport = jsonMarshaller.toJson(recommendations.filterWithRecommendation)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(recommendationReportName), jsonReport)
+  }
+
+  override def reportInconsistencies(recommendations: Recommendations): Unit = {
+    val jsonReport = jsonMarshaller.toJson(recommendations.filterWithInconsistent)
+    fileSystem.ensureDirectoriesExist(reportPath)
+    fileSystem.storeString(reportPath.resolve(inconsistencyReportName), jsonReport)
   }
 
   override def reportPom(existingDependencies: ExistingDependencies): Unit = {

@@ -5,6 +5,8 @@ trait Reporter {
 
   def reportRecommendations(recommendations: Recommendations)
 
+  def reportInconsistencies(recommendations: Recommendations)
+
   def reportPom(existingDependencies: ExistingDependencies)
 
   def reportRepository(dependencyVersions: DependencyVersions)

@@ -16,6 +16,7 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
       val automaticUpgradesPerformed = upgrader.performAutomaticUpgrades(recommendations)
       reporter.reportAutomaticUpgradesPerformed(automaticUpgradesPerformed)
       reporter.reportRecommendations(recommendations)
+      reporter.reportInconsistencies(recommendations)
     }
   }
 }

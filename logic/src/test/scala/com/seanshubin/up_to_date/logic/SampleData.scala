@@ -91,6 +91,43 @@ object SampleData {
       |    }
       |  }
       |}""".stripMargin
+  val inconsistencyReport =
+    """{
+      |  "GroupAndArtifact(com.fasterxml.jackson.module,jackson-module-scala_2.11)" : {
+      |    "bestAvailable" : "1.3.0",
+      |    "repositoryLocation" : "http://repo1/jackson",
+      |    "byPomLocation" : {
+      |      "pom.xml" : {
+      |        "fromVersion" : "1.2.3",
+      |        "maybeToVersion" : "1.3.0"
+      |      },
+      |      "logic/pom.xml" : {
+      |        "fromVersion" : "1.3-rc1",
+      |        "maybeToVersion" : "1.3.0"
+      |      },
+      |      "integration/pom.xml" : {
+      |        "fromVersion" : "1.4-rc1"
+      |      }
+      |    }
+      |  },
+      |  "GroupAndArtifact(org.scala-lang,scala-library)" : {
+      |    "bestAvailable" : "2.11.1",
+      |    "repositoryLocation" : "http://repo1/scala",
+      |    "byPomLocation" : {
+      |      "pom.xml" : {
+      |        "fromVersion" : "2.11.1"
+      |      },
+      |      "logic/pom.xml" : {
+      |        "fromVersion" : "2.10",
+      |        "maybeToVersion" : "2.11.1"
+      |      },
+      |      "integration/pom.xml" : {
+      |        "fromVersion" : "2.11.0",
+      |        "maybeToVersion" : "2.11.1"
+      |      }
+      |    }
+      |  }
+      |}""".stripMargin
   val jacksonId = GroupAndArtifact("com.fasterxml.jackson.module", "jackson-module-scala_2.11")
   val scalaId = GroupAndArtifact("org.scala-lang", "scala-library")
   val jodaId = GroupAndArtifact("joda-time", "joda-time")

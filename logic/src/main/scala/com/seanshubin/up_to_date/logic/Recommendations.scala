@@ -16,6 +16,8 @@ case class RecommendationBySource(bestAvailable: String,
                                   byPomLocation: Map[String, RecommendedVersionBump]) {
   def hasRecommendation: Boolean = byPomLocation.values.exists(_.hasRecommendation)
 
+  def hasInconsistency: Boolean = byPomLocation.values.map(_.fromVersion).toSet.size > 1
+
   def versionEntriesToUpgrade: Int = byPomLocation.values.count(_.hasRecommendation)
 
   def recommendVersionBump(pomLocation: String, pomVersion: Version, versions: Set[Version]) = {
@@ -36,6 +38,12 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
     for {
       (key, value) <- byGroupAndArtifact
       if value.hasRecommendation
+    } yield (key, value)
+
+  def filterWithInconsistent: Map[GroupAndArtifact, RecommendationBySource] =
+    for {
+      (key, value) <- byGroupAndArtifact
+      if value.hasInconsistency
     } yield (key, value)
 
   def addPart(part: RecommendationPart): Recommendations = {

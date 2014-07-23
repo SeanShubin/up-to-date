@@ -11,6 +11,7 @@ trait ProductionRunnerWiring {
   lazy val pomReportName: String = "pom.json"
   lazy val repositoryReportName: String = "repository.json"
   lazy val recommendationReportName: String = "recommendations.json"
+  lazy val inconsistencyReportName: String = "inconsistency.json"
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
   lazy val systemClock: SystemClock = new SystemClockImpl
@@ -35,6 +36,7 @@ trait ProductionRunnerWiring {
     pomReportName,
     repositoryReportName,
     recommendationReportName,
+    inconsistencyReportName,
     fileSystem,
     jsonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
