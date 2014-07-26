@@ -3,7 +3,8 @@ package com.seanshubin.up_to_date.logic
 import java.nio.file.Path
 
 class LineEmittingNotifications(systemClock: SystemClock, emitLine: String => Unit) extends Notifications {
-  override def errorWithConfiguration(errorReport: Seq[String]): Unit = {
+  override def errorWithConfiguration(commandLineArguments: Seq[String], errorReport: Seq[String]): Unit = {
+    emitLine(commandLineArguments.mkString(" "))
     emitLine("Unable to launch application due to configuration validation errors")
     errorReport.foreach(emitLine)
   }

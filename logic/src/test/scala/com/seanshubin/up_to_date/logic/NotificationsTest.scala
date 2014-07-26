@@ -14,13 +14,14 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     val notifications = new LineEmittingNotifications(stubSystemClock, emitLine)
 
     //when
-    notifications.errorWithConfiguration(Seq("line 1", "line 2"))
+    notifications.errorWithConfiguration(Seq("config.json"), Seq("line 1", "line 2"))
 
     //then
-    assert(lines.size === 3)
-    assert(lines(0) === "Unable to launch application due to configuration validation errors")
-    assert(lines(1) === "line 1")
-    assert(lines(2) === "line 2")
+    assert(lines.size === 4)
+    assert(lines(0) === "config.json")
+    assert(lines(1) === "Unable to launch application due to configuration validation errors")
+    assert(lines(2) === "line 1")
+    assert(lines(3) === "line 2")
   }
 
   test("time taken") {

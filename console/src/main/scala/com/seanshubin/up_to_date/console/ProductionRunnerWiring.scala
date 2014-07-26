@@ -36,7 +36,7 @@ trait ProductionRunnerWiring {
     configuration.reportDirectory, pomReportName, repositoryReportName, recommendationReportName,
     inconsistencyReportName, fileSystem, jsonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
-  lazy val runner: RunnerImpl = new RunnerImpl(
+  lazy val runner: Runner = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)
 }
 

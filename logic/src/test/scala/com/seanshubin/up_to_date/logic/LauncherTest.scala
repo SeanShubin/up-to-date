@@ -5,7 +5,7 @@ import org.scalatest.mock.EasyMockSugar
 
 class LauncherTest extends FunSuite with EasyMockSugar {
   test("if configuration if valid, launcher will create a runner and execute the run method") {
-    val commandLineArguments = Seq("some configuration file")
+    val commandLineArguments = Seq("some-configuration-file")
     val configurationValidator = mock[ConfigurationValidator]
     val validConfiguration = SampleData.validConfiguration
     val createRunner = mock[ValidConfiguration => Runner]
@@ -25,7 +25,7 @@ class LauncherTest extends FunSuite with EasyMockSugar {
   }
 
   test("if the configuration is not valid, launcher will write an error report to the console") {
-    val commandLineArguments = Seq("some configuration file")
+    val commandLineArguments = Seq("some-configuration-file")
     val configurationValidator = mock[ConfigurationValidator]
     val errorReport = Seq("error with configuration")
     val notifications = mock[Notifications]
@@ -34,7 +34,7 @@ class LauncherTest extends FunSuite with EasyMockSugar {
 
     expecting {
       configurationValidator.validate(commandLineArguments).andReturn(Left(errorReport))
-      notifications.errorWithConfiguration(Seq("error with configuration"))
+      notifications.errorWithConfiguration(commandLineArguments, Seq("error with configuration"))
     }
 
     whenExecuting(configurationValidator, notifications) {

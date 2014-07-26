@@ -8,7 +8,7 @@ class FakeNotifications extends Notifications {
   val timeTakenCalls = new ArrayBuffer[String]()
   val getCalls = new ArrayBuffer[String]()
 
-  override def errorWithConfiguration(errorReport: Seq[String]): Unit = ???
+  override def errorWithConfiguration(commandLineArguments: Seq[String], errorReport: Seq[String]): Unit = ???
 
   override def timeTaken[T](caption: String)(block: => T): T = {
     timeTakenCalls.append(caption)

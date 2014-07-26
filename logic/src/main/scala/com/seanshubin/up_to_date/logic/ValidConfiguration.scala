@@ -8,6 +8,7 @@ case class ValidConfiguration(pomFileName: String,
                               mavenRepositories: Seq[String],
                               doNotUpgradeFrom: Seq[Seq[String]],
                               doNotUpgradeTo: Seq[Seq[String]],
+                              automaticallyUpgrade: Boolean,
                               reportDirectory: Path,
                               cacheDirectory: Path,
                               cacheExpireMilliseconds: Long)

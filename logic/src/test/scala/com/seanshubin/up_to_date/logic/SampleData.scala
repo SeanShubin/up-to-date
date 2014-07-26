@@ -10,6 +10,7 @@ object SampleData {
     mavenRepositories = Some(Seq("maven repository 1", "maven repository 2")),
     doNotUpgradeFrom = Some(Seq(Seq("group 3", "artifact 3", "version 3"), Seq("group 4", "artifact 4", "version 4"))),
     doNotUpgradeTo = Some(Seq(Seq("group 5", "artifact 5", "version 5"), Seq("group 6", "artifact 6", "version 6"))),
+    automaticallyUpgrade = Some(true),
     reportDirectory = Some("report directory"),
     cacheDirectory = Some("cache directory"),
     cacheExpire = Some("5 days"))
@@ -20,6 +21,7 @@ object SampleData {
     mavenRepositories = Seq("maven repository 1", "maven repository 2"),
     doNotUpgradeFrom = Seq(Seq("group 3", "artifact 3", "version 3"), Seq("group 4", "artifact 4", "version 4")),
     doNotUpgradeTo = Seq(Seq("group 5", "artifact 5", "version 5"), Seq("group 6", "artifact 6", "version 6")),
+    automaticallyUpgrade = true,
     reportDirectory = Paths.get("report directory"),
     cacheDirectory = Paths.get("cache directory"),
     cacheExpireMilliseconds = DurationFormat.MillisecondsFormat.parse("5 days")

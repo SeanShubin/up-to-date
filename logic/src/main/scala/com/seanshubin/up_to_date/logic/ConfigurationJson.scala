@@ -8,6 +8,7 @@ case class ConfigurationJson(pomFileName: Option[String],
                              mavenRepositories: Option[Seq[String]],
                              doNotUpgradeFrom: Option[Seq[Seq[String]]],
                              doNotUpgradeTo: Option[Seq[Seq[String]]],
+                             automaticallyUpgrade: Option[Boolean],
                              reportDirectory: Option[String],
                              cacheDirectory: Option[String],
                              cacheExpire: Option[String]) {
@@ -19,6 +20,7 @@ case class ConfigurationJson(pomFileName: Option[String],
       Some(theMavenRepositories),
       Some(theDoNotUpgradeFrom),
       Some(theDoNotUpgradeTo),
+      Some(theAutomaticallyUpgrade),
       Some(theReportDirectory),
       Some(theCacheDirectory),
       Some(theCacheExpire)) =>
@@ -31,6 +33,7 @@ case class ConfigurationJson(pomFileName: Option[String],
             theMavenRepositories,
             theDoNotUpgradeFrom,
             theDoNotUpgradeTo,
+            theAutomaticallyUpgrade,
             nameToPath(theReportDirectory),
             nameToPath(theCacheDirectory),
             expireMilliseconds))
@@ -44,6 +47,7 @@ case class ConfigurationJson(pomFileName: Option[String],
           errorIfMissing(x.mavenRepositories, "mavenRepositories") ++
           errorIfMissing(x.doNotUpgradeTo, "doNotUpgradeTo") ++
           errorIfMissing(x.doNotUpgradeFrom, "doNotUpgradeFrom") ++
+          errorIfMissing(x.automaticallyUpgrade, "automaticallyUpgrade") ++
           errorIfMissing(x.reportDirectory, "reportDirectory") ++
           errorIfMissing(x.cacheDirectory, "cacheDirectory") ++
           errorIfMissing(x.cacheExpire, "cacheExpire"))
@@ -71,6 +75,7 @@ object ConfigurationJson {
       "http://oss.sonatype.org/content/groups/scala-tools")),
     doNotUpgradeFrom = Some(Seq(Seq("groupIdToIgnore", "artifactIdToIgnore", "1.2.3"))),
     doNotUpgradeTo = Some(Seq(Seq("groupIdToIgnore", "artifactIdToIgnore", "1.2.3"))),
+    automaticallyUpgrade = Some(true),
     reportDirectory = Some("generated/sample/report"),
     cacheDirectory = Some("generated/cache"),
     cacheExpire = Some("5 days")

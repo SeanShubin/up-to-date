@@ -8,7 +8,7 @@ class LauncherImpl(commandLineArguments: Seq[String],
   override def launch(): Unit = {
     configurationValidator.validate(commandLineArguments) match {
       case Left(errorReport) =>
-        notifications.errorWithConfiguration(errorReport)
+        notifications.errorWithConfiguration(commandLineArguments, errorReport)
       case Right(validConfiguration) =>
         val runner = createRunner(validConfiguration)
         runner.run()
