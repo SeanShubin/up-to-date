@@ -46,11 +46,11 @@ Design by Contract Presentation
     - Logic Testing
         - [Http](logic/src/main/scala/com/seanshubin/up_to_date/logic/Http.scala)
         - [HttpCache](logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCache.scala)
-        - [HttpCacheTest](logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCacheTest.scala)
+        - [HttpCacheTest](logic/src/test/scala/com/seanshubin/up_to_date/logic/HttpCacheTest.scala)
     - Integration Testing
         - [FileSystem](logic/src/main/scala/com/seanshubin/up_to_date/logic/FileSystem.scala)
         - [FileSystemImpl](integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemImpl.scala)
-        - [FileSystemTest](integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemTest.scala)
+        - [FileSystemTest](integration/src/test/scala/com/seanshubin/up_to_date/integration/FileSystemTest.scala)
     - Wiring
         - [ProductionRunnerWiring](console/src/main/scala/com/seanshubin/up_to_date/console/ProductionRunnerWiring.scala)
         - Statically typed
