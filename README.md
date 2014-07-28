@@ -10,9 +10,11 @@ If dependency analysis is not important to you, you can just disable the exec-ma
 
 Design by Contract Presentation
 =
-- Maintainable Code
-- Easy to Change
-- Easy to Test
+- Assumed values
+    - Maintainable code
+    - Easy to change
+    - Good test coverage
+    - Easy to test
 - Design By Contract
     - Object-Oriented Software Construction - Bertrand Meyer
         - Pre-conditions
@@ -34,9 +36,10 @@ Design by Contract Presentation
             - if the system clock is accessed at different times, you need a contract
         - environment variable
             - if you are not changing them while running, pass them in as parameters
+        - network
+            -http
         - local time zone
         - random
-        - network
         - filesystem
         - database
         - implementation details unrelated to need
@@ -55,6 +58,9 @@ Design by Contract Presentation
         - [FileSystem](logic/src/main/scala/com/seanshubin/up_to_date/logic/FileSystem.scala)
         - [FileSystemImpl](integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemImpl.scala)
         - [FileSystemTest](integration/src/test/scala/com/seanshubin/up_to_date/integration/FileSystemTest.scala)
+        - [Http](logic/src/main/scala/com/seanshubin/up_to_date/logic/Http.scala)
+        - [HttpImpl](integration/src/main/scala/com/seanshubin/up_to_date/integration/HttpImpl.scala)
+        - [HttpTest](integration/src/test/scala/com/seanshubin/up_to_date/integration/HttpTest.scala)
     - Wiring
         - [ProductionRunnerWiring](console/src/main/scala/com/seanshubin/up_to_date/console/ProductionRunnerWiring.scala)
         - Statically typed
@@ -65,3 +71,13 @@ Design by Contract Presentation
         - No proxies in stack trace
         - Can follow the code in IDE
     - [Logging as a first class citizen](http://blog.cj.com/05212013/logging-first-class-citizen)
+- Constructor injection vs setter injection
+    - Why create it the wrong way and mutate it to be correct when you can create it correctly in the first place?
+    - If you have static typing and a compiler, you never forget to add a collaborator
+- What if you don't have static typing or protocols?
+    - You still benefit from design by contract, but you don't have any support until runtime
+    - This is our problem in javascript
+    - You can try to make the runtime support more effective, as with [protocop](https://github.com/cjdev/protocop)
+    - How much do we value maintainability?  Statically typed languages that compile to javascript could be worth a try
+        - [Dart](https://www.dartlang.org)
+        - [TypeScript](http://www.typescriptlang.org)
