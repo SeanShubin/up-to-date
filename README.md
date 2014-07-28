@@ -38,6 +38,10 @@ Design by Contract Presentation
             - if you are not changing them while running, pass them in as parameters
         - network
             - http
+                - Requests and responses are not values
+                - Make converters to and from values
+                - Make thin wrapper around http
+                - Use [httpobjects](https://github.com/cjdev/httpobjects)
         - local time zone
         - random
         - filesystem
