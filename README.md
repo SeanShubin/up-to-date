@@ -11,6 +11,7 @@ If dependency analysis is not important to you, you can just disable the exec-ma
 Design by Contract Presentation
 =
 - Maintainable Code
+- Easy to Change
 - Easy to Test
 - Design By Contract
     - Object-Oriented Software Construction - Bertrand Meyer
@@ -21,6 +22,9 @@ Design by Contract Presentation
         - input -> function -> output
     - Contract of constructor injection
         - collaborators -> constructor -> instance
+    - Expressiveness of contract
+        - Static Typing
+        - Protocols        
 - Should x be behind a contract?
     - Sometimes this is a judgment call, sometimes there is a correct answer
     - If the code is more comprehensible as a unit, it should not be split into contracts
