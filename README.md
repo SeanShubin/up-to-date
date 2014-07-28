@@ -44,15 +44,15 @@ Design by Contract Presentation
         - Now we have to emulate that syntax if we change our implementation
 - Good examples
     - Logic Testing
-        - [Http](blob/master/logic/src/main/scala/com/seanshubin/up_to_date/logic/Http.scala)
-        - [HttpCache](blob/master/logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCache.scala)
-        - [HttpCacheTest](blob/master/logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCacheTest.scala)
+        - [Http](logic/src/main/scala/com/seanshubin/up_to_date/logic/Http.scala)
+        - [HttpCache](logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCache.scala)
+        - [HttpCacheTest](logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCacheTest.scala)
     - Integration Testing
-        - [FileSystem](blob/master/logic/src/main/scala/com/seanshubin/up_to_date/logic/FileSystem.scala)
-        - [FileSystemImpl](blob/master/integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemImpl.scala)
-        - [FileSystemTest](blob/master/integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemTest.scala)
+        - [FileSystem](logic/src/main/scala/com/seanshubin/up_to_date/logic/FileSystem.scala)
+        - [FileSystemImpl](integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemImpl.scala)
+        - [FileSystemTest](integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemTest.scala)
     - Wiring
-        - [ProductionRunnerWiring](blob/master/console/src/main/scala/com/seanshubin/up_to_date/console/ProductionRunnerWiring.scala)
+        - [ProductionRunnerWiring](console/src/main/scala/com/seanshubin/up_to_date/console/ProductionRunnerWiring.scala)
         - Statically typed
         - Compiled
             - no scanning xml files at run time
