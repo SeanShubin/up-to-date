@@ -37,7 +37,7 @@ Design by Contract Presentation
         - environment variable
             - if you are not changing them while running, pass them in as parameters
         - network
-            -http
+            - http
         - local time zone
         - random
         - filesystem
