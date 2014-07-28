@@ -29,7 +29,10 @@ Design by Contract Presentation
         - Protocols        
 - Should x be behind a contract?
     - Sometimes this is a judgment call, sometimes there is a correct answer
-    - If the code is more comprehensible as a unit, it should not be split into contracts
+    - It is a judgement call if
+        - No observable change of state
+        - Non side effecting
+        - Not dependant on anything outside of process (network, filesystem, database, system clock, environment variable)
     - If the code is talking to something you do not control, it should be placed behind a contract, for example
         - system clock
             - if the system clock is only accessed once, pass an argument instead
