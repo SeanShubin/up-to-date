@@ -16,4 +16,24 @@ object StringUtil {
   }
 
   def doubleQuote(target: String) = s""""${escape(target)}""""
+
+  def getNewlineSeparator(target: String, default: String): String = {
+    val histogram: Map[String, Int] = "\r\n|\r|\n".r.findAllIn(target).foldLeft(Map[String, Int]())(addToHistogram)
+    if (histogram.values.sum == 0) {
+      default
+    } else if (histogram.values.sum == histogram.values.max) {
+      histogram.filter(nonZeroValue).keys.head
+    } else {
+      throw new RuntimeException("Inconsistent newline separator")
+    }
+  }
+
+  private def nonZeroValue(entry: (String, Int)): Boolean = {
+    val (_, value) = entry
+    value != 0
+  }
+
+  private def addToHistogram[T](histogram: Map[T, Int], value: T): Map[T, Int] = {
+    histogram.updated(value, histogram.getOrElse(value, 0) + 1)
+  }
 }
