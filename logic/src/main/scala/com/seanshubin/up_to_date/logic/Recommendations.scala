@@ -25,8 +25,6 @@ case class RecommendationBySource(bestAvailable: String,
     val recommendedVersionBump = RecommendedVersionBump(pomVersion.originalString, maybeUpgrade)
     copy(byPomLocation = byPomLocation.updated(pomLocation, recommendedVersionBump))
   }
-
-  def pomFiles:Set[String] = byPomLocation.keySet
 }
 
 case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, RecommendationBySource]) {
@@ -60,7 +58,22 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
     copy(byGroupAndArtifact = byGroupAndArtifact.updated(groupAndArtifact, newBySource))
   }
 
-  def pomFiles:Set[String] = byGroupAndArtifact.values.flatMap(_.pomFiles).toSet
+  def upgradesByPom: Map[String, Map[GroupAndArtifact, String]] = {
+    val rows = for {
+      (groupAndArtifact, recommendationBySource) <- byGroupAndArtifact
+      (pomLocation, versionBump) <- recommendationBySource.byPomLocation
+      RecommendedVersionBump(fromVersion, Some(toVersion)) = versionBump
+    } yield {
+      (pomLocation, groupAndArtifact, toVersion)
+    }
+    def foldRowIntoMap(map: Map[String, Map[GroupAndArtifact, String]],
+                       row: (String, GroupAndArtifact, String)): Map[String, Map[GroupAndArtifact, String]] = {
+      val (pomLocation, groupAndArtifact, toVersion) = row
+      map.updated(pomLocation, map(pomLocation).updated(groupAndArtifact, toVersion))
+    }
+    val emptyResult:Map[String, Map[GroupAndArtifact, String]] = Map().withDefaultValue(Map[GroupAndArtifact, String]())
+    rows.foldLeft(emptyResult)(foldRowIntoMap)
+  }
 }
 
 object Recommendations {

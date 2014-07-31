@@ -3,11 +3,11 @@ package com.seanshubin.up_to_date.logic
 import org.scalatest.FunSuite
 
 class RecommendationsTest extends FunSuite {
-  val bump1 = RecommendedVersionBump("from-1", Some("to-1"))
-  val bump2 = RecommendedVersionBump("from-2", Some("to-2"))
-  val bump3 = RecommendedVersionBump("from-3", Some("to-3"))
-  val bump4 = RecommendedVersionBump("from-4", Some("to-4"))
   test("collect pom files") {
+    val bump1 = RecommendedVersionBump("from-1", Some("to-1"))
+    val bump2 = RecommendedVersionBump("from-2", Some("to-2"))
+    val bump3 = RecommendedVersionBump("from-3", Some("to-3"))
+    val bump4 = RecommendedVersionBump("from-4", Some("to-4"))
     val byPomLocation1 = Map(
       "pom-1" -> bump1,
       "pom-2" -> bump2
@@ -25,8 +25,11 @@ class RecommendationsTest extends FunSuite {
       groupAndArtifact2 -> recommendationBySource2
     )
     val recommendations = Recommendations(byGroupAndArtifact)
-    val actual = recommendations.pomFiles
-    val expected = Set("pom-1", "pom-2", "pom-3")
+    val actual = recommendations.upgradesByPom
+    val expected = Map(
+      "pom-1" -> Map(groupAndArtifact1 -> "to-1"),
+      "pom-2" -> Map(groupAndArtifact1 -> "to-2", groupAndArtifact2 -> "to-3"),
+      "pom-3" -> Map(groupAndArtifact2 -> "to-4"))
     assert(actual === expected)
   }
 }
