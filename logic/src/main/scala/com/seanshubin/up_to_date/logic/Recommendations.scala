@@ -25,6 +25,8 @@ case class RecommendationBySource(bestAvailable: String,
     val recommendedVersionBump = RecommendedVersionBump(pomVersion.originalString, maybeUpgrade)
     copy(byPomLocation = byPomLocation.updated(pomLocation, recommendedVersionBump))
   }
+
+  def pomFiles:Set[String] = byPomLocation.keySet
 }
 
 case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, RecommendationBySource]) {
@@ -57,6 +59,8 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
     val newBySource = bySource.recommendVersionBump(pomLocation, pomVersion, versions)
     copy(byGroupAndArtifact = byGroupAndArtifact.updated(groupAndArtifact, newBySource))
   }
+
+  def pomFiles:Set[String] = byGroupAndArtifact.values.flatMap(_.pomFiles).toSet
 }
 
 object Recommendations {
