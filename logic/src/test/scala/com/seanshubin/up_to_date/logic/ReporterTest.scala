@@ -10,6 +10,7 @@ class ReporterTest extends FunSuite {
   val repositoryReportName = "repository"
   val recommendationReportName = "recommendations"
   val inconsistencyReportName = "inconsistencies"
+  val upgradesReportName = "upgrades"
 
   class FakeFileSystemForReporter extends FakeFileSystem {
     var actualPath: Path = null
@@ -34,6 +35,7 @@ class ReporterTest extends FunSuite {
       repositoryReportName,
       recommendationReportName,
       inconsistencyReportName,
+      upgradesReportName,
       fileSystem,
       jsonMarshaller)
     reporter

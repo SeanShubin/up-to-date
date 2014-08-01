@@ -12,6 +12,7 @@ trait ProductionRunnerWiring {
   lazy val repositoryReportName: String = "repository.json"
   lazy val recommendationReportName: String = "recommendations.json"
   lazy val inconsistencyReportName: String = "inconsistency.json"
+  lazy val upgradesReportName: String = "upgrades.json"
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
   lazy val systemClock: SystemClock = new SystemClockImpl
@@ -30,11 +31,12 @@ trait ProductionRunnerWiring {
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
     configuration.mavenRepositories, http, metadataParser)
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
-  lazy val upgrader: Upgrader = new UpgraderImpl
+  lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(charset)
+  lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
   lazy val reporter: Reporter = new ReporterImpl(
     configuration.reportDirectory, pomReportName, repositoryReportName, recommendationReportName,
-    inconsistencyReportName, fileSystem, jsonMarshaller)
+    inconsistencyReportName, upgradesReportName, fileSystem, jsonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: Runner = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)

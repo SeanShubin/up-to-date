@@ -151,7 +151,6 @@ object SampleData {
           "logic/pom.xml" -> RecommendedVersionBump("2.3", None),
           "integration/pom.xml" -> RecommendedVersionBump("2.3", None)))))
 
-  val automaticUpgradesPerformed: AutomaticUpgradesPerformed = null
   val sampleMetadataContents =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<metadata modelVersion="1.1.0">

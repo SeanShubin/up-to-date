@@ -13,7 +13,7 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
     parts.foldLeft(Recommendations.Empty)(addDependency)
   }
 
-  private def addDependency(recommendations:Recommendations, part:RecommendationPart):Recommendations = {
+  private def addDependency(recommendations: Recommendations, part: RecommendationPart): Recommendations = {
     recommendations.addPart(part)
   }
 }

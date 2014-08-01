@@ -7,10 +7,13 @@ class ReporterImpl(reportPath: Path,
                    repositoryReportName: String,
                    recommendationReportName: String,
                    inconsistencyReportName: String,
+                   upgradesReportName: String,
                    fileSystem: FileSystem,
                    jsonMarshaller: JsonMarshaller) extends Reporter {
-  override def reportAutomaticUpgradesPerformed(automaticUpgradesPerformed: AutomaticUpgradesPerformed): Unit = {
-    println("reporter - Automatic upgrades not supported yet, skipping.")
+  override def reportAutomaticUpgradesPerformed(upgradesByPom: Map[String, Map[GroupAndArtifact, String]]): Unit = {
+    val jsonReport = jsonMarshaller.toJson(upgradesByPom)
+    fileSystem.ensureDirectoriesExist(reportPath)
+    fileSystem.storeString(reportPath.resolve(upgradesReportName), jsonReport)
   }
 
   override def reportRecommendations(recommendations: Recommendations): Unit = {

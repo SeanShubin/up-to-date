@@ -8,7 +8,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val pomFileScanner = mock[PomFileScanner]
     val mavenRepositoryScanner = mock[MavenRepositoryScanner]
     val dependencyUpgradeAnalyzer = mock[DependencyUpgradeAnalyzer]
-    val upgrader = mock[Upgrader]
+    val upgrader = mock[PomFileUpgrader]
     val reporter = mock[Reporter]
     val notifications = new FakeNotifications
     val runner: Runner = new RunnerImpl(
@@ -22,10 +22,10 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       pomFileScanner.scanExistingDependencies().andReturn(SampleData.existingDependencies)
       mavenRepositoryScanner.scanLatestDependencies(SampleData.existingDependencies.toGroupAndArtifactSet).andReturn(SampleData.dependencyVersions)
       dependencyUpgradeAnalyzer.recommend(SampleData.existingDependencies, SampleData.dependencyVersions).andReturn(SampleData.recommendations)
-      upgrader.performAutomaticUpgrades(SampleData.recommendations).andReturn(SampleData.automaticUpgradesPerformed)
+      upgrader.performAutomaticUpgradesIfApplicable(SampleData.recommendations.upgradesByPom)
       reporter.reportPom(SampleData.existingDependencies)
       reporter.reportRepository(SampleData.dependencyVersions)
-      reporter.reportAutomaticUpgradesPerformed(SampleData.automaticUpgradesPerformed)
+      reporter.reportAutomaticUpgradesPerformed(SampleData.recommendations.upgradesByPom)
       reporter.reportRecommendations(SampleData.recommendations)
       reporter.reportInconsistencies(SampleData.recommendations)
     }

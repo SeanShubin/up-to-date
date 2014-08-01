@@ -1,6 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
-import java.io.{ByteArrayOutputStream, ByteArrayInputStream, Closeable, InputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, Closeable, InputStream}
 import java.nio.charset.Charset
 import javax.xml.parsers.{DocumentBuilder, DocumentBuilderFactory}
 import javax.xml.transform.TransformerFactory

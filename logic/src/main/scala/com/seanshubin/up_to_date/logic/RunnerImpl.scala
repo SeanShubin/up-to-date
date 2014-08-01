@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 class RunnerImpl(pomFileScanner: PomFileScanner,
                  mavenRepositoryScanner: MavenRepositoryScanner,
                  dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer,
-                 upgrader: Upgrader,
+                 upgrader: PomFileUpgrader,
                  reporter: Reporter,
                  notifications: Notifications) extends Runner {
   override def run(): Unit = {
@@ -13,8 +13,9 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
       reporter.reportPom(existingDependencies)
       reporter.reportRepository(latestDependencies)
       val recommendations = dependencyUpgradeAnalyzer.recommend(existingDependencies, latestDependencies)
-      val automaticUpgradesPerformed = upgrader.performAutomaticUpgrades(recommendations)
-      reporter.reportAutomaticUpgradesPerformed(automaticUpgradesPerformed)
+      val upgradesByPom = recommendations.upgradesByPom
+      upgrader.performAutomaticUpgradesIfApplicable(upgradesByPom)
+      reporter.reportAutomaticUpgradesPerformed(upgradesByPom)
       reporter.reportRecommendations(recommendations)
       reporter.reportInconsistencies(recommendations)
     }

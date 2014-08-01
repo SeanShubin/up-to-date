@@ -62,7 +62,8 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
     val rows = for {
       (groupAndArtifact, recommendationBySource) <- byGroupAndArtifact
       (pomLocation, versionBump) <- recommendationBySource.byPomLocation
-      RecommendedVersionBump(fromVersion, Some(toVersion)) = versionBump
+      RecommendedVersionBump(fromVersion, maybeToVersion) = versionBump
+      toVersion <- maybeToVersion
     } yield {
       (pomLocation, groupAndArtifact, toVersion)
     }
@@ -71,7 +72,7 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
       val (pomLocation, groupAndArtifact, toVersion) = row
       map.updated(pomLocation, map(pomLocation).updated(groupAndArtifact, toVersion))
     }
-    val emptyResult:Map[String, Map[GroupAndArtifact, String]] = Map().withDefaultValue(Map[GroupAndArtifact, String]())
+    val emptyResult: Map[String, Map[GroupAndArtifact, String]] = Map().withDefaultValue(Map[GroupAndArtifact, String]())
     rows.foldLeft(emptyResult)(foldRowIntoMap)
   }
 }
