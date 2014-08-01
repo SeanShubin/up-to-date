@@ -13,44 +13,50 @@ case class ConfigurationJson(pomFileName: Option[String],
                              cacheDirectory: Option[String],
                              cacheExpire: Option[String]) {
   def validate(): Either[Seq[String], ValidConfiguration] = {
-    this match {
-      case ConfigurationJson(Some(thePomFileName),
-      Some(theDirectoriesToSearch),
-      Some(theDirectoryNamesToSkip),
-      Some(theMavenRepositories),
-      Some(theDoNotUpgradeFrom),
-      Some(theDoNotUpgradeTo),
-      Some(theAutomaticallyUpgrade),
-      Some(theReportDirectory),
-      Some(theCacheDirectory),
-      Some(theCacheExpire)) =>
-        try {
-          val expireMilliseconds = DurationFormat.MillisecondsFormat.parse(theCacheExpire)
-          Right(ValidConfiguration(
-            thePomFileName,
-            theDirectoriesToSearch.map(nameToPath),
-            theDirectoryNamesToSkip,
-            theMavenRepositories,
-            theDoNotUpgradeFrom,
-            theDoNotUpgradeTo,
-            theAutomaticallyUpgrade,
-            nameToPath(theReportDirectory),
-            nameToPath(theCacheDirectory),
-            expireMilliseconds))
-        } catch {
-          case ex: RuntimeException => Left(Seq("unable to parse milliseconds for cacheExpire: " + ex.getMessage))
-        }
-      case x: ConfigurationJson =>
-        Left(errorIfMissing(x.pomFileName, "pomFileName") ++
-          errorIfMissing(x.directoriesToSearch, "directoriesToSearch") ++
-          errorIfMissing(x.directoryNamesToSkip, "directoryNamesToSkip") ++
-          errorIfMissing(x.mavenRepositories, "mavenRepositories") ++
-          errorIfMissing(x.doNotUpgradeTo, "doNotUpgradeTo") ++
-          errorIfMissing(x.doNotUpgradeFrom, "doNotUpgradeFrom") ++
-          errorIfMissing(x.automaticallyUpgrade, "automaticallyUpgrade") ++
-          errorIfMissing(x.reportDirectory, "reportDirectory") ++
-          errorIfMissing(x.cacheDirectory, "cacheDirectory") ++
-          errorIfMissing(x.cacheExpire, "cacheExpire"))
+    val missingErrors = errorIfMissing(pomFileName, "pomFileName") ++
+      errorIfMissing(directoriesToSearch, "directoriesToSearch") ++
+      errorIfMissing(directoryNamesToSkip, "directoryNamesToSkip") ++
+      errorIfMissing(mavenRepositories, "mavenRepositories") ++
+      errorIfMissing(doNotUpgradeTo, "doNotUpgradeTo") ++
+      errorIfMissing(doNotUpgradeFrom, "doNotUpgradeFrom") ++
+      errorIfMissing(automaticallyUpgrade, "automaticallyUpgrade") ++
+      errorIfMissing(reportDirectory, "reportDirectory") ++
+      errorIfMissing(cacheDirectory, "cacheDirectory") ++
+      errorIfMissing(cacheExpire, "cacheExpire")
+    if (missingErrors.size == 0) {
+      val ConfigurationJson(Some(thePomFileName), Some(theDirectoriesToSearch), Some(theDirectoryNamesToSkip),
+      Some(theMavenRepositories), Some(theDoNotUpgradeFrom), Some(theDoNotUpgradeTo), Some(theAutomaticallyUpgrade),
+      Some(theReportDirectory), Some(theCacheDirectory), Some(theCacheExpire)) = this
+
+      val errorOrExpireMilliseconds = validateCacheExpire(theCacheExpire)
+      val errorOrDoNotUpgradeFrom = validateDoNotUpgradeFrom(theDoNotUpgradeFrom)
+      val errorOrDoNotUpgradeTo = validateDoNotUpgradeTo(theDoNotUpgradeTo)
+
+      val errors =
+        extractLeft(errorOrExpireMilliseconds) ++
+          extractLeft(errorOrDoNotUpgradeFrom) ++
+          extractLeft(errorOrDoNotUpgradeTo)
+
+      if (errors.size == 0) {
+        val Right(expireMilliseconds) = errorOrExpireMilliseconds
+        val Right(doNotUpgradeFrom) = errorOrDoNotUpgradeFrom
+        val Right(doNotUpgradeTo) = errorOrDoNotUpgradeTo
+        Right(ValidConfiguration(
+          thePomFileName,
+          theDirectoriesToSearch.map(nameToPath),
+          theDirectoryNamesToSkip,
+          theMavenRepositories,
+          doNotUpgradeFrom,
+          doNotUpgradeTo,
+          theAutomaticallyUpgrade,
+          nameToPath(theReportDirectory),
+          nameToPath(theCacheDirectory),
+          expireMilliseconds))
+      } else {
+        Left(errors)
+      }
+    } else {
+      Left(missingErrors)
     }
   }
 
@@ -62,6 +68,63 @@ case class ConfigurationJson(pomFileName: Option[String],
   }
 
   private def nameToPath(name: String): Path = Paths.get(name)
+
+  private def validateCacheExpire(cacheExpire: String): Either[Seq[String], Long] = try {
+    Right(DurationFormat.MillisecondsFormat.parse(cacheExpire))
+  } catch {
+    case ex: RuntimeException => Left(Seq("unable to parse milliseconds for cacheExpire: " + ex.getMessage))
+  }
+
+  private def validateDoNotUpgradeFrom(values: Seq[Seq[String]]): Either[Seq[String], Set[GroupAndArtifact]] = {
+    val validated = values.map(validateGroupAndArtifact)
+    val errorMessages = validated.flatMap(extractLeft)
+    if (errorMessages.size == 0) {
+      Right(validated.map(extractRight).toSet)
+    } else {
+      Left(errorMessages)
+    }
+  }
+
+  private def validateGroupAndArtifact(values: Seq[String]): Either[Seq[String], GroupAndArtifact] = {
+    values match {
+      case Seq(group, artifact) => Right(GroupAndArtifact(group, artifact))
+      case x => Left(Seq(s"Cannot convert $x to group, artifact"))
+    }
+  }
+
+  private def validateDoNotUpgradeTo(values: Seq[Seq[String]]): Either[Seq[String], Set[GroupArtifactVersion]] = {
+    val validated = values.map(validateGroupArtifactVersion)
+    val errorMessages = validated.flatMap(extractLeft)
+    if (errorMessages.size == 0) {
+      Right(validated.map(extractRight).toSet)
+    } else {
+      Left(errorMessages)
+    }
+  }
+
+  private def extractLeft[T](either: Either[Seq[String], T]): Seq[String] = either match {
+    case Left(values) => values
+    case Right(_) => Seq()
+  }
+
+  private def extractRight[T](either: Either[Seq[String], T]): T = either match {
+    case Left(_) => throw new RuntimeException("logic error, don't extract right unless you are sure it is valid")
+    case Right(value) => value
+  }
+
+  private def validateGroupArtifactVersion(values: Seq[String]): Either[Seq[String], GroupArtifactVersion] = {
+    values match {
+      case Seq(group, artifact, version) => Right(GroupArtifactVersion(group, artifact, version))
+      case x => Left(Seq(s"Cannot convert $x to group, artifact, version"))
+    }
+  }
+
+  private def toGroupAndArtifact(values: Seq[String]): GroupAndArtifact = {
+    values match {
+      case Seq(group, artifact) => GroupAndArtifact(group, artifact)
+      case x => throw new RuntimeException("Cannot convert $x to group and artifact")
+    }
+  }
 }
 
 object ConfigurationJson {

@@ -6,8 +6,6 @@ import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemCl
 import com.seanshubin.up_to_date.logic._
 
 trait ProductionRunnerWiring {
-  def configuration: ValidConfiguration
-
   lazy val pomReportName: String = "pom.json"
   lazy val repositoryReportName: String = "repository.json"
   lazy val recommendationReportName: String = "recommendations.json"
@@ -31,8 +29,10 @@ trait ProductionRunnerWiring {
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
     configuration.mavenRepositories, http, metadataParser)
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
-  lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(charset)
-  lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
+  lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(
+    charset, configuration.doNotUpgradeFrom, configuration.doNotUpgradeTo)
+  lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(
+    fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
   lazy val reporter: Reporter = new ReporterImpl(
     configuration.reportDirectory, pomReportName, repositoryReportName, recommendationReportName,
@@ -40,6 +40,8 @@ trait ProductionRunnerWiring {
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: Runner = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter, notifications)
+
+  def configuration: ValidConfiguration
 }
 
 object ProductionRunnerWiring {

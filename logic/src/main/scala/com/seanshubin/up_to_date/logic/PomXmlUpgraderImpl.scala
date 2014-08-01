@@ -4,7 +4,9 @@ import java.nio.charset.Charset
 
 import org.w3c.dom.Node
 
-class PomXmlUpgraderImpl(charset: Charset) extends PomXmlUpgrader {
+class PomXmlUpgraderImpl(charset: Charset,
+                         doNotUpgradeFrom: Set[GroupAndArtifact],
+                         doNotUpgradeTo: Set[GroupArtifactVersion]) extends PomXmlUpgrader {
   override def upgrade(oldXml: String, upgrades: Map[GroupAndArtifact, String]): String = {
     val document = DocumentUtil.stringToDocument(oldXml, charset)
     val nodeList = document.getElementsByTagName("dependency")
@@ -29,7 +31,18 @@ class PomXmlUpgraderImpl(charset: Charset) extends PomXmlUpgrader {
       (groupNode, artifactNode, versionNode) match {
         case (Some(g), Some(a), Some(v)) =>
           val groupAndArtifact = GroupAndArtifact(g.getTextContent, a.getTextContent)
-          upgrades.get(groupAndArtifact).map(v.setTextContent)
+          upgrades.get(groupAndArtifact) match {
+            case Some(toVersion) =>
+              val groupArtifactVersion = GroupArtifactVersion(g.getTextContent, a.getTextContent, toVersion)
+              if (doNotUpgradeFrom.contains(groupAndArtifact)) {
+                //ignore
+              } else if (doNotUpgradeTo.contains(groupArtifactVersion)) {
+                //ignore
+              } else {
+                v.setTextContent(toVersion)
+              }
+            case None =>
+          }
         case _ =>
       }
     }

@@ -27,7 +27,9 @@ class PomXmlUpgraderTest extends FunSuite {
     )
     val charsetName = "utf-8"
     val charset = Charset.forName(charsetName)
-    val pomXmlUpgrader = new PomXmlUpgraderImpl(charset)
+    val doNotUpgradeFrom = Set[GroupAndArtifact]()
+    val doNotUpgradeTo = Set[GroupArtifactVersion]()
+    val pomXmlUpgrader = new PomXmlUpgraderImpl(charset, doNotUpgradeFrom, doNotUpgradeTo)
     val actual = pomXmlUpgrader.upgrade(inputXml, upgrades)
     val expected =
       """<?xml version="1.0" encoding="UTF-8" standalone="no"?><xml>
@@ -43,5 +45,47 @@ class PomXmlUpgraderTest extends FunSuite {
         |  </dependency>
         |</xml>""".stripMargin
     assert(actual === expected)
+  }
+
+  test("ignore do not upgrade to") {
+    val inputXml =
+      """<?xml version="1.0" encoding="UTF-8" standalone="no"?><xml>
+        |  <dependency>
+        |    <groupId>group-1</groupId>
+        |    <artifactId>artifact-1</artifactId>
+        |    <version>version-1</version>
+        |  </dependency>
+        |</xml>""".stripMargin
+    val upgrades: Map[GroupAndArtifact, String] = Map(
+      GroupAndArtifact("group-1", "artifact-1") -> "upgrade-1"
+    )
+    val doNotUpgradeFrom = Set[GroupAndArtifact]()
+    val doNotUpgradeTo = Set(GroupArtifactVersion("group-1", "artifact-1", "upgrade-1"))
+    val charsetName = "utf-8"
+    val charset = Charset.forName(charsetName)
+    val pomXmlUpgrader = new PomXmlUpgraderImpl(charset, doNotUpgradeFrom, doNotUpgradeTo)
+    val actual = pomXmlUpgrader.upgrade(inputXml, upgrades)
+    assert(actual === inputXml)
+  }
+
+  test("ignore do not upgrade from") {
+    val inputXml =
+      """<?xml version="1.0" encoding="UTF-8" standalone="no"?><xml>
+        |  <dependency>
+        |    <groupId>group-1</groupId>
+        |    <artifactId>artifact-1</artifactId>
+        |    <version>version-1</version>
+        |  </dependency>
+        |</xml>""".stripMargin
+    val upgrades: Map[GroupAndArtifact, String] = Map(
+      GroupAndArtifact("group-1", "artifact-1") -> "upgrade-1"
+    )
+    val charsetName = "utf-8"
+    val charset = Charset.forName(charsetName)
+    val doNotUpgradeFrom = Set(GroupAndArtifact("group-1", "artifact-1"))
+    val doNotUpgradeTo = Set[GroupArtifactVersion]()
+    val pomXmlUpgrader = new PomXmlUpgraderImpl(charset, doNotUpgradeFrom, doNotUpgradeTo)
+    val actual = pomXmlUpgrader.upgrade(inputXml, upgrades)
+    assert(actual === inputXml)
   }
 }
