@@ -52,26 +52,6 @@
                 <version>2.11.2</version>
             </dependency>
             <dependency>
-                <groupId>org.scala-lang.modules</groupId>
-                <artifactId>scala-xml_2.11</artifactId>
-                <version>1.0.2</version>
-            </dependency>
-            <dependency>
-                <groupId>com.typesafe.akka</groupId>
-                <artifactId>akka-actor_2.11</artifactId>
-                <version>2.3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.joda</groupId>
-                <artifactId>joda-convert</artifactId>
-                <version>1.6</version>
-            </dependency>
-            <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-scala_2.11</artifactId>
                 <version>2.4.1</version>
@@ -87,11 +67,6 @@
                 <artifactId>scalatest_2.11</artifactId>
                 <version>2.2.0</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.typesafe.akka</groupId>
-                <artifactId>akka-testkit_2.11.0</artifactId>
-                <version>2.3.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
