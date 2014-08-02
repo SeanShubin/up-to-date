@@ -59,4 +59,24 @@ class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
       pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgradesByPom)
     }
   }
+
+  test("preserve line separators") {
+    val upgrades: Map[GroupAndArtifact, String] = Map()
+    val upgradesByPom: Map[String, Map[GroupAndArtifact, String]] = Map("pom-1" -> upgrades)
+    val fileSystem = mock[FileSystem]
+    val pomXmlUpgrader = mock[PomXmlUpgrader]
+    val allowAutomaticUpgrades = true
+    val pomFileUpgrader = new PomFileUpgraderImpl(fileSystem, pomXmlUpgrader, allowAutomaticUpgrades)
+    val originalFileContents = "aaa\nbbb"
+    val processedFileContents = "aaa\r\nccc"
+    val newFileContents = "aaa\nccc"
+    expecting {
+      fileSystem.loadString(Paths.get("pom-1")).andReturn(originalFileContents)
+      pomXmlUpgrader.upgrade(originalFileContents, upgrades).andReturn(processedFileContents)
+      fileSystem.storeString(Paths.get("pom-1"), newFileContents)
+    }
+    whenExecuting(fileSystem, pomXmlUpgrader) {
+      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgradesByPom)
+    }
+  }
 }

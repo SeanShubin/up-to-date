@@ -17,7 +17,9 @@ class PomFileUpgraderImpl(fileSystem: FileSystem,
     } {
       val path = Paths.get(pom)
       val oldPomText = fileSystem.loadString(path)
-      val newPomText = pomXmlUpgrader.upgrade(oldPomText, upgrades)
+      val oldNewlineSeparator = StringUtil.getNewlineSeparator(oldPomText, "\n")
+      val newPomTextWithDefaultNewlineSeparator = pomXmlUpgrader.upgrade(oldPomText, upgrades)
+      val newPomText = StringUtil.replaceNewlineSeparator(newPomTextWithDefaultNewlineSeparator, oldNewlineSeparator)
       fileSystem.storeString(path, newPomText)
     }
   }

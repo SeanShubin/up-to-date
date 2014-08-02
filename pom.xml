@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin</groupId>
     <artifactId>up_to_date</artifactId>
@@ -65,13 +64,13 @@
             <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_2.11</artifactId>
-                <version>2.2.0</version>
+                <version>2.2.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.3.4</version>
+                <version>4.3.5</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>

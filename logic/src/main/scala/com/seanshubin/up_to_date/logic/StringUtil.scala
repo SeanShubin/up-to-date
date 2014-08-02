@@ -28,6 +28,11 @@ object StringUtil {
     }
   }
 
+  def replaceNewlineSeparator(target: String, newlineSeparator: String): String = {
+    val lines = target.split("\r\n|\r|\n")
+    lines.mkString(newlineSeparator)
+  }
+
   private def nonZeroValue(entry: (String, Int)): Boolean = {
     val (_, value) = entry
     value != 0
