@@ -75,6 +75,10 @@ case class Recommendations(byGroupAndArtifact: Map[GroupAndArtifact, Recommendat
     val emptyResult: Map[String, Map[GroupAndArtifact, String]] = Map().withDefaultValue(Map[GroupAndArtifact, String]())
     rows.foldLeft(emptyResult)(foldRowIntoMap)
   }
+
+  def toUpgrades(doNotUpgradeFrom: Set[GroupAndArtifact], doNotUpgradeTo: Set[GroupArtifactVersion]): Upgrades = {
+    Upgrades(upgradesByPom, Map(), Set(), Set(), Seq())
+  }
 }
 
 object Recommendations {
