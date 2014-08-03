@@ -1,21 +1,21 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.Path
+import java.nio.charset.Charset
 
 import org.w3c.dom.{Element, Node, NodeList}
 
-class PomParserImpl(fileSystem: FileSystem) extends PomParser {
-  override def parseDependencies(path: Path): Pom = {
-    val document = DocumentUtil.inputStreamToDocument(fileSystem.pathToInputStream(path))
+class PomParserImpl(charset:Charset) extends PomParser {
+  override def parseDependencies(pomName:String, pomContents: String): Pom = {
+    val document = DocumentUtil.stringToDocument(pomContents, charset)
     val nodeList = document.getElementsByTagName("dependency")
     val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
-    val nodeToDependency: Node => Option[Dependency] = pathAndNodeToDependency(path, _: Node)
+    val nodeToDependency: Node => Option[Dependency] = pomNameAndNodeToDependency(pomName, _: Node)
     val dependencies = traversableNodeList.map(nodeToDependency).toSeq.flatten
-    val pom = Pom(path.toString, dependencies)
+    val pom = Pom(pomName, dependencies)
     pom
   }
 
-  private def pathAndNodeToDependency(path: Path, node: Node): Option[Dependency] = {
+  private def pomNameAndNodeToDependency(pomName: String, node: Node): Option[Dependency] = {
     val childNodeList = node.getChildNodes
     val childNodes = nodeListToTraversable(childNodeList)
     val childNodeMapEntries = for {
@@ -26,7 +26,7 @@ class PomParserImpl(fileSystem: FileSystem) extends PomParser {
       (element.getNodeName, element.getTextContent)
     }
     val childNodeMap = childNodeMapEntries.toMap
-    if (hasNecessaryFields(childNodeMap)) Some(pathAndFieldsToDependency(path, childNodeMap))
+    if (hasNecessaryFields(childNodeMap)) Some(pomNameAndFieldsToDependency(pomName, childNodeMap))
     else None
   }
 
@@ -41,8 +41,8 @@ class PomParserImpl(fileSystem: FileSystem) extends PomParser {
     containsValid("groupId") && containsValid("artifactId") && containsValid("version")
   }
 
-  private def pathAndFieldsToDependency(path: Path, fields: Map[String, String]): Dependency = {
-    val dependency = Dependency(path.toString, fields("groupId"), fields("artifactId"), fields("version"))
+  private def pomNameAndFieldsToDependency(pomName: String, fields: Map[String, String]): Dependency = {
+    val dependency = Dependency(pomName, fields("groupId"), fields("artifactId"), fields("version"))
     dependency
   }
 }

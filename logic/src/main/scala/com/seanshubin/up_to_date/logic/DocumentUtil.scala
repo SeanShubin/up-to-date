@@ -33,7 +33,7 @@ object DocumentUtil {
     }
   }
 
-  def inputStreamToDocument(inputStream: InputStream): Document = documentBuilder.parse(inputStream)
+  private def inputStreamToDocument(inputStream: InputStream): Document = documentBuilder.parse(inputStream)
 
   private def stringToInputStream(s: String, charset: Charset): InputStream = new ByteArrayInputStream(s.getBytes(charset))
 

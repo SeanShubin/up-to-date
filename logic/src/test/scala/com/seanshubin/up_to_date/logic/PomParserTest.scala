@@ -1,13 +1,10 @@
 package com.seanshubin.up_to_date.logic
 
-import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
-import java.nio.file.Paths
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
 
-class PomParserTest extends FunSuite with EasyMockSugar {
+class PomParserTest extends FunSuite {
   test("parse dependencies") {
     val sampleData =
       """<xml>
@@ -22,20 +19,14 @@ class PomParserTest extends FunSuite with EasyMockSugar {
         |        <version>2.3</version>
         |    </dependency>
         |</xml>""".stripMargin
-    val sampleDocumentInputStream = new ByteArrayInputStream(sampleData.getBytes(StandardCharsets.UTF_8))
-    val fileSystem = mock[FileSystem]
-    val pomParser = new PomParserImpl(fileSystem)
-    val path = Paths.get("foo", "bar", "pom.xml")
-    val expectedDependency1 = Dependency(path.toString, "org.scala-lang", "scala-library", "2.11.1")
-    val expectedDependency2 = Dependency(path.toString, "joda-time", "joda-time", "2.3")
-    val expected = Pom(path.toString, Seq(expectedDependency1, expectedDependency2))
-    expecting {
-      fileSystem.pathToInputStream(path).andReturn(sampleDocumentInputStream)
-    }
-    whenExecuting(fileSystem) {
-      val actual = pomParser.parseDependencies(path)
-      assert(actual === expected)
-    }
+    val charset = StandardCharsets.UTF_8
+    val pomParser = new PomParserImpl(charset)
+    val pomName = "foo/bar/pom.xml"
+    val expectedDependency1 = Dependency(pomName, "org.scala-lang", "scala-library", "2.11.1")
+    val expectedDependency2 = Dependency(pomName, "joda-time", "joda-time", "2.3")
+    val expected = Pom(pomName, Seq(expectedDependency1, expectedDependency2))
+    val actual = pomParser.parseDependencies(pomName, sampleData)
+    assert(actual === expected)
   }
 
   test("ignore if group, artifact, or version starts with $") {
@@ -62,18 +53,12 @@ class PomParserTest extends FunSuite with EasyMockSugar {
         |        <version>$lll</version>
         |    </dependency>
         |</xml>""".stripMargin
-    val sampleDocumentInputStream = new ByteArrayInputStream(sampleData.getBytes(StandardCharsets.UTF_8))
-    val fileSystem = mock[FileSystem]
-    val pomParser = new PomParserImpl(fileSystem)
-    val path = Paths.get("foo", "bar", "pom.xml")
-    val expectedDependency = Dependency(path.toString, "ddd", "eee", "fff")
-    val expected = Pom(path.toString, Seq(expectedDependency))
-    expecting {
-      fileSystem.pathToInputStream(path).andReturn(sampleDocumentInputStream)
-    }
-    whenExecuting(fileSystem) {
-      val actual = pomParser.parseDependencies(path)
-      assert(actual === expected)
-    }
+    val charset = StandardCharsets.UTF_8
+    val pomParser = new PomParserImpl(charset)
+    val pomName = "foo/bar/pom.xml"
+    val expectedDependency = Dependency(pomName.toString, "ddd", "eee", "fff")
+    val expected = Pom(pomName.toString, Seq(expectedDependency))
+    val actual = pomParser.parseDependencies(pomName, sampleData)
+    assert(actual === expected)
   }
 }

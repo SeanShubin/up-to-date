@@ -10,11 +10,14 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
   test("scan pom files for dependencies") {
     val pomFileFinder = mock[PomFileFinder]
     val pomParser = mock[PomParser]
-    val pomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser)
+    val fileSystem = mock[FileSystem]
+    val pomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser, fileSystem)
     val samplePom1 = Paths.get("foo", "pom.xml")
     val samplePom2 = Paths.get("bar", "pom.xml")
     val path1 = samplePom1.toString
     val path2 = samplePom2.toString
+    val contents1 = "contents 1"
+    val contents2 = "contents 2"
     val samplePomFiles = Seq(samplePom1, samplePom2)
     val sampleDependencies1 = Seq(
       Dependency(path1, "group 1", "artifact 1", "version 1"),
@@ -28,11 +31,13 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
 
     expecting {
       pomFileFinder.relevantPomFiles().andReturn(samplePomFiles)
-      pomParser.parseDependencies(samplePom1).andReturn(expectedPom1)
-      pomParser.parseDependencies(samplePom2).andReturn(expectedPom2)
+      fileSystem.loadString(samplePom1).andReturn(contents1)
+      pomParser.parseDependencies(path1, contents1).andReturn(expectedPom1)
+      fileSystem.loadString(samplePom2).andReturn(contents2)
+      pomParser.parseDependencies(path2, contents2).andReturn(expectedPom2)
     }
 
-    whenExecuting(pomFileFinder, pomParser) {
+    whenExecuting(pomFileFinder, pomParser, fileSystem) {
       val actual = pomFileScanner.scanPomFiles()
       assert(actual === expected)
     }
