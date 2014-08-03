@@ -14,6 +14,19 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
     }
   }
 
+  override def splitIntoApplyAndIgnore(upgrades: Seq[Upgrade],
+                                       doNotUpgradeFrom: Set[GroupAndArtifact],
+                                       doNotUpgradeTo: Set[GroupArtifactVersion]): (Seq[Upgrade], Seq[Upgrade]) = {
+    def shouldApplyUpgrade(upgrade: Upgrade) = {
+      val shouldUpgradeFrom = !doNotUpgradeFrom.contains(upgrade.groupAndArtifact)
+      val shouldUpgradeTo = !doNotUpgradeTo.contains(upgrade.groupArtifactVersionTo)
+      val result = shouldUpgradeFrom && shouldUpgradeTo
+      result
+    }
+    val result = upgrades.span(shouldApplyUpgrade)
+    result
+  }
+
   override def findInconsistencies(poms: Seq[Pom]): Map[GroupAndArtifact, Seq[Dependency]] = {
     val dependencies = Pom.toDependencies(poms)
     val dependenciesByGroupAndArtifact = Dependency.groupByGroupAndArtifact(dependencies)

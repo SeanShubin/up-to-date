@@ -8,7 +8,8 @@ class ReporterTest extends FunSuite {
   val reportPath = Paths.get("foo")
   val pomReportName = "pom"
   val repositoryReportName = "repository"
-  val upgradesReportName = "upgrades"
+  val upgradesToApplyReportName = "apply"
+  val upgradesToIgnoreReportName = "ignore"
   val inconsistencyReportName = "inconsistencies"
 
   def createReporter(fileSystem: FileSystem): Reporter = {
@@ -17,9 +18,9 @@ class ReporterTest extends FunSuite {
       reportPath,
       pomReportName,
       repositoryReportName,
-      upgradesReportName,
       inconsistencyReportName,
-      upgradesReportName,
+      upgradesToApplyReportName,
+      upgradesToIgnoreReportName,
       fileSystem,
       jsonMarshaller)
     reporter
@@ -58,11 +59,20 @@ class ReporterTest extends FunSuite {
     assert(fileSystem.actualReportDirectory === Paths.get("foo"))
   }
 
-  test("upgrades report") {
+  test("upgrades to apply report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    reporter.reportUpgrades(SampleData.upgrades)
-    assert(fileSystem.actualPath === reportPath.resolve(upgradesReportName))
+    reporter.reportUpgradesToApply(SampleData.upgrades)
+    assert(fileSystem.actualPath === reportPath.resolve(upgradesToApplyReportName))
+    assert(fileSystem.actualContent === SampleData.upgradesReport)
+    assert(fileSystem.actualReportDirectory === Paths.get("foo"))
+  }
+
+  test("upgrades to ignore report") {
+    val fileSystem = new FakeFileSystemForReporter
+    val reporter = createReporter(fileSystem)
+    reporter.reportUpgradesToIgnore(SampleData.upgrades)
+    assert(fileSystem.actualPath === reportPath.resolve(upgradesToIgnoreReportName))
     assert(fileSystem.actualContent === SampleData.upgradesReport)
     assert(fileSystem.actualReportDirectory === Paths.get("foo"))
   }

@@ -17,10 +17,11 @@ class DependencyUpgradeAnalyzerTest extends FunSuite {
         Dependency("integration/pom.xml", "org.scala-lang", "scala-library", "2.11.0"),
         Dependency("integration/pom.xml", "joda-time", "joda-time", "2.3")))
     )
+
     val libraries = Seq(
-      Library("http://repo1/jackson", SampleData.jacksonGroup, SampleData.jacksonArtifact, Seq("1.2.3", "1.3.0", "1.3-rc1", "1.4-rc1")),
-      Library("http://repo1/scala", SampleData.scalaGroup, SampleData.scalaArtifact, Seq("2.11.1", "2.10", "2.11.0")),
-      Library("http://repo1/joda", SampleData.jodaGroup, SampleData.jodaArtifact, Seq("2.0", "2.1", "2.2", "2.3", "2.4-rc1")))
+      Library("http://repo1/jackson", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", Seq("1.2.3", "1.3.0", "1.3-rc1", "1.4-rc1")),
+      Library("http://repo1/scala", "org.scala-lang", "scala-library", Seq("2.11.1", "2.10", "2.11.0")),
+      Library("http://repo1/joda", "joda-time", "joda-time", Seq("2.0", "2.1", "2.2", "2.3", "2.4-rc1")))
 
     val dependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
     val actual = dependencyUpgradeAnalyzer.recommendUpgrades(poms, libraries)
@@ -45,5 +46,25 @@ class DependencyUpgradeAnalyzerTest extends FunSuite {
     assert(actual(3).artifact === "scala-library")
     assert(actual(3).fromVersion === "2.11.0")
     assert(actual(3).toVersion === "2.11.1")
+  }
+
+  test("filter out do not upgrade from") {
+    val upgrades = Seq(Upgrade("pom", "group-1", "artifact-1", "version-1", "upgrade-1"))
+    val doNotUpgradeFrom = Set(GroupAndArtifact("group-1", "artifact-1"))
+    val doNotUpgradeTo = Set[GroupArtifactVersion]()
+    val dependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
+    val (apply, ignore) = dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(upgrades, doNotUpgradeFrom, doNotUpgradeTo)
+    assert(apply.size === 0)
+    assert(ignore.size === 1)
+  }
+
+  test("filter out do not upgrade to") {
+    val upgrades = Seq(Upgrade("pom", "group-1", "artifact-1", "version-1", "upgrade-1"))
+    val doNotUpgradeFrom = Set[GroupAndArtifact]()
+    val doNotUpgradeTo = Set(GroupArtifactVersion("group-1", "artifact-1", "upgrade-1"))
+    val dependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
+    val (apply, ignore) = dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(upgrades, doNotUpgradeFrom, doNotUpgradeTo)
+    assert(apply.size === 0)
+    assert(ignore.size === 1)
   }
 }

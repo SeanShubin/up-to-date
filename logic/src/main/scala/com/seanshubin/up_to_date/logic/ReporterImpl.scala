@@ -5,16 +5,23 @@ import java.nio.file.Path
 class ReporterImpl(reportPath: Path,
                    pomReportName: String,
                    repositoryReportName: String,
-                   recommendationReportName: String,
                    inconsistencyReportName: String,
-                   upgradesReportName: String,
+                   upgradesToApplyReportName: String,
+                   upgradesToIgnoreReportName: String,
                    fileSystem: FileSystem,
                    jsonMarshaller: JsonMarshaller) extends Reporter {
-  override def reportUpgrades(upgrades: Seq[Upgrade]): Unit = {
+  override def reportUpgradesToApply(upgrades: Seq[Upgrade]): Unit = {
     val upgradesByPom = Upgrade.groupByLocation(upgrades)
     val jsonReport = jsonMarshaller.toJson(upgradesByPom)
     fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(reportPath.resolve(upgradesReportName), jsonReport)
+    fileSystem.storeString(reportPath.resolve(upgradesToApplyReportName), jsonReport)
+  }
+
+  override def reportUpgradesToIgnore(upgrades: Seq[Upgrade]): Unit = {
+    val upgradesByPom = Upgrade.groupByLocation(upgrades)
+    val jsonReport = jsonMarshaller.toJson(upgradesByPom)
+    fileSystem.ensureDirectoriesExist(reportPath)
+    fileSystem.storeString(reportPath.resolve(upgradesToIgnoreReportName), jsonReport)
   }
 
   override def reportInconsistencies(inconsistencies: Map[GroupAndArtifact, Seq[Dependency]]): Unit = {

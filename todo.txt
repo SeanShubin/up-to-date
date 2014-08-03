@@ -1,4 +1,0 @@
-remove file io from pom parser
-boundaries: RunnerImpl.pomFileScanner.scanPomFiles into imperative shell
-boundaries: MavenRepositoryScanner.scanLatestDependencies
-PomXmlUpgraderImpl should not decide whether or not to upgrade, it should be given the proper upgrade list

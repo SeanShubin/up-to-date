@@ -11,10 +11,14 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val upgrader = mock[PomFileUpgrader]
     val reporter = mock[Reporter]
     val notifications = new FakeNotifications
+    val doNotUpgradeFrom = Set(GroupAndArtifact("from-group", "from-artifact"))
+    val doNotUpgradeTo = Set(GroupArtifactVersion("to-group", "to-artifact", "to-verions"))
     val runner: Runner = new RunnerImpl(
       pomFileScanner,
       mavenRepositoryScanner,
       dependencyUpgradeAnalyzer,
+      doNotUpgradeFrom,
+      doNotUpgradeTo,
       upgrader,
       reporter,
       notifications)
@@ -23,10 +27,12 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       mavenRepositoryScanner.scanLatestDependencies(SampleData.poms).andReturn(SampleData.libraries)
       dependencyUpgradeAnalyzer.findInconsistencies(SampleData.poms).andReturn(SampleData.inconsistencies)
       dependencyUpgradeAnalyzer.recommendUpgrades(SampleData.poms, SampleData.libraries).andReturn(SampleData.upgrades)
-      upgrader.performAutomaticUpgradesIfApplicable(SampleData.upgrades)
+      dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(SampleData.upgrades, doNotUpgradeFrom, doNotUpgradeTo).andReturn((SampleData.applyUpgrades, SampleData.ignoreUpgrades))
+      upgrader.performAutomaticUpgradesIfApplicable(SampleData.applyUpgrades)
       reporter.reportPom(SampleData.poms)
       reporter.reportRepository(SampleData.libraries)
-      reporter.reportUpgrades(SampleData.upgrades)
+      reporter.reportUpgradesToApply(SampleData.applyUpgrades)
+      reporter.reportUpgradesToIgnore(SampleData.ignoreUpgrades)
       reporter.reportInconsistencies(SampleData.inconsistencies)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
