@@ -126,4 +126,15 @@ object Version {
     }
     availableVersions.toSeq.sorted.reverse.head
   }
+
+  def selectUpgrade(currentVersionString: String, versionStrings: Seq[String]): Option[String] = {
+    val version = Version(currentVersionString)
+    val versions = versionStrings.toSet.map(Version.apply)
+    val upgrade = version.selectUpgrade(versions)
+    upgrade.map(_.originalString)
+  }
+
+  def stringDescending(left: String, right: String): Boolean = {
+    Version(left).compareTo(Version(right)) > 0
+  }
 }

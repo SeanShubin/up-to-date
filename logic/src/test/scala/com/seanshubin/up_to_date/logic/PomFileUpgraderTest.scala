@@ -7,18 +7,15 @@ import org.scalatest.mock.EasyMockSugar
 
 class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
   test("automatically update") {
-    val upgradesForPom1: Map[GroupAndArtifact, String] = Map(
-      GroupAndArtifact("group-1", "artifact-1") -> "upgrade-1",
-      GroupAndArtifact("group-2", "artifact-2") -> "upgrade-2"
+    val upgradesForPom1 = Seq(
+      Upgrade("pom-1", "group-1", "artifact-1", "verison-1", "upgrade-1"),
+      Upgrade("pom-1", "group-2", "artifact-2", "version-2", "upgrade-2")
     )
-    val upgradesForPom2: Map[GroupAndArtifact, String] = Map(
-      GroupAndArtifact("group-3", "artifact-3") -> "upgrade-3",
-      GroupAndArtifact("group-4", "artifact-4") -> "upgrade-4"
+    val upgradesForPom2 = Seq(
+      Upgrade("pom-2", "group-3", "artifact-3", "version-3", "upgrade-3"),
+      Upgrade("pom-2", "group-4", "artifact-4", "version-4", "upgrade-4")
     )
-    val upgradesByPom: Map[String, Map[GroupAndArtifact, String]] = Map(
-      "pom-1" -> upgradesForPom1,
-      "pom-2" -> upgradesForPom2
-    )
+    val upgrades = upgradesForPom1 ++ upgradesForPom2
     val fileSystem = mock[FileSystem]
     val pomXmlUpgrader = mock[PomXmlUpgrader]
     val allowAutomaticUpgrades = true
@@ -32,23 +29,20 @@ class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
       fileSystem.storeString(Paths.get("pom-2"), "new pom 2")
     }
     whenExecuting(fileSystem, pomXmlUpgrader) {
-      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgradesByPom)
+      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgrades)
     }
   }
 
   test("don't automatically upgrade if flag not set") {
-    val upgradesForPom1: Map[GroupAndArtifact, String] = Map(
-      GroupAndArtifact("group-1", "artifact-1") -> "upgrade-1",
-      GroupAndArtifact("group-2", "artifact-2") -> "upgrade-2"
+    val upgradesForPom1 = Seq(
+      Upgrade("pom-1", "group-1", "artifact-1", "verison-1", "upgrade-1"),
+      Upgrade("pom-1", "group-2", "artifact-2", "version-2", "upgrade-2")
     )
-    val upgradesForPom2: Map[GroupAndArtifact, String] = Map(
-      GroupAndArtifact("group-3", "artifact-3") -> "upgrade-3",
-      GroupAndArtifact("group-4", "artifact-4") -> "upgrade-4"
+    val upgradesForPom2 = Seq(
+      Upgrade("pom-2", "group-3", "artifact-3", "version-3", "upgrade-3"),
+      Upgrade("pom-2", "group-4", "artifact-4", "version-4", "upgrade-4")
     )
-    val upgradesByPom: Map[String, Map[GroupAndArtifact, String]] = Map(
-      "pom-1" -> upgradesForPom1,
-      "pom-2" -> upgradesForPom2
-    )
+    val upgrades = upgradesForPom1 ++ upgradesForPom2
     val fileSystem = mock[FileSystem]
     val pomXmlUpgrader = mock[PomXmlUpgrader]
     val allowAutomaticUpgrades = false
@@ -56,13 +50,16 @@ class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
     expecting {
     }
     whenExecuting(fileSystem, pomXmlUpgrader) {
-      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgradesByPom)
+      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgrades)
     }
   }
 
   test("preserve line separators") {
-    val upgrades: Map[GroupAndArtifact, String] = Map()
-    val upgradesByPom: Map[String, Map[GroupAndArtifact, String]] = Map("pom-1" -> upgrades)
+    val upgradesForPom1 = Seq(
+      Upgrade("pom-1", "group-1", "artifact-1", "verison-1", "upgrade-1"),
+      Upgrade("pom-1", "group-2", "artifact-2", "version-2", "upgrade-2")
+    )
+    val upgrades = upgradesForPom1
     val fileSystem = mock[FileSystem]
     val pomXmlUpgrader = mock[PomXmlUpgrader]
     val allowAutomaticUpgrades = true
@@ -76,7 +73,7 @@ class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
       fileSystem.storeString(Paths.get("pom-1"), newFileContents)
     }
     whenExecuting(fileSystem, pomXmlUpgrader) {
-      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgradesByPom)
+      pomFileUpgrader.performAutomaticUpgradesIfApplicable(upgrades)
     }
   }
 }

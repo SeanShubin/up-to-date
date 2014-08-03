@@ -10,9 +10,9 @@ class PomFileFinderImpl(fileSystem: FileSystem,
                         directoriesToSearch: Seq[Path],
                         pomFileName: String,
                         excludedDirectories: Seq[String]) extends PomFileFinder {
-  override def relevantPomFiles(): Set[Path] = {
+  override def relevantPomFiles(): Seq[Path] = {
     val relevantPomFilesSeq = directoriesToSearch.flatMap(relevantPomFilesFromPath)
-    relevantPomFilesSeq.toSet
+    relevantPomFilesSeq
   }
 
   private def relevantPomFilesFromPath(path: Path): Seq[Path] = {

@@ -1,13 +1,11 @@
 package com.seanshubin.up_to_date.logic
 
 trait Reporter {
-  def reportAutomaticUpgradesPerformed(upgradesByPom: Map[String, Map[GroupAndArtifact, String]])
+  def reportUpgrades(upgrades: Seq[Upgrade])
 
-  def reportRecommendations(recommendations: Recommendations)
+  def reportInconsistencies(inconsistencies: Map[GroupAndArtifact, Seq[Dependency]])
 
-  def reportInconsistencies(recommendations: Recommendations)
+  def reportPom(poms: Seq[Pom])
 
-  def reportPom(existingDependencies: ExistingDependencies)
-
-  def reportRepository(dependencyVersions: DependencyVersions)
+  def reportRepository(libraries: Seq[Library])
 }

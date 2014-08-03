@@ -26,9 +26,9 @@ class PomParserTest extends FunSuite with EasyMockSugar {
     val fileSystem = mock[FileSystem]
     val pomParser = new PomParserImpl(fileSystem)
     val path = Paths.get("foo", "bar", "pom.xml")
-    val expectedDependency1 = PomDependency("org.scala-lang", "scala-library", "2.11.1")
-    val expectedDependency2 = PomDependency("joda-time", "joda-time", "2.3")
-    val expected = path.toString -> Seq(expectedDependency1, expectedDependency2)
+    val expectedDependency1 = Dependency(path.toString, "org.scala-lang", "scala-library", "2.11.1")
+    val expectedDependency2 = Dependency(path.toString, "joda-time", "joda-time", "2.3")
+    val expected = Pom(path.toString, Seq(expectedDependency1, expectedDependency2))
     expecting {
       fileSystem.pathToInputStream(path).andReturn(sampleDocumentInputStream)
     }
@@ -66,8 +66,8 @@ class PomParserTest extends FunSuite with EasyMockSugar {
     val fileSystem = mock[FileSystem]
     val pomParser = new PomParserImpl(fileSystem)
     val path = Paths.get("foo", "bar", "pom.xml")
-    val expectedDependency = PomDependency("ddd", "eee", "fff")
-    val expected = path.toString -> Seq(expectedDependency)
+    val expectedDependency = Dependency(path.toString, "ddd", "eee", "fff")
+    val expected = Pom(path.toString, Seq(expectedDependency))
     expecting {
       fileSystem.pathToInputStream(path).andReturn(sampleDocumentInputStream)
     }

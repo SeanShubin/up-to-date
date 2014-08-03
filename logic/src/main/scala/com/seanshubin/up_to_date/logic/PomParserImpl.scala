@@ -5,22 +5,17 @@ import java.nio.file.Path
 import org.w3c.dom.{Element, Node, NodeList}
 
 class PomParserImpl(fileSystem: FileSystem) extends PomParser {
-  override def parseDependencies(path: Path): (String, Seq[PomDependency]) = {
+  override def parseDependencies(path: Path): Pom = {
     val document = DocumentUtil.inputStreamToDocument(fileSystem.pathToInputStream(path))
     val nodeList = document.getElementsByTagName("dependency")
     val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
-    val nodeToDependency: Node => Option[PomDependency] = pathAndNodeToDependency(path, _: Node)
+    val nodeToDependency: Node => Option[Dependency] = pathAndNodeToDependency(path, _: Node)
     val dependencies = traversableNodeList.map(nodeToDependency).toSeq.flatten
-    (path.toString, dependencies)
+    val pom = Pom(path.toString, dependencies)
+    pom
   }
 
-  private def nodeListToTraversable(nodeList: NodeList): Traversable[Node] = new Traversable[Node] {
-    def foreach[U](f: (Node) => U) {
-      for (i <- 0 until nodeList.getLength) yield f(nodeList.item(i))
-    }
-  }
-
-  private def pathAndNodeToDependency(path: Path, node: Node): Option[PomDependency] = {
+  private def pathAndNodeToDependency(path: Path, node: Node): Option[Dependency] = {
     val childNodeList = node.getChildNodes
     val childNodes = nodeListToTraversable(childNodeList)
     val childNodeMapEntries = for {
@@ -35,13 +30,19 @@ class PomParserImpl(fileSystem: FileSystem) extends PomParser {
     else None
   }
 
+  private def nodeListToTraversable(nodeList: NodeList): Traversable[Node] = new Traversable[Node] {
+    def foreach[U](f: (Node) => U) {
+      for (i <- 0 until nodeList.getLength) yield f(nodeList.item(i))
+    }
+  }
+
   private def hasNecessaryFields(fields: Map[String, String]): Boolean = {
     def containsValid(name: String): Boolean = fields.contains(name) && !fields(name).startsWith("$")
     containsValid("groupId") && containsValid("artifactId") && containsValid("version")
   }
 
-  private def pathAndFieldsToDependency(path: Path, fields: Map[String, String]): PomDependency = {
-    val dependency = PomDependency(fields("groupId"), fields("artifactId"), fields("version"))
+  private def pathAndFieldsToDependency(path: Path, fields: Map[String, String]): Dependency = {
+    val dependency = Dependency(path.toString, fields("groupId"), fields("artifactId"), fields("version"))
     dependency
   }
 }

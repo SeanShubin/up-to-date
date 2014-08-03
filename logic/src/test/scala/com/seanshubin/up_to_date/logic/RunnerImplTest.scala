@@ -19,15 +19,15 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       reporter,
       notifications)
     expecting {
-      pomFileScanner.scanExistingDependencies().andReturn(SampleData.existingDependencies)
-      mavenRepositoryScanner.scanLatestDependencies(SampleData.existingDependencies.toGroupAndArtifactSet).andReturn(SampleData.dependencyVersions)
-      dependencyUpgradeAnalyzer.recommend(SampleData.existingDependencies, SampleData.dependencyVersions).andReturn(SampleData.recommendations)
-      upgrader.performAutomaticUpgradesIfApplicable(SampleData.recommendations.upgradesByPom)
-      reporter.reportPom(SampleData.existingDependencies)
-      reporter.reportRepository(SampleData.dependencyVersions)
-      reporter.reportAutomaticUpgradesPerformed(SampleData.recommendations.upgradesByPom)
-      reporter.reportRecommendations(SampleData.recommendations)
-      reporter.reportInconsistencies(SampleData.recommendations)
+      pomFileScanner.scanPomFiles().andReturn(SampleData.poms)
+      mavenRepositoryScanner.scanLatestDependencies(SampleData.poms).andReturn(SampleData.libraries)
+      dependencyUpgradeAnalyzer.findInconsistencies(SampleData.poms).andReturn(SampleData.inconsistencies)
+      dependencyUpgradeAnalyzer.recommendUpgrades(SampleData.poms, SampleData.libraries).andReturn(SampleData.upgrades)
+      upgrader.performAutomaticUpgradesIfApplicable(SampleData.upgrades)
+      reporter.reportPom(SampleData.poms)
+      reporter.reportRepository(SampleData.libraries)
+      reporter.reportUpgrades(SampleData.upgrades)
+      reporter.reportInconsistencies(SampleData.inconsistencies)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()

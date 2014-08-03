@@ -7,7 +7,9 @@ import org.w3c.dom.Node
 class PomXmlUpgraderImpl(charset: Charset,
                          doNotUpgradeFrom: Set[GroupAndArtifact],
                          doNotUpgradeTo: Set[GroupArtifactVersion]) extends PomXmlUpgrader {
-  override def upgrade(oldXml: String, upgrades: Map[GroupAndArtifact, String]): String = {
+
+  override def upgrade(oldXml: String, upgrades: Seq[Upgrade]): String = {
+    val groupedUpgrades = Upgrade.groupByGroupArtifactVersionFrom(upgrades)
     val document = DocumentUtil.stringToDocument(oldXml, charset)
     val nodeList = document.getElementsByTagName("dependency")
     val nodes = DocumentUtil.nodeListToTraversable(nodeList)
@@ -30,16 +32,17 @@ class PomXmlUpgraderImpl(charset: Charset,
       childNodes.foreach(findParts)
       (groupNode, artifactNode, versionNode) match {
         case (Some(g), Some(a), Some(v)) =>
-          val groupAndArtifact = GroupAndArtifact(g.getTextContent, a.getTextContent)
-          upgrades.get(groupAndArtifact) match {
-            case Some(toVersion) =>
-              val groupArtifactVersion = GroupArtifactVersion(g.getTextContent, a.getTextContent, toVersion)
+          val groupArtifactVersion = GroupArtifactVersion(g.getTextContent, a.getTextContent, v.getTextContent)
+          val maybeUpgrade = groupedUpgrades.get(groupArtifactVersion)
+          maybeUpgrade match {
+            case Some(upgrade) =>
+              val groupAndArtifact = upgrade.groupAndArtifact
               if (doNotUpgradeFrom.contains(groupAndArtifact)) {
                 //ignore
-              } else if (doNotUpgradeTo.contains(groupArtifactVersion)) {
+              } else if (doNotUpgradeTo.contains(upgrade.groupArtifactVersionTo)) {
                 //ignore
               } else {
-                v.setTextContent(toVersion)
+                v.setTextContent(upgrade.toVersion)
               }
             case None =>
           }

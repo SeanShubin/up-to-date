@@ -10,32 +10,29 @@ class ReporterImpl(reportPath: Path,
                    upgradesReportName: String,
                    fileSystem: FileSystem,
                    jsonMarshaller: JsonMarshaller) extends Reporter {
-  override def reportAutomaticUpgradesPerformed(upgradesByPom: Map[String, Map[GroupAndArtifact, String]]): Unit = {
+  override def reportUpgrades(upgrades: Seq[Upgrade]): Unit = {
+    val upgradesByPom = Upgrade.groupByLocation(upgrades)
     val jsonReport = jsonMarshaller.toJson(upgradesByPom)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(upgradesReportName), jsonReport)
   }
 
-  override def reportRecommendations(recommendations: Recommendations): Unit = {
-    val jsonReport = jsonMarshaller.toJson(recommendations.filterWithRecommendation)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(reportPath.resolve(recommendationReportName), jsonReport)
-  }
-
-  override def reportInconsistencies(recommendations: Recommendations): Unit = {
-    val jsonReport = jsonMarshaller.toJson(recommendations.filterWithInconsistent)
+  override def reportInconsistencies(inconsistencies: Map[GroupAndArtifact, Seq[Dependency]]): Unit = {
+    val jsonReport = jsonMarshaller.toJson(inconsistencies)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(inconsistencyReportName), jsonReport)
   }
 
-  override def reportPom(existingDependencies: ExistingDependencies): Unit = {
-    val jsonReport = jsonMarshaller.toJson(existingDependencies.byPom)
+  override def reportPom(poms: Seq[Pom]): Unit = {
+    val pomByLocation = Pom.groupByLocation(poms)
+    val jsonReport = jsonMarshaller.toJson(pomByLocation)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(pomReportName), jsonReport)
   }
 
-  override def reportRepository(dependencyVersions: DependencyVersions): Unit = {
-    val jsonReport = jsonMarshaller.toJson(dependencyVersions.map)
+  override def reportRepository(libraries: Seq[Library]): Unit = {
+    val librariesByLocation = Library.groupByLocation(libraries)
+    val jsonReport = jsonMarshaller.toJson(librariesByLocation)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(repositoryReportName), jsonReport)
   }

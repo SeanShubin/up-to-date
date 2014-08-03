@@ -1,32 +1,24 @@
 package com.seanshubin.up_to_date.logic
 
 class MavenRepositoryScannerImpl(repositories: Seq[String], http: Http, metadataParser: MetadataParser) extends MavenRepositoryScanner {
-  override def scanLatestDependencies(groupAndArtifactSet: Set[GroupAndArtifact]): DependencyVersions = {
-    val initialDependencyVersions: Map[GroupAndArtifact, LocationAndVersions] = Map()
-    val dependencyVersions = groupAndArtifactSet.foldLeft(initialDependencyVersions)(addDependencyVersions)
-    DependencyVersions(dependencyVersions)
+  override def scanLatestDependencies(poms: Seq[Pom]): Seq[Library] = {
+    val groupAndArtifactSet = Pom.toGroupAndArtifactSet(poms)
+    groupAndArtifactSet.toSeq.flatMap(searchRepositoriesForVersions).sorted
   }
 
-  private def addDependencyVersions(soFar: Map[GroupAndArtifact, LocationAndVersions],
-                                    groupAndArtifact: GroupAndArtifact): Map[GroupAndArtifact, LocationAndVersions] = {
-    if (soFar.contains(groupAndArtifact)) {
-      soFar
-    } else {
-      val searchRepository = searchRepositoryForVersions(_: String, groupAndArtifact)
-      val maybeVersions = repositories.toStream.map(searchRepository).flatten.headOption
-      maybeVersions match {
-        case Some((location, versions)) => soFar + (groupAndArtifact -> LocationAndVersions(location, versions))
-        case None => soFar
-      }
-    }
+  private def searchRepositoriesForVersions(groupAndArtifact: GroupAndArtifact): Option[Library] = {
+    def searchRepository(repository: String) = searchRepositoryForVersions(repository, groupAndArtifact)
+    repositories.toStream.map(searchRepository).flatten.headOption
   }
 
-  private def searchRepositoryForVersions(repository: String, groupAndArtifact: GroupAndArtifact): Option[(String, Set[String])] = {
+  private def searchRepositoryForVersions(repository: String, groupAndArtifact: GroupAndArtifact): Option[Library] = {
     val url = repository + groupAndArtifact.urlPath + "/maven-metadata.xml"
     val (httpResponseCode, httpContent) = http.get(url)
     if (Http.isSuccess(httpResponseCode)) {
       val versions = metadataParser.parseVersions(httpContent)
-      Some(repository -> versions)
+      val GroupAndArtifact(group, artifact) = groupAndArtifact
+      val library = Library(url, group, artifact, versions)
+      Some(library)
     } else {
       None
     }

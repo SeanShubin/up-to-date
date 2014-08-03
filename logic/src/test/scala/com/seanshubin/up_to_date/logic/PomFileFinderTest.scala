@@ -25,7 +25,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(directory), "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Set(file))
+    assert(found === Seq(file))
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -40,7 +40,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Set())
+    assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -55,7 +55,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Set())
+    assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.SKIP_SUBTREE))
   }
 
@@ -69,7 +69,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Set())
+    assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -84,7 +84,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Set())
+    assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 
@@ -98,7 +98,7 @@ class PomFileFinderTest extends FunSuite with EasyMockSugar {
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
     val found = finder.relevantPomFiles()
-    assert(found === Set())
+    assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
   }
 }

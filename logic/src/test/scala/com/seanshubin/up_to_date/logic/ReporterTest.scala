@@ -8,9 +8,22 @@ class ReporterTest extends FunSuite {
   val reportPath = Paths.get("foo")
   val pomReportName = "pom"
   val repositoryReportName = "repository"
-  val recommendationReportName = "recommendations"
-  val inconsistencyReportName = "inconsistencies"
   val upgradesReportName = "upgrades"
+  val inconsistencyReportName = "inconsistencies"
+
+  def createReporter(fileSystem: FileSystem): Reporter = {
+    val jsonMarshaller = new JsonMarshallerImpl
+    val reporter = new ReporterImpl(
+      reportPath,
+      pomReportName,
+      repositoryReportName,
+      upgradesReportName,
+      inconsistencyReportName,
+      upgradesReportName,
+      fileSystem,
+      jsonMarshaller)
+    reporter
+  }
 
   class FakeFileSystemForReporter extends FakeFileSystem {
     var actualPath: Path = null
@@ -27,24 +40,10 @@ class ReporterTest extends FunSuite {
     }
   }
 
-  def createReporter(fileSystem: FileSystem): Reporter = {
-    val jsonMarshaller = new JsonMarshallerImpl
-    val reporter = new ReporterImpl(
-      reportPath,
-      pomReportName,
-      repositoryReportName,
-      recommendationReportName,
-      inconsistencyReportName,
-      upgradesReportName,
-      fileSystem,
-      jsonMarshaller)
-    reporter
-  }
-
   test("pom report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    reporter.reportPom(SampleData.existingDependencies)
+    reporter.reportPom(SampleData.poms)
     assert(fileSystem.actualPath === reportPath.resolve(pomReportName))
     assert(fileSystem.actualContent === SampleData.pomReport)
     assert(fileSystem.actualReportDirectory === Paths.get("foo"))
@@ -53,25 +52,25 @@ class ReporterTest extends FunSuite {
   test("repository report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    reporter.reportRepository(SampleData.dependencyVersions)
+    reporter.reportRepository(SampleData.libraries)
     assert(fileSystem.actualPath === reportPath.resolve(repositoryReportName))
     assert(fileSystem.actualContent === SampleData.repositoryReport)
     assert(fileSystem.actualReportDirectory === Paths.get("foo"))
   }
 
-  test("recommendations report") {
+  test("upgrades report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    reporter.reportRecommendations(SampleData.recommendations)
-    assert(fileSystem.actualPath === reportPath.resolve(recommendationReportName))
-    assert(fileSystem.actualContent === SampleData.recommendationsReport)
+    reporter.reportUpgrades(SampleData.upgrades)
+    assert(fileSystem.actualPath === reportPath.resolve(upgradesReportName))
+    assert(fileSystem.actualContent === SampleData.upgradesReport)
     assert(fileSystem.actualReportDirectory === Paths.get("foo"))
   }
 
   test("inconsistency report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    reporter.reportInconsistencies(SampleData.recommendations)
+    reporter.reportInconsistencies(SampleData.inconsistencies)
     assert(fileSystem.actualPath === reportPath.resolve(inconsistencyReportName))
     assert(fileSystem.actualContent === SampleData.inconsistencyReport)
     assert(fileSystem.actualReportDirectory === Paths.get("foo"))

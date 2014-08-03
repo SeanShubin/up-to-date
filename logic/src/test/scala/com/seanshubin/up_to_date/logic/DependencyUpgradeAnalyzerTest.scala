@@ -4,54 +4,46 @@ import org.scalatest.FunSuite
 
 class DependencyUpgradeAnalyzerTest extends FunSuite {
   test("recommend upgrades") {
-    val existingDependencies = ExistingDependencies(Map(
-      "pom.xml" -> Seq(
-        PomDependency("com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.2.3"),
-        PomDependency("org.scala-lang", "scala-library", "2.11.1"),
-        PomDependency("joda-time", "joda-time", "2.3")),
-      "logic/pom.xml" -> Seq(
-        PomDependency("com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.3-rc1"),
-        PomDependency("org.scala-lang", "scala-library", "2.10"),
-        PomDependency("joda-time", "joda-time", "2.3")),
-      "integration/pom.xml" -> Seq(
-        PomDependency("com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.4-rc1"),
-        PomDependency("org.scala-lang", "scala-library", "2.11.0"),
-        PomDependency("joda-time", "joda-time", "2.3"))
-    ))
-
-    val latestDependencies = DependencyVersions(Map(
-      SampleData.jacksonId ->
-        LocationAndVersions("http://repo1/jackson", Set("1.2.3", "1.3.0", "1.3-rc1", "1.4-rc1")),
-      SampleData.scalaId ->
-        LocationAndVersions("http://repo1/scala", Set("2.11.1", "2.10", "2.11.0")),
-      SampleData.jodaId ->
-        LocationAndVersions("http://repo2/joda", Set("2.0", "2.1", "2.2", "2.3", "2.4-rc1"))))
+    val poms = Seq(Pom("pom.xml", Seq(
+      Dependency("pom.xml", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.2.3"),
+      Dependency("pom.xml", "org.scala-lang", "scala-library", "2.11.1"),
+      Dependency("pom.xml", "joda-time", "joda-time", "2.3"))),
+      Pom("logic/pom.xml", Seq(
+        Dependency("logic/pom.xml", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.3-rc1"),
+        Dependency("logic/pom.xml", "org.scala-lang", "scala-library", "2.10"),
+        Dependency("logic/pom.xml", "joda-time", "joda-time", "2.3"))),
+      Pom("integration/pom.xml", Seq(
+        Dependency("integration/pom.xml", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.4-rc1"),
+        Dependency("integration/pom.xml", "org.scala-lang", "scala-library", "2.11.0"),
+        Dependency("integration/pom.xml", "joda-time", "joda-time", "2.3")))
+    )
+    val libraries = Seq(
+      Library("http://repo1/jackson", SampleData.jacksonGroup, SampleData.jacksonArtifact, Seq("1.2.3", "1.3.0", "1.3-rc1", "1.4-rc1")),
+      Library("http://repo1/scala", SampleData.scalaGroup, SampleData.scalaArtifact, Seq("2.11.1", "2.10", "2.11.0")),
+      Library("http://repo1/joda", SampleData.jodaGroup, SampleData.jodaArtifact, Seq("2.0", "2.1", "2.2", "2.3", "2.4-rc1")))
 
     val dependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
-    val actual = dependencyUpgradeAnalyzer.recommend(existingDependencies, latestDependencies)
-    assert(actual.totalDependencies === 3)
-    assert(actual.dependenciesToUpgrade === 2)
-    assert(actual.versionEntriesToUpgrade === 4)
-    val actualJackson: RecommendationBySource = actual.byGroupAndArtifact(SampleData.jacksonId)
-    assert(actualJackson.bestAvailable === "1.3.0")
-    assert(actualJackson.repositoryLocation === "http://repo1/jackson")
-    assert(actualJackson.byPomLocation.size === 3)
-    assert(actualJackson.byPomLocation("pom.xml") === RecommendedVersionBump("1.2.3", Some("1.3.0")))
-    assert(actualJackson.byPomLocation("logic/pom.xml") === RecommendedVersionBump("1.3-rc1", Some("1.3.0")))
-    assert(actualJackson.byPomLocation("integration/pom.xml") === RecommendedVersionBump("1.4-rc1", None))
-    val actualScala: RecommendationBySource = actual.byGroupAndArtifact(SampleData.scalaId)
-    assert(actualScala.bestAvailable === "2.11.1")
-    assert(actualScala.repositoryLocation === "http://repo1/scala")
-    assert(actualScala.byPomLocation.size === 3)
-    assert(actualScala.byPomLocation("pom.xml") === RecommendedVersionBump("2.11.1", None))
-    assert(actualScala.byPomLocation("logic/pom.xml") === RecommendedVersionBump("2.10", Some("2.11.1")))
-    assert(actualScala.byPomLocation("integration/pom.xml") === RecommendedVersionBump("2.11.0", Some("2.11.1")))
-    val actualJoda: RecommendationBySource = actual.byGroupAndArtifact(SampleData.jodaId)
-    assert(actualJoda.bestAvailable === "2.3")
-    assert(actualJoda.repositoryLocation === "http://repo2/joda")
-    assert(actualJoda.byPomLocation.size === 3)
-    assert(actualJoda.byPomLocation("pom.xml") === RecommendedVersionBump("2.3", None))
-    assert(actualJoda.byPomLocation("logic/pom.xml") === RecommendedVersionBump("2.3", None))
-    assert(actualJoda.byPomLocation("integration/pom.xml") === RecommendedVersionBump("2.3", None))
+    val actual = dependencyUpgradeAnalyzer.recommendUpgrades(poms, libraries)
+    assert(actual.size === 4)
+    assert(actual(0).location === "pom.xml")
+    assert(actual(0).group === "com.fasterxml.jackson.module")
+    assert(actual(0).artifact === "jackson-module-scala_2.11")
+    assert(actual(0).fromVersion === "1.2.3")
+    assert(actual(0).toVersion === "1.3.0")
+    assert(actual(1).location === "logic/pom.xml")
+    assert(actual(1).group === "com.fasterxml.jackson.module")
+    assert(actual(1).artifact === "jackson-module-scala_2.11")
+    assert(actual(1).fromVersion === "1.3-rc1")
+    assert(actual(1).toVersion === "1.3.0")
+    assert(actual(2).location === "logic/pom.xml")
+    assert(actual(2).group === "org.scala-lang")
+    assert(actual(2).artifact === "scala-library")
+    assert(actual(2).fromVersion === "2.10")
+    assert(actual(2).toVersion === "2.11.1")
+    assert(actual(3).location === "integration/pom.xml")
+    assert(actual(3).group === "org.scala-lang")
+    assert(actual(3).artifact === "scala-library")
+    assert(actual(3).fromVersion === "2.11.0")
+    assert(actual(3).toVersion === "2.11.1")
   }
 }

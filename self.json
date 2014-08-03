@@ -10,7 +10,7 @@
     "doNotUpgradeTo": [],
     "doNotUpgradeFrom": [],
     "automaticallyUpgrade": true,
-    "reportDirectory": "generated/self/report",
+    "reportDirectory": "generated/self",
     "cacheDirectory": "generated/cache",
     "cacheExpire": "5 days"
 }

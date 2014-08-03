@@ -5,13 +5,14 @@ import java.nio.file.Paths
 class PomFileUpgraderImpl(fileSystem: FileSystem,
                           pomXmlUpgrader: PomXmlUpgrader,
                           allowAutomaticUpgrades: Boolean) extends PomFileUpgrader {
-  override def performAutomaticUpgradesIfApplicable(upgradesByPom: Map[String, Map[GroupAndArtifact, String]]) {
+  override def performAutomaticUpgradesIfApplicable(upgrades: Seq[Upgrade]) {
     if (allowAutomaticUpgrades) {
+      val upgradesByPom = Upgrade.groupByLocation(upgrades)
       performAutomaticUpgrades(upgradesByPom)
     }
   }
 
-  private def performAutomaticUpgrades(upgradesByPom: Map[String, Map[GroupAndArtifact, String]]) {
+  private def performAutomaticUpgrades(upgradesByPom: Map[String, Seq[Upgrade]]) {
     for {
       (pom, upgrades) <- upgradesByPom
     } {
