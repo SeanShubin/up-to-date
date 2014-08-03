@@ -10,4 +10,6 @@ trait Reporter {
   def reportPom(poms: Seq[Pom])
 
   def reportRepository(libraries: Seq[Library])
+
+  def reportStatusQuo(upgrades:Seq[Upgrade])
 }

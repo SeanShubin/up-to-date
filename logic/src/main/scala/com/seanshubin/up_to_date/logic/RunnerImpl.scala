@@ -21,6 +21,7 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
       reporter.reportUpgradesToApply(apply)
       reporter.reportUpgradesToIgnore(ignore)
       reporter.reportInconsistencies(inconsistencies)
+      reporter.reportStatusQuo(upgrades)
     }
   }
 }

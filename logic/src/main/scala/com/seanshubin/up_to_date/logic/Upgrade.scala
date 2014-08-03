@@ -6,6 +6,8 @@ case class Upgrade(location: String, group: String, artifact: String, fromVersio
   def groupArtifactVersionFrom = GroupArtifactVersion(group, artifact, fromVersion)
 
   def groupArtifactVersionTo = GroupArtifactVersion(group, artifact, toVersion)
+
+  def toGroupArtifactSeq = Seq(group, artifact)
 }
 
 object Upgrade {

@@ -8,8 +8,16 @@ class ReporterImpl(reportPath: Path,
                    inconsistencyReportName: String,
                    upgradesToApplyReportName: String,
                    upgradesToIgnoreReportName: String,
+                   statusQuoReportName: String,
                    fileSystem: FileSystem,
                    jsonMarshaller: JsonMarshaller) extends Reporter {
+  override def reportStatusQuo(upgrades: Seq[Upgrade]): Unit = {
+    val upgradesAsGroupArtifactSeq = upgrades.map(_.toGroupArtifactSeq)
+    val jsonReport = jsonMarshaller.toJson(upgradesAsGroupArtifactSeq)
+    fileSystem.ensureDirectoriesExist(reportPath)
+    fileSystem.storeString(reportPath.resolve(statusQuoReportName), jsonReport)
+  }
+
   override def reportUpgradesToApply(upgrades: Seq[Upgrade]): Unit = {
     val upgradesByPom = Upgrade.groupByLocation(upgrades)
     val jsonReport = jsonMarshaller.toJson(upgradesByPom)

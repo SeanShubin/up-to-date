@@ -11,6 +11,7 @@ class ReporterTest extends FunSuite {
   val upgradesToApplyReportName = "apply"
   val upgradesToIgnoreReportName = "ignore"
   val inconsistencyReportName = "inconsistencies"
+  val statusQuoReportName = "status-quo"
 
   def createReporter(fileSystem: FileSystem): Reporter = {
     val jsonMarshaller = new JsonMarshallerImpl
@@ -21,6 +22,7 @@ class ReporterTest extends FunSuite {
       inconsistencyReportName,
       upgradesToApplyReportName,
       upgradesToIgnoreReportName,
+      statusQuoReportName,
       fileSystem,
       jsonMarshaller)
     reporter

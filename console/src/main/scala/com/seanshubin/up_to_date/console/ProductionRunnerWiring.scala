@@ -13,6 +13,7 @@ trait ProductionRunnerWiring {
   lazy val inconsistencyReportName: String = "inconsistency.json"
   lazy val upgradesToApplyReportName: String = "apply.json"
   lazy val upgradesToIgnoreReportName: String = "ignore.json"
+  lazy val statusQuoReportName: String = "status-quo.json"
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
   lazy val systemClock: SystemClock = new SystemClockImpl
@@ -37,7 +38,7 @@ trait ProductionRunnerWiring {
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
   lazy val reporter: Reporter = new ReporterImpl(
     configuration.reportDirectory, pomReportName, repositoryReportName, inconsistencyReportName,
-    upgradesToApplyReportName, upgradesToIgnoreReportName, fileSystem, jsonMarshaller)
+    upgradesToApplyReportName, upgradesToIgnoreReportName, statusQuoReportName, fileSystem, jsonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: Runner = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom,

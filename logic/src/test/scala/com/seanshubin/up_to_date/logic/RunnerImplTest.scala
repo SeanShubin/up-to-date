@@ -34,6 +34,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       reporter.reportUpgradesToApply(SampleData.applyUpgrades)
       reporter.reportUpgradesToIgnore(SampleData.ignoreUpgrades)
       reporter.reportInconsistencies(SampleData.inconsistencies)
+      reporter.reportStatusQuo(SampleData.upgrades)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()
