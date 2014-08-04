@@ -24,7 +24,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       notifications)
     expecting {
       pomFileScanner.scanPomFiles().andReturn(SampleData.poms)
-      mavenRepositoryScanner.scanLatestDependencies(SampleData.poms).andReturn(SampleData.libraries)
+      mavenRepositoryScanner.scanLatestDependencies(SampleData.poms).andReturn((SampleData.libraries, SampleData.notFound))
       dependencyUpgradeAnalyzer.findInconsistencies(SampleData.poms).andReturn(SampleData.inconsistencies)
       dependencyUpgradeAnalyzer.recommendUpgrades(SampleData.poms, SampleData.libraries).andReturn(SampleData.upgrades)
       dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(SampleData.upgrades, doNotUpgradeFrom, doNotUpgradeTo).andReturn((SampleData.applyUpgrades, SampleData.ignoreUpgrades))
@@ -35,6 +35,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       reporter.reportUpgradesToIgnore(SampleData.ignoreUpgrades)
       reporter.reportInconsistencies(SampleData.inconsistencies)
       reporter.reportStatusQuo(SampleData.upgrades)
+      reporter.reportNotFound(SampleData.notFound)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()

@@ -16,10 +16,12 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
     val poms = Seq(pom)
     val versions1 = Seq("version1a", "version1b", "version1c")
     val versions2 = Seq("version2a", "version2b", "version2c")
-    val expected = Seq(
+    val expectedLibraries = Seq(
       Library("repo1/group1/artifact1/maven-metadata.xml", "group1", "artifact1", versions1),
       Library("repo1/group2/artifact2/maven-metadata.xml", "group2", "artifact2", versions2)
     )
+    val expectedNotFound: Seq[GroupAndArtifact] = Seq()
+    val expected = (expectedLibraries, expectedNotFound)
     expecting {
       http.get("repo1/group1/artifact1/maven-metadata.xml").andReturn((200, "content1"))
       metadataParser.parseVersions("content1").andReturn(versions1)
@@ -31,6 +33,7 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       assert(actual === expected)
     }
   }
+
   test("don't search later repository if earlier repository finds it") {
     val repositories = Seq("repo1", "repo2")
     val http = mock[Http]
@@ -41,7 +44,9 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
     val pom = Pom("pom.xml", Seq(dependency))
     val poms = Seq(pom)
     val versions = Seq("version-a", "version-b", "version-c")
-    val expected = Seq(Library("repo1/group/artifact/maven-metadata.xml", "group", "artifact", versions))
+    val expectedLibraries = Seq(Library("repo1/group/artifact/maven-metadata.xml", "group", "artifact", versions))
+    val expectedNotFound: Seq[GroupAndArtifact] = Seq()
+    val expected = (expectedLibraries, expectedNotFound)
     expecting {
       http.get("repo1/group/artifact/maven-metadata.xml").andReturn((200, "content"))
       metadataParser.parseVersions("content").andReturn(versions)
@@ -51,6 +56,7 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       assert(actual === expected)
     }
   }
+
   test("search later repository if earlier repository does not find it") {
     val repositories = Seq("repo1", "repo2")
     val http = mock[Http]
@@ -61,7 +67,9 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
     val pom = Pom("pom.xml", Seq(dependency))
     val poms = Seq(pom)
     val versions = Seq("version-a", "version-b", "version-c")
-    val expected = Seq(Library("repo2/group/artifact/maven-metadata.xml", "group", "artifact", versions))
+    val expectedLibraries = Seq(Library("repo2/group/artifact/maven-metadata.xml", "group", "artifact", versions))
+    val expectedNotFound: Seq[GroupAndArtifact] = Seq()
+    val expected = (expectedLibraries, expectedNotFound)
     expecting {
       http.get("repo1/group/artifact/maven-metadata.xml").andReturn((404, "not found"))
       http.get("repo2/group/artifact/maven-metadata.xml").andReturn((200, "content"))
@@ -72,6 +80,7 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
       assert(actual === expected)
     }
   }
+
   test("dependency not found") {
     val repositories = Seq("repo1", "repo2")
     val http = mock[Http]
@@ -81,7 +90,9 @@ class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
     val dependency = Dependency("pom.xml", "group", "artifact", "version1")
     val pom = Pom("pom.xml", Seq(dependency))
     val poms = Seq(pom)
-    val expected: Seq[Library] = Seq()
+    val expectedLibraries: Seq[Library] = Seq()
+    val expectedNotFound: Seq[GroupAndArtifact] = Seq(GroupAndArtifact("group", "artifact"))
+    val expected = (expectedLibraries, expectedNotFound)
     expecting {
       http.get("repo1/group/artifact/maven-metadata.xml").andReturn((404, "not found"))
       http.get("repo2/group/artifact/maven-metadata.xml").andReturn((404, "not found"))

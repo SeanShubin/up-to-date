@@ -5,7 +5,6 @@ import java.nio.charset.Charset
 import org.w3c.dom.Node
 
 class PomXmlUpgraderImpl(charset: Charset) extends PomXmlUpgrader {
-
   override def upgrade(oldXml: String, upgrades: Seq[Upgrade]): String = {
     val groupedUpgrades = Upgrade.groupByGroupArtifactVersionFrom(upgrades)
     val document = DocumentUtil.stringToDocument(oldXml, charset)

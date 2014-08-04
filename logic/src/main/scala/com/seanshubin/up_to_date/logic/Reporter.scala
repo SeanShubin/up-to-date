@@ -11,5 +11,7 @@ trait Reporter {
 
   def reportRepository(libraries: Seq[Library])
 
-  def reportStatusQuo(upgrades:Seq[Upgrade])
+  def reportStatusQuo(upgrades: Seq[Upgrade])
+
+  def reportNotFound(notFound: Seq[GroupAndArtifact])
 }

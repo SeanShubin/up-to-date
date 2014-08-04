@@ -5,11 +5,10 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{FileVisitResult, FileVisitor, Path, Paths}
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
 
 import scala.collection.mutable.ArrayBuffer
 
-class PomFileFinderTest extends FunSuite with EasyMockSugar {
+class PomFileFinderTest extends FunSuite {
   val stubAttributes: BasicFileAttributes = null
   val stubFile: Path = null
   val stubException: IOException = null

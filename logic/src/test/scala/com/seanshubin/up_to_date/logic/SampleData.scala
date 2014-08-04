@@ -58,6 +58,9 @@ object SampleData {
     library4,
     library5
   )
+  val notFound: Seq[GroupAndArtifact] = Seq(
+    dependency3_3.groupAndArtifact
+  )
 
   val upgrades = Seq(
     Upgrade("one/pom.xml", "group1", "artifact1", "version1", "version1-3"),
@@ -272,6 +275,12 @@ object SampleData {
       |    "version" : "version2"
       |  } ]
       |}""".stripMargin
+
+  val notFoundReport =
+    """[ {
+      |  "group" : "group5",
+      |  "artifact" : "artifact5"
+      |} ]""".stripMargin
 
   val sampleMetadataContents =
     """<?xml version="1.0" encoding="UTF-8"?>
