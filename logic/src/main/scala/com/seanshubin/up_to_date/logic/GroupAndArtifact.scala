@@ -5,8 +5,6 @@ case class GroupAndArtifact(group: String, artifact: String) extends Ordered[Gro
 
   private def dotToSlash(s: String): String = s.replaceAll("\\.", "/")
 
-  def addVersion(version: String) = GroupArtifactVersion(group, artifact, version)
-
   override def compare(that: GroupAndArtifact): Int = {
     Ordering.Tuple2(Ordering.String, Ordering.String).compare((group, artifact), (that.group, that.artifact))
   }

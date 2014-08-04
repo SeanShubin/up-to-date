@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.integration
 
 import java.nio.charset.StandardCharsets
 
-import com.seanshubin.up_to_date.logic.{FakeNotifications, Http}
+import com.seanshubin.up_to_date.logic.Http
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
