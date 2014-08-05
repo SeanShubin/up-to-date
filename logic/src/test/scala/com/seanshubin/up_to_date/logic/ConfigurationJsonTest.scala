@@ -37,7 +37,7 @@ class ConfigurationJsonTest extends FunSuite {
   }
 
   test("directoryNamesToSkip is required") {
-    val parsedFromJson = SampleData.configurationJsonComplete.copy(directoryNamesToSkip = None)
+    val parsedFromJson = configurationJsonComplete.copy(directoryNamesToSkip = None)
 
     val actual = parsedFromJson.validate()
     val expected = Left(Seq("directoryNamesToSkip is required"))

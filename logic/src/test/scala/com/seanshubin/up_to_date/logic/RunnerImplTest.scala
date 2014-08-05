@@ -13,6 +13,13 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val notifications = new FakeNotifications
     val doNotUpgradeFrom = Set(GroupAndArtifact("from-group", "from-artifact"))
     val doNotUpgradeTo = Set(GroupArtifactVersion("to-group", "to-artifact", "to-verions"))
+    val samplePoms = Data.poms()
+    val sampleLibraries = Data.libraries()
+    val sampleNotFound = Data.groupAndArtifactSeq()
+    val sampleInconsistencies = Data.inconsistencies()
+    val sampleUpgrades = Data.upgrades(1, 6)
+    val sampleApplyUpgrades = Data.upgrades(1, 3)
+    val sampleIgnoreUpgrades = Data.upgrades(4, 6)
     val runner: Runner = new RunnerImpl(
       pomFileScanner,
       mavenRepositoryScanner,
@@ -23,19 +30,19 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       reporter,
       notifications)
     expecting {
-      pomFileScanner.scanPomFiles().andReturn(SampleData.poms)
-      mavenRepositoryScanner.scanLatestDependencies(SampleData.poms).andReturn((SampleData.libraries, SampleData.notFound))
-      dependencyUpgradeAnalyzer.findInconsistencies(SampleData.poms).andReturn(SampleData.inconsistencies)
-      dependencyUpgradeAnalyzer.recommendUpgrades(SampleData.poms, SampleData.libraries).andReturn(SampleData.upgrades)
-      dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(SampleData.upgrades, doNotUpgradeFrom, doNotUpgradeTo).andReturn((SampleData.applyUpgrades, SampleData.ignoreUpgrades))
-      upgrader.performAutomaticUpgradesIfApplicable(SampleData.applyUpgrades)
-      reporter.reportPom(SampleData.poms)
-      reporter.reportRepository(SampleData.libraries)
-      reporter.reportUpgradesToApply(SampleData.applyUpgrades)
-      reporter.reportUpgradesToIgnore(SampleData.ignoreUpgrades)
-      reporter.reportInconsistencies(SampleData.inconsistencies)
-      reporter.reportStatusQuo(SampleData.upgrades)
-      reporter.reportNotFound(SampleData.notFound)
+      pomFileScanner.scanPomFiles().andReturn(samplePoms)
+      mavenRepositoryScanner.scanLatestDependencies(samplePoms).andReturn((sampleLibraries, sampleNotFound))
+      dependencyUpgradeAnalyzer.findInconsistencies(samplePoms).andReturn(sampleInconsistencies)
+      dependencyUpgradeAnalyzer.recommendUpgrades(samplePoms, sampleLibraries).andReturn(sampleUpgrades)
+      dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(sampleUpgrades, doNotUpgradeFrom, doNotUpgradeTo).andReturn((sampleApplyUpgrades, sampleIgnoreUpgrades))
+      upgrader.performAutomaticUpgradesIfApplicable(sampleApplyUpgrades)
+      reporter.reportPom(samplePoms)
+      reporter.reportRepository(sampleLibraries)
+      reporter.reportUpgradesToApply(sampleApplyUpgrades)
+      reporter.reportUpgradesToIgnore(sampleIgnoreUpgrades)
+      reporter.reportInconsistencies(sampleInconsistencies)
+      reporter.reportStatusQuo(sampleUpgrades)
+      reporter.reportNotFound(sampleNotFound)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()
