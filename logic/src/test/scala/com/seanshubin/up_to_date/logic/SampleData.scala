@@ -1,29 +1,64 @@
 package com.seanshubin.up_to_date.logic
 
-import java.nio.file.Paths
-
 object SampleData {
-  val configurationJsonComplete = ConfigurationJson(
-    pomFileName = Some("pom.xml"),
-    directoriesToSearch = Some(Seq("pom directory 1", "pom directory 2")),
-    directoryNamesToSkip = Some(Seq("skip this directory")),
-    mavenRepositories = Some(Seq("maven repository 1", "maven repository 2")),
-    doNotUpgradeFrom = Some(Seq(Seq("group 3", "artifact 3"), Seq("group 4", "artifact 4"))),
-    doNotUpgradeTo = Some(Seq(Seq("group 5", "artifact 5", "version 5"), Seq("group 6", "artifact 6", "version 6"))),
-    automaticallyUpgrade = Some(true),
-    reportDirectory = Some("report directory"),
-    cacheDirectory = Some("cache directory"),
-    cacheExpire = Some("5 days"))
-  val validConfiguration = ValidConfiguration(
-    pomFileName = "pom.xml",
-    directoriesToSearch = Seq(Paths.get("pom directory 1"), Paths.get("pom directory 2")),
-    directoryNamesToSkip = Seq("skip this directory"),
-    mavenRepositories = Seq("maven repository 1", "maven repository 2"),
-    doNotUpgradeFrom = Set(GroupAndArtifact("group 3", "artifact 3"), GroupAndArtifact("group 4", "artifact 4")),
-    doNotUpgradeTo = Set(GroupArtifactVersion("group 5", "artifact 5", "version 5"), GroupArtifactVersion("group 6", "artifact 6", "version 6")),
-    automaticallyUpgrade = true,
-    reportDirectory = Paths.get("report directory"),
-    cacheDirectory = Paths.get("cache directory"),
-    cacheExpireMilliseconds = DurationFormat.MillisecondsFormat.parse("5 days")
-  )
+  def poms(): Seq[Pom] = {
+    (1 to 3).map(pom)
+  }
+
+  def pom(index: Int): Pom = {
+    val location = s"location-$index"
+    Pom(s"location-$index", dependencies(index, location))
+  }
+
+  def dependencies(index: Int, location: String): Seq[Dependency] = {
+    def dependencyWithLocation(i: Int) = dependency(i, location)
+    (1 to 3).map(dependencyWithLocation)
+  }
+
+  def dependency(index: Int, location: String): Dependency = {
+    Dependency(location, s"group-$index", s"artifact-$index", s"version-$index")
+  }
+
+  def libraries(): Seq[Library] = {
+    (1 to 3).map(library)
+  }
+
+  def library(index: Int): Library = {
+    Library(s"location-$index", s"group-$index", s"artifact-$index", versions())
+  }
+
+  def versions(): Seq[String] = {
+    (1 to 3).map(version)
+  }
+
+  def version(index: Int): String = s"version-$index"
+
+  def inconsistencies(): Map[GroupAndArtifact, Seq[Dependency]] = {
+    (1 to 3).map(inconsistency).toMap
+  }
+
+  def inconsistency(index: Int): (GroupAndArtifact, Seq[Dependency]) = {
+    val sampleGroupAndArtifact = groupAndArtifact(index)
+    val GroupAndArtifact(group, artifact) = sampleGroupAndArtifact
+    val sampleDependencies = dependenciesWithDifferentVersions(group, artifact)
+    (sampleGroupAndArtifact, sampleDependencies)
+  }
+
+  def groupAndArtifactSeq(): Seq[GroupAndArtifact] = {
+    (1 to 3).map(groupAndArtifact)
+  }
+
+  def groupAndArtifact(index: Int): GroupAndArtifact = {
+    GroupAndArtifact(s"group-$index", s"artifact-$index")
+  }
+
+  def dependenciesWithDifferentVersions(group: String, artifact: String): Seq[Dependency] = {
+    (1 to 3).map(i => Dependency(s"location-$i", group, artifact, s"version-$i"))
+  }
+
+  def upgrades(begin: Int, end: Int): Seq[Upgrade] = {
+    (begin to end).map(upgrade)
+  }
+
+  def upgrade(index: Int): Upgrade = Upgrade(s"location-$index", s"group-$index", s"artifact-$index", s"fromVersion-$index", s"toVersion-$index")
 }

@@ -43,7 +43,7 @@ class ReporterTest extends FunSuite {
   test("pom report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    val poms = Data.poms()
+    val poms = SampleData.poms()
     reporter.reportPom(poms)
     assert(fileSystem.actualPath === reportPath.resolve(reportNames.pom))
     assert(fileSystem.actualContent === samplePomReport)
@@ -53,7 +53,7 @@ class ReporterTest extends FunSuite {
   test("repository report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    val libraries = Data.libraries()
+    val libraries = SampleData.libraries()
     reporter.reportRepository(libraries)
     assert(fileSystem.actualPath === reportPath.resolve(reportNames.repository))
     assert(fileSystem.actualContent === sampleLibraryReport)
@@ -63,7 +63,7 @@ class ReporterTest extends FunSuite {
   test("upgrades to apply report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    val upgrades = Data.upgrades(1, 3)
+    val upgrades = SampleData.upgrades(1, 3)
     reporter.reportUpgradesToApply(upgrades)
     assert(fileSystem.actualPath === reportPath.resolve(reportNames.upgradesToApply))
     assert(fileSystem.actualContent === sampleUpgradesToApplyReport)
@@ -73,7 +73,7 @@ class ReporterTest extends FunSuite {
   test("upgrades to ignore report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    val upgrades = Data.upgrades(4, 6)
+    val upgrades = SampleData.upgrades(4, 6)
     reporter.reportUpgradesToIgnore(upgrades)
     assert(fileSystem.actualPath === reportPath.resolve(reportNames.upgradesToIgnore))
     println(fileSystem.actualContent)
@@ -84,7 +84,7 @@ class ReporterTest extends FunSuite {
   test("inconsistency report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    val inconsistencies = Data.inconsistencies()
+    val inconsistencies = SampleData.inconsistencies()
     reporter.reportInconsistencies(inconsistencies)
     assert(fileSystem.actualPath === reportPath.resolve(reportNames.inconsistency))
     assert(fileSystem.actualContent === sampleInconsistencyReport)
@@ -94,7 +94,7 @@ class ReporterTest extends FunSuite {
   test("not found report") {
     val fileSystem = new FakeFileSystemForReporter
     val reporter = createReporter(fileSystem)
-    val notFound = Data.groupAndArtifactSeq()
+    val notFound = SampleData.groupAndArtifactSeq()
     reporter.reportNotFound(notFound)
     assert(fileSystem.actualPath === reportPath.resolve(reportNames.notFound))
     assert(fileSystem.actualContent === sampleNotFoundReport)

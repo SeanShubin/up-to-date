@@ -13,13 +13,13 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val notifications = new FakeNotifications
     val doNotUpgradeFrom = Set(GroupAndArtifact("from-group", "from-artifact"))
     val doNotUpgradeTo = Set(GroupArtifactVersion("to-group", "to-artifact", "to-verions"))
-    val samplePoms = Data.poms()
-    val sampleLibraries = Data.libraries()
-    val sampleNotFound = Data.groupAndArtifactSeq()
-    val sampleInconsistencies = Data.inconsistencies()
-    val sampleUpgrades = Data.upgrades(1, 6)
-    val sampleApplyUpgrades = Data.upgrades(1, 3)
-    val sampleIgnoreUpgrades = Data.upgrades(4, 6)
+    val samplePoms = SampleData.poms()
+    val sampleLibraries = SampleData.libraries()
+    val sampleNotFound = SampleData.groupAndArtifactSeq()
+    val sampleInconsistencies = SampleData.inconsistencies()
+    val sampleUpgrades = SampleData.upgrades(1, 6)
+    val sampleApplyUpgrades = SampleData.upgrades(1, 3)
+    val sampleIgnoreUpgrades = SampleData.upgrades(4, 6)
     val runner: Runner = new RunnerImpl(
       pomFileScanner,
       mavenRepositoryScanner,

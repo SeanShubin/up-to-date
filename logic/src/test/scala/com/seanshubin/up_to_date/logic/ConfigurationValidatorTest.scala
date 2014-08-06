@@ -69,7 +69,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val jsonMarshaller: JsonMarshaller = mock[JsonMarshaller]
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(fileSystem, jsonMarshaller)
     val jsonString = "some json"
-    val parsedFromJson = SampleData.configurationJsonComplete.copy(reportDirectory = None)
+    val parsedFromJson = SampleConfigurations.configurationJsonComplete.copy(reportDirectory = None)
 
     expecting {
       fileSystem.fileExists(fakeFile).andReturn(true)
@@ -89,7 +89,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
     val jsonMarshaller: JsonMarshaller = mock[JsonMarshaller]
     val configurationValidator: ConfigurationValidator = new ConfigurationValidatorImpl(fileSystem, jsonMarshaller)
     val jsonString = "some json"
-    val parsedFromJson = SampleData.configurationJsonComplete
+    val parsedFromJson = SampleConfigurations.configurationJsonComplete
 
     expecting {
       fileSystem.fileExists(fakeFile).andReturn(true)
@@ -99,7 +99,7 @@ class ConfigurationValidatorTest extends FunSuite with EasyMockSugar {
 
     whenExecuting(fileSystem, jsonMarshaller) {
       val actual = configurationValidator.validate(Seq("file name"))
-      val expected = Right(SampleData.validConfiguration)
+      val expected = Right(SampleConfigurations.validConfiguration)
       assert(actual === expected)
     }
   }

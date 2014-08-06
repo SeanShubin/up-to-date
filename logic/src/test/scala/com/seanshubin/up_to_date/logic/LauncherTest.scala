@@ -7,7 +7,7 @@ class LauncherTest extends FunSuite with EasyMockSugar {
   test("if configuration if valid, launcher will create a runner and execute the run method") {
     val commandLineArguments = Seq("some-configuration-file")
     val configurationValidator = mock[ConfigurationValidator]
-    val validConfiguration = SampleData.validConfiguration
+    val validConfiguration = SampleConfigurations.validConfiguration
     val createRunner = mock[ValidConfiguration => Runner]
     val runner = mock[Runner]
     val notifications = mock[Notifications]

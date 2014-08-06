@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 class ConfigurationJsonTest extends FunSuite {
 
-  import com.seanshubin.up_to_date.logic.SampleData._
+  import com.seanshubin.up_to_date.logic.SampleConfigurations._
 
   test("report directory is required") {
     val actual = configurationJsonComplete.copy(reportDirectory = None).validate()
