@@ -16,6 +16,13 @@ Design by Contract Presentation
     - Good test coverage
     - Easy to test
 - Design By Contract
+    - Express semantics through contracts
+        - Syntax is what you see, semantics is what it means
+        - For example, in Java
+            - Interface method name
+            - Parameter types
+            - Parameter names
+            - Return type
     - Object-Oriented Software Construction - Bertrand Meyer
         - Pre-conditions
         - Post-conditions
@@ -26,7 +33,7 @@ Design by Contract Presentation
         - collaborators -> constructor -> instance
     - Expressiveness of contract
         - Static Typing
-        - Protocols        
+        - Protocols
 - Should x be behind a contract?
     - Sometimes this is a judgment call, sometimes there is a correct answer
     - It is a judgement call if
@@ -88,3 +95,25 @@ Design by Contract Presentation
     - How much do we value maintainability?  Statically typed languages that compile to javascript could be worth a try
         - [Dart](https://www.dartlang.org)
         - [TypeScript](http://www.typescriptlang.org)
+- Recommended style
+    - pure functions
+        - referentially transparent
+        - no observable side effects
+        - stable
+    - immutable values
+        - immutable
+        - no observable side effects
+    - collaborators on the inside
+        - behind contract
+        - don't directly talk to anything we don't control
+        - only interact with
+            - pure functions
+            - collaborators
+            - immutable values
+    - collaborators at the edges
+        - behind contract
+        - no logic
+        - can talk to things we don't control
+    - entry points
+        - responsible for wiring
+        - no logic
