@@ -17,12 +17,13 @@ Design by Contract Presentation
     - Easy to test
 - Design By Contract
     - Express semantics through contracts
+        - If you can't tell what to expect from the signature, you are not doing design by contract
         - Syntax is what you see, semantics is what it means
         - For example, in Java
             - Interface method name
             - Parameter types
             - Parameter names
-            - Return type
+            - Return type (not null)
     - Object-Oriented Software Construction - Bertrand Meyer
         - Pre-conditions
         - Post-conditions
@@ -103,6 +104,7 @@ Design by Contract Presentation
     - immutable values
         - immutable
         - no observable side effects
+        - not null (use empty list or maybe/option)
     - collaborators on the inside
         - behind contract
         - don't directly talk to anything we don't control
@@ -112,7 +114,7 @@ Design by Contract Presentation
             - immutable values
     - collaborators at the edges
         - behind contract
-        - no logic
+        - no logic (handle logic before calling, or delegate logic to other collaborator)
         - can talk to things we don't control
     - entry points
         - responsible for wiring
