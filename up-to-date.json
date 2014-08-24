@@ -6,11 +6,10 @@
         "http://repo.maven.apache.org/maven2",
         "http://onejar-maven-plugin.googlecode.com/svn/mavenrepo",
         "http://oss.sonatype.org/content/groups/scala-tools"],
-    "ignore": [],
     "doNotUpgradeTo": [],
     "doNotUpgradeFrom": [],
     "automaticallyUpgrade": true,
-    "reportDirectory": "generated/self",
+    "reportDirectory": "generated/up-to-date",
     "cacheDirectory": "generated/cache",
     "cacheExpire": "5 days"
 }

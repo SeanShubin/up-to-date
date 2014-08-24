@@ -1,0 +1,90 @@
+Design by Contract Presentation
+=
+- summary
+    - why design by contract?
+    - what makes code easy to maintain?
+    - ideal
+    - reality
+    - incremental transition from ideal to reality
+    - the rules sean uses
+- why design by contract?
+    - code should be easy to maintain
+    - it is more important for code to be easy to maintain than it is for code to be easy to write, because you write it once, you maintain it forever
+- what makes code easy to maintain?
+    - how soon you get feedback
+        - compile time
+        - fast tests (such as unit tests)
+        - slow tests (such as integration tests)
+        - full tests (such as end-to-end tests, smoke tests, selenium tests)
+        - run time
+    - easy to debug
+        - breakpoints
+        - stack trace
+    - always ask, "how to I test that?".  The answer should be simple.
+- ideal
+    - constructor injection (use constructor functions if your language does not have constructors)
+    - single entry point
+    - Wiring
+        - [ProductionRunnerWiring](console/src/main/scala/com/seanshubin/up_to_date/console/ProductionRunnerWiring.scala)
+        - Statically typed
+        - Compiled
+            - no scanning xml files at run time
+            - no scanning .class files at run time
+        - Breakpoints
+        - No proxies in stack trace
+        - Can follow the code in IDE
+    - Integration Testing
+        - [FileSystem](logic/src/main/scala/com/seanshubin/up_to_date/logic/FileSystem.scala)
+        - [FileSystemImpl](integration/src/main/scala/com/seanshubin/up_to_date/integration/FileSystemImpl.scala)
+        - [FileSystemTest](integration/src/test/scala/com/seanshubin/up_to_date/integration/FileSystemTest.scala)
+        - [Http](logic/src/main/scala/com/seanshubin/up_to_date/logic/Http.scala)
+        - [HttpImpl](integration/src/main/scala/com/seanshubin/up_to_date/integration/HttpImpl.scala)
+        - [HttpTest](integration/src/test/scala/com/seanshubin/up_to_date/integration/HttpTest.scala)
+    - Logic Testing
+        - [Http](logic/src/main/scala/com/seanshubin/up_to_date/logic/Http.scala)
+        - [HttpCache](logic/src/main/scala/com/seanshubin/up_to_date/logic/HttpCache.scala)
+        - [HttpCacheTest](logic/src/test/scala/com/seanshubin/up_to_date/logic/HttpCacheTest.scala)
+    - [Logging as a first class citizen](http://blog.cj.com/05212013/logging-first-class-citizen)
+- reality
+    - service locator
+    - multiple entry points
+        - servlets
+        - java server pages
+        - struts actions
+        - spring controllers
+- the incremental transition from the reality to the ideal
+    - pull logic out of entry points
+        - entry points are hard to test without a smoke test or end-to-end test
+        - with only one logic path per entry point, you will only need one smoke test or end-to-end test per entry point
+    - put wiring at the top level
+    - make each entry point delegate to wiring
+    - find most top level class not counting entry point and wiring
+        - remove cycles
+        - invert dependencies
+        - since you are so close to the top level, the caller should already have access to wiring
+    - find a usage of service locator
+        - remove cycles
+        - invert dependencies
+        - they will bubble up
+        - repeat at each calling class
+- how to invert dependencies
+    - make a copy of the class, with Impl appended to the name
+    - make the original class an interface, and delete its contents
+    - have the copy implement the interface
+    - fix the compiler errors
+    - you will eventually hit an entry point
+    - use wiring to inject the dependencies from here
+- don't need to invert dependencies in some cases
+    - values
+        - immutable
+    - pure functions
+        - referentially transparent
+        - communicate through values
+        - no observable side effects
+- rules I have yet to find an exception to
+    - put all integration points behind contracts
+    - no mixing logic and integration
+    - pass values rather than contracts when you have a choice
+        - http request/response
+    - anything that can see the current time goes behind a contract
+    - anything that can see environment variables goes behind a contract
