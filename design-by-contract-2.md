@@ -74,17 +74,33 @@ Design by Contract Presentation
     - fix the compiler errors
     - you will eventually hit an entry point
     - use wiring to inject the dependencies from here
-- don't need to invert dependencies in some cases
-    - values
-        - immutable
+- rules I have yet to find an exception to
     - pure functions
         - referentially transparent
-        - communicate through values
         - no observable side effects
-- rules I have yet to find an exception to
-    - put all integration points behind contracts
-    - no mixing logic and integration
-    - pass values rather than contracts when you have a choice
-        - http request/response
-    - anything that can see the current time goes behind a contract
-    - anything that can see environment variables goes behind a contract
+        - stable
+    - values
+        - immutable
+        - no observable side effects
+        - not null (use empty list or maybe/option)
+    - contracts
+        - pass values rather than contracts when you have a choice
+            - example: time
+            - example: environment variables
+            - example: http request/response
+    - implementations on the inside
+        - behind contract
+        - don't directly talk to anything we don't control
+            - example: system clock
+            - example: environment variables
+        - only interact with
+            - pure functions
+            - contracts
+            - immutable values
+    - implementations at the edges
+        - behind contract
+        - no logic (handle logic before calling, or delegate logic to other contracts)
+        - can talk to things we don't control
+    - entry points
+        - responsible for wiring
+        - no logic
