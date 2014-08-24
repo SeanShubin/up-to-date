@@ -61,6 +61,7 @@ Reports are currently formatted as plain json
 
 Design by Contract
 =
-This project uses Sean's design-by-contract programming style
-To learn more, see the following presentation
-[Design by Contract](design-by-contract-2.md)
+
+- This project uses Sean's design-by-contract programming style
+- To learn more, see the following presentation
+- [Design by Contract](design-by-contract-2.md)
