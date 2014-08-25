@@ -2,7 +2,6 @@ Design by Contract Presentation
 =
 - summary
     - why design by contract?
-    - what makes code easy to maintain?
     - ideal
     - reality
     - incremental transition from ideal to reality
