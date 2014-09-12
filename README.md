@@ -2,10 +2,6 @@ Up to Date
 =
 Will help keep your maven project dependencies up to date
 
-Currently you will not be able to compile the console module without setting up [dependency analyzer](https://github.com/SeanShubin/dependency-analyzer) and [dot](http://graphviz.org) first.
-
-If dependency analysis is not important to you, you can just disable the exec-maven-plugin entry in the console module
-
 Make sure it works
 =
     mvn clean install
@@ -65,3 +61,12 @@ Design by Contract
 - This project uses Sean's design-by-contract programming style
 - To learn more, see the following presentation
 - [Design by Contract](design-by-contract-2.md)
+
+Dependency Analysis
+=
+If you want dependency analysis, set up [dependency analyzer](https://github.com/SeanShubin/dependency-analyzer) and [dot](http://graphviz.org) first.
+
+Then, you can run the dependency report as follows
+
+    mvn verify -P dependency
+
