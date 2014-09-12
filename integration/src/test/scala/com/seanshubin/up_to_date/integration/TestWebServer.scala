@@ -10,9 +10,9 @@ import org.eclipse.jetty.server.{Request, Server}
 class TestWebServer {
   private var server: Server = _
 
-  var fakeStatus: Int = _
-  var fakeContent: String = _
-  var fakeCharset: Charset = _
+  var status: Int = _
+  var content: String = _
+  var charset: Charset = _
   var actualMethod: String = _
   var actualPath: String = _
 
@@ -24,9 +24,9 @@ class TestWebServer {
       actualMethod = httpServletRequest.getMethod
       actualPath = httpServletRequest.getRequestURI
       baseRequest.setHandled(true)
-      httpServletResponse.setStatus(fakeStatus)
-      httpServletResponse.setCharacterEncoding(fakeCharset.name())
-      httpServletResponse.getWriter.write(fakeContent)
+      httpServletResponse.setStatus(status)
+      httpServletResponse.setCharacterEncoding(charset.name())
+      httpServletResponse.getWriter.write(content)
     }
   }
 

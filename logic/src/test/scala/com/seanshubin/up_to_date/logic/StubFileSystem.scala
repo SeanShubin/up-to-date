@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.io.{InputStream, Reader}
 import java.nio.file.{FileVisitor, Path}
 
-abstract class FakeFileSystem extends FileSystem {
+abstract class StubFileSystem extends FileSystem {
   override def fileExists(path: Path): Boolean = ???
 
   override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = ???

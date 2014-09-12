@@ -25,7 +25,7 @@ class ReporterTest extends FunSuite {
     reporter
   }
 
-  class FakeFileSystemForReporter extends FakeFileSystem {
+  class StubFileSystemForReporter extends StubFileSystem {
     var actualPath: Path = null
     var actualContent: String = null
     var actualReportDirectory: Path = null
@@ -41,7 +41,7 @@ class ReporterTest extends FunSuite {
   }
 
   test("pom report") {
-    val fileSystem = new FakeFileSystemForReporter
+    val fileSystem = new StubFileSystemForReporter
     val reporter = createReporter(fileSystem)
     val poms = SampleData.poms()
     reporter.reportPom(poms)
@@ -51,7 +51,7 @@ class ReporterTest extends FunSuite {
   }
 
   test("repository report") {
-    val fileSystem = new FakeFileSystemForReporter
+    val fileSystem = new StubFileSystemForReporter
     val reporter = createReporter(fileSystem)
     val libraries = SampleData.libraries()
     reporter.reportRepository(libraries)
@@ -61,7 +61,7 @@ class ReporterTest extends FunSuite {
   }
 
   test("upgrades to apply report") {
-    val fileSystem = new FakeFileSystemForReporter
+    val fileSystem = new StubFileSystemForReporter
     val reporter = createReporter(fileSystem)
     val upgrades = SampleData.upgrades(1, 3)
     reporter.reportUpgradesToApply(upgrades)
@@ -71,7 +71,7 @@ class ReporterTest extends FunSuite {
   }
 
   test("upgrades to ignore report") {
-    val fileSystem = new FakeFileSystemForReporter
+    val fileSystem = new StubFileSystemForReporter
     val reporter = createReporter(fileSystem)
     val upgrades = SampleData.upgrades(4, 6)
     reporter.reportUpgradesToIgnore(upgrades)
@@ -82,7 +82,7 @@ class ReporterTest extends FunSuite {
   }
 
   test("inconsistency report") {
-    val fileSystem = new FakeFileSystemForReporter
+    val fileSystem = new StubFileSystemForReporter
     val reporter = createReporter(fileSystem)
     val inconsistencies = SampleData.inconsistencies()
     reporter.reportInconsistencies(inconsistencies)
@@ -92,7 +92,7 @@ class ReporterTest extends FunSuite {
   }
 
   test("not found report") {
-    val fileSystem = new FakeFileSystemForReporter
+    val fileSystem = new StubFileSystemForReporter
     val reporter = createReporter(fileSystem)
     val notFound = SampleData.groupAndArtifactSeq()
     reporter.reportNotFound(notFound)

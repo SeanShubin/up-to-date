@@ -9,17 +9,17 @@ import org.scalatest.FunSuite
 import scala.collection.mutable.ArrayBuffer
 
 class PomFileFinderTest extends FunSuite {
-  val stubAttributes: BasicFileAttributes = null
-  val stubFile: Path = null
-  val stubException: IOException = null
+  val dummyAttributes: BasicFileAttributes = null
+  val dummyFile: Path = null
+  val dummyException: IOException = null
 
   test("trigger found if matches") {
     val directory = Paths.get("blah")
     val file = directory.resolve("pom.xml")
     val visitResults = new ArrayBuffer[FileVisitResult]()
-    val fileTreeWalker = new FakeFileSystem {
+    val fileTreeWalker = new StubFileSystem {
       override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
-        visitResults.append(visitor.visitFile(file, stubAttributes))
+        visitResults.append(visitor.visitFile(file, dummyAttributes))
       }
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(directory), "pom.xml", Seq("target"))
@@ -32,9 +32,9 @@ class PomFileFinderTest extends FunSuite {
     val baseDirectory = Paths.get("blah")
     val importantDirectory = baseDirectory.resolve("important")
     val visitResults = new ArrayBuffer[FileVisitResult]()
-    val fileTreeWalker = new FakeFileSystem {
+    val fileTreeWalker = new StubFileSystem {
       override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
-        visitResults.append(visitor.preVisitDirectory(importantDirectory, stubAttributes))
+        visitResults.append(visitor.preVisitDirectory(importantDirectory, dummyAttributes))
       }
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
@@ -47,9 +47,9 @@ class PomFileFinderTest extends FunSuite {
     val baseDirectory = Paths.get("blah")
     val targetDirectory: Path = baseDirectory.resolve("target")
     val visitResults = new ArrayBuffer[FileVisitResult]()
-    val fileTreeWalker = new FakeFileSystem {
+    val fileTreeWalker = new StubFileSystem {
       override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
-        visitResults.append(visitor.preVisitDirectory(targetDirectory, stubAttributes))
+        visitResults.append(visitor.preVisitDirectory(targetDirectory, dummyAttributes))
       }
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
@@ -61,9 +61,9 @@ class PomFileFinderTest extends FunSuite {
   test("do nothing if visit file failed") {
     val baseDirectory = Paths.get("blah")
     val visitResults = new ArrayBuffer[FileVisitResult]()
-    val fileTreeWalker = new FakeFileSystem {
+    val fileTreeWalker = new StubFileSystem {
       override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
-        visitResults.append(visitor.visitFileFailed(stubFile, stubException))
+        visitResults.append(visitor.visitFileFailed(dummyFile, dummyException))
       }
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
@@ -76,9 +76,9 @@ class PomFileFinderTest extends FunSuite {
     val baseDirectory = Paths.get("blah")
     val notPom = baseDirectory.resolve("not-pom.xml")
     val visitResults = new ArrayBuffer[FileVisitResult]()
-    val fileTreeWalker = new FakeFileSystem {
+    val fileTreeWalker = new StubFileSystem {
       override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
-        visitResults.append(visitor.visitFile(notPom, stubAttributes))
+        visitResults.append(visitor.visitFile(notPom, dummyAttributes))
       }
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
@@ -90,9 +90,9 @@ class PomFileFinderTest extends FunSuite {
   test("do nothing after visiting directory") {
     val baseDirectory = Paths.get("blah")
     val visitResults = new ArrayBuffer[FileVisitResult]()
-    val fileTreeWalker = new FakeFileSystem {
+    val fileTreeWalker = new StubFileSystem {
       override def walkFileTree(start: Path, visitor: FileVisitor[_ >: Path]): Unit = {
-        visitResults.append(visitor.postVisitDirectory(stubFile, stubException))
+        visitResults.append(visitor.postVisitDirectory(dummyFile, dummyException))
       }
     }
     val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))

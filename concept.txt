@@ -1,0 +1,39 @@
+This application is also meant to showcase a particular style of programming which I believe leads to code that stays just as easy to maintain no matter how large the code base gets.
+
+The intent is that you should only have to know about a small subsection of a large application to implement any given feature.
+
+The fundamental concept:
+Separate every compilation unit (in java, a file) into one of three types.
+(1) entry point
+(2) integration
+(3) core
+
+Entry points are allowed to
+* wire collaborators together
+* react to events by delegating
+* launch the application
+* only one entry point per process (if a web application, have a single servlet delegate to a dispatcher)
+* no branching logic or data processing allowed (see "core")
+* no initiating contact with anything we don't control (see "integration")
+
+Integration is allowed to
+* interact with things not controlled by the application, such as
+** filesystem
+** network
+** internet
+** database
+** system clock
+** environment variables
+* no branching logic or data processing allowed (see "core")
+
+Core is allowed to
+* handle branching logic, such as for loops and if statements
+* process data, such as computations and transformations
+* no interacting with anything we don't control (see "integration")
+
+Although this example actually splits the three different types of code into three separate modules, it is not a rule, or even a suggestion, that you do so.
+The only reason I put them is separate modules is to be very clear about what I consider to be each of the three types of code.
+
+A natural consequence of following these rules is that the vast majority of your code will be in "Core", which is easy to unit test.
+The second most common type of code will be "Integration", which you will have to write integration tests for.  However, since there is no branching logic, there will be only one code path per method, so there will not be very many integration tests.
+Finally, you will only have one entry point per process.  This may constitute multiple files if you decide to split out your wiring, but none of these files will interact with something you don't control, or have branching logic or data processing.  If a web application, only have a single servlet delegate to a dispatcher.  This way the dispatch code becomes part of "Core" which is very easy to test.

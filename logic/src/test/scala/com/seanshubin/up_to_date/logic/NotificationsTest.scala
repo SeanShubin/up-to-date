@@ -6,12 +6,12 @@ import org.scalatest.mock.EasyMockSugar
 import scala.collection.mutable.ArrayBuffer
 
 class NotificationsTest extends FunSuite with EasyMockSugar {
-  private val stubSystemClock: SystemClock = null
+  private val dummySystemClock: SystemClock = null
   test("configuration error") {
     //given
     val lines = new ArrayBuffer[String]()
     def emitLine(line: String) = lines.append(line)
-    val notifications = new LineEmittingNotifications(stubSystemClock, emitLine)
+    val notifications = new LineEmittingNotifications(dummySystemClock, emitLine)
 
     //when
     notifications.errorWithConfiguration(Seq("config.json"), Seq("line 1", "line 2"))
@@ -50,7 +50,7 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     //given
     val lines = new ArrayBuffer[String]()
     def emitLine(line: String) = lines.append(line)
-    val notifications = new LineEmittingNotifications(stubSystemClock, emitLine)
+    val notifications = new LineEmittingNotifications(dummySystemClock, emitLine)
 
     //when
     notifications.httpGet("http://localhost")

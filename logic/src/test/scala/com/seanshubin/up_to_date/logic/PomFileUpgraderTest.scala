@@ -21,10 +21,10 @@ class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
     val allowAutomaticUpgrades = true
     val pomFileUpgrader = new PomFileUpgraderImpl(fileSystem, pomXmlUpgrader, allowAutomaticUpgrades)
     expecting {
-      fileSystem.loadString(Paths.get("pom-1")).andReturn("fake contents 1")
-      fileSystem.loadString(Paths.get("pom-2")).andReturn("fake contents 2")
-      pomXmlUpgrader.upgrade("fake contents 1", upgradesForPom1).andReturn("new pom 1")
-      pomXmlUpgrader.upgrade("fake contents 2", upgradesForPom2).andReturn("new pom 2")
+      fileSystem.loadString(Paths.get("pom-1")).andReturn("contents 1")
+      fileSystem.loadString(Paths.get("pom-2")).andReturn("contents 2")
+      pomXmlUpgrader.upgrade("contents 1", upgradesForPom1).andReturn("new pom 1")
+      pomXmlUpgrader.upgrade("contents 2", upgradesForPom2).andReturn("new pom 2")
       fileSystem.storeString(Paths.get("pom-1"), "new pom 1")
       fileSystem.storeString(Paths.get("pom-2"), "new pom 2")
     }

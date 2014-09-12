@@ -10,10 +10,10 @@ class HttpTest extends FunSuite with EasyMockSugar {
   test("get") {
     val charset = StandardCharsets.UTF_8
     val testWebServer = new TestWebServer
-    val notifications = new FakeNotifications()
-    testWebServer.fakeStatus = 200
-    testWebServer.fakeContent = """{ "result": "ok" }"""
-    testWebServer.fakeCharset = charset
+    val notifications = new StubNotifications()
+    testWebServer.status = 200
+    testWebServer.content = """{ "result": "ok" }"""
+    testWebServer.charset = charset
     val http: Http = new HttpImpl(charset, notifications)
     val port = testWebServer.start()
     val uri: String = s"http://localhost:$port/foo"

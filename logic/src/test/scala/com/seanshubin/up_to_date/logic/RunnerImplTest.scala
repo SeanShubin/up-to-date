@@ -10,7 +10,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val dependencyUpgradeAnalyzer = mock[DependencyUpgradeAnalyzer]
     val upgrader = mock[PomFileUpgrader]
     val reporter = mock[Reporter]
-    val notifications = new FakeNotifications
+    val notifications = new StubNotifications
     val doNotUpgradeFrom = Set(GroupAndArtifact("from-group", "from-artifact"))
     val doNotUpgradeTo = Set(GroupArtifactVersion("to-group", "to-artifact", "to-verions"))
     val samplePoms = SampleData.poms()
