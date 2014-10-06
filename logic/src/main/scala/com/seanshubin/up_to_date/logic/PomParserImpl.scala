@@ -4,8 +4,8 @@ import java.nio.charset.Charset
 
 import org.w3c.dom.{Element, Node, NodeList}
 
-class PomParserImpl(charset:Charset) extends PomParser {
-  override def parseDependencies(pomName:String, pomContents: String): Pom = {
+class PomParserImpl(charset: Charset) extends PomParser {
+  override def parseDependencies(pomName: String, pomContents: String): Pom = {
     val document = DocumentUtil.stringToDocument(pomContents, charset)
     val nodeList = document.getElementsByTagName("dependency")
     val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
