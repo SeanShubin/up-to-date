@@ -14,19 +14,19 @@ class StringUtilTest extends FunSuite {
   }
 
   test("get newline separator") {
-    assert(StringUtil.getNewlineSeparator("aaa", "\n") === "\n")
-    assert(StringUtil.getNewlineSeparator("aaa\rbbb", "\n") === "\r")
-    assert(StringUtil.getNewlineSeparator("aaa\r\nbbb", "\n") === "\r\n")
-    assert(StringUtil.getNewlineSeparator("aaa\nbbb", "\n") === "\n")
-    assert(StringUtil.getNewlineSeparator("aaa\rbbb\rccc", "\n") === "\r")
-    assert(StringUtil.getNewlineSeparator("aaa\r\nbbb\r\nccc", "\n") === "\r\n")
-    assert(StringUtil.getNewlineSeparator("aaa\nbbb\nccc", "\n") === "\n")
+    assert(StringUtil.getNewlineSeparator("name", "aaa", "\n") === "\n")
+    assert(StringUtil.getNewlineSeparator("name", "aaa\rbbb", "\n") === "\r")
+    assert(StringUtil.getNewlineSeparator("name", "aaa\r\nbbb", "\n") === "\r\n")
+    assert(StringUtil.getNewlineSeparator("name", "aaa\nbbb", "\n") === "\n")
+    assert(StringUtil.getNewlineSeparator("name", "aaa\rbbb\rccc", "\n") === "\r")
+    assert(StringUtil.getNewlineSeparator("name", "aaa\r\nbbb\r\nccc", "\n") === "\r\n")
+    assert(StringUtil.getNewlineSeparator("name", "aaa\nbbb\nccc", "\n") === "\n")
   }
 
   test("fail if inconsistent newline separator") {
-    val expectedMessage = "Inconsistent newline separator"
+    val expectedMessage = "Inconsistent newline separator in name"
     val exception = intercept[RuntimeException] {
-      StringUtil.getNewlineSeparator("aaa\r\nbbb\nccc", "\n")
+      StringUtil.getNewlineSeparator("name", "aaa\r\nbbb\nccc", "\n")
     }
     assert(exception.getMessage === expectedMessage)
   }
