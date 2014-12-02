@@ -3,6 +3,11 @@
 This is targeted to those who are thinking of becoming software engineers, but don’t have much experience writing code.
 I will be focusing on what you really need to know early to accelerate your rate of learning as much as possible.
 I also want to help you avoid mistakes and bad habits common in even very experienced software engineers.
+The most important things to learn first are broken down into 3 categories.
+
+* Critical Thinking
+* Simplicity
+* Skills
 
 ## Critical Thinking
 
@@ -11,8 +16,8 @@ Your goal is to solve a customer’s problem, and your tool is your brain;  not 
 In fact, the best solutions you come up with will be the ones where no code was written.
 
 So, creative, critical thinking is the name of the game; your first inclination needs to be to think about the problem and question your assumptions.
-Don’t assume that the problem is the same as one you’ve encountered before
-don’t assume the experts know better
+Don’t assume that the problem is the same as one you’ve encountered before.
+Don’t assume the experts know better.
 
 ### critical thinking is not innate in humans
 
