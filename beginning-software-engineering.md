@@ -154,4 +154,4 @@ Optimizations will also never do better than designing away the need to invoke a
 If there is a problem that seems to require optimization, put in metrics to verify where the problem really is.
 Make sure the customer really needs the problem to be solved, sometimes an alternative design or flow will make the optimization unnecessary.
 If the customer actually need the code to go faster, this becomes part of the requirements, and is treated accordingly.
-In this sense, the section should have been titled "Don't optimize at all", because you will have to get the application to perform according to customer need, but that freaks out anyone I ask to proof read it.
+In this sense, the section should have been titled "Don't optimize at all", because you will still have to get the application to perform according to customer need, but that freaks out anyone I ask to proof read it.
