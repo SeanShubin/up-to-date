@@ -16,7 +16,8 @@ don’t assume the experts know better
 
 ### critical thinking is not innate in humans
 
-Critical thinking is a skill that requires discipline and training over a lifetime. 
+Critical thinking is a skill that requires discipline and training over a lifetime.
+It is not natural and has very little to do with how smart you are.
 
 ### a problem is a difference between desire and perception
 
