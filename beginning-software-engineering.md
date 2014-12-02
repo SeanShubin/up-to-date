@@ -117,6 +117,15 @@ This is a good thing.
 It warns you that it is time to stop and think about your design before creating more code that is badly designed.
 
 ### Design by contract
+
+The contract must be explicitly clear in the code.
+For pure functions, the sole source of inputs is the signature, and the sole source of output is the return value.
+There are no side effects, mutating state, or hidden inputs.
+For side-effecting functions, the nature of the side effect is clearly expressed in the name.
+Side-effecting functions should have no logic, and only do what their name implies.
+For objects, all collaborators and configuration are sent via the constructor function, and all capabilities are encapsulated in the returned object.
+Implementation details of the created object are hidden behind the proper programming language abstraction (such as an interface or protocol)
+
 ### Extract method (refactoring)
 
 Functions allow you to give a human readable name to a block of code, making it much easier to understand.
