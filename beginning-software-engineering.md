@@ -32,15 +32,15 @@ Quote from "Are Your Lights On?", by Donald C. Gause and Gerald M. Weinberg
 When you are new, it can be hard to tell the difference between genuine experts and pontificating blowhards.
 Developers that know what they are talking about
 
-    * will be able to give you reason for their claims
-    * are happy to explain what you don't understand
-    * admit when they have not personally verified a claim
+* will be able to give you reason for their claims
+* are happy to explain what you don't understand
+* admit when they have not personally verified a claim
 
 Developers you cannot learn from
 
-    * try to dazzle you with their "experience"
-    * what you to "trust" that they "know" what they are talking about without explaining why
-    * point to unrelated personal accomplishments rather than related evidence 
+* try to dazzle you with their "experience"
+* what you to "trust" that they "know" what they are talking about without explaining why
+* point to unrelated personal accomplishments rather than related evidence 
 
 ### appeal to ignorance
 
@@ -82,13 +82,13 @@ If you make a change to the code which introduces unintended consequences, you s
 This means your code will need automated tests.
 The best times to get feedback, in order, are:
 
-    * Instant (for example, your Integrated Development Environment may be able to detect typos in statically typed languages)
-    * Compile Time
-    * Automated Unit Tests (unit tests are fast because they don't touch things you don't control)
-    * Automated Integration Tests (integration tests verify a single thing you don't control, such as a database)
-    * Automated Smoke Tests (smoke tests verify all the application parts are configured together correctly)
-    * Manual Testing
-    * Customer Feedback
+* Instant (for example, your Integrated Development Environment may be able to detect typos in statically typed languages)
+* Compile Time
+* Automated Unit Tests (unit tests are fast because they don't touch things you don't control)
+* Automated Integration Tests (integration tests verify a single thing you don't control, such as a database)
+* Automated Smoke Tests (smoke tests verify all the application parts are configured together correctly)
+* Manual Testing
+* Customer Feedback
 
 ### Clearly express intent
 
