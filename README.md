@@ -71,3 +71,7 @@ Then, you can run the dependency report as follows
     mvn verify -P dependency
 
 You will find the dependency report at console/target/dependency-report/index.html
+
+Beginning Software Engineering
+=
+[beginning-software-engineering](https://github.com/SeanShubin/up-to-date/beginning-software-engineering.md)
