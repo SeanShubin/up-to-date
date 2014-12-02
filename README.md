@@ -74,4 +74,4 @@ You will find the dependency report at console/target/dependency-report/index.ht
 
 Beginning Software Engineering
 =
-[beginning-software-engineering](https://github.com/SeanShubin/up-to-date/beginning-software-engineering.md)
+[beginning-software-engineering](beginning-software-engineering.md)
