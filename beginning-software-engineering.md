@@ -59,6 +59,12 @@ Try to decide what would be evidence for and against your guess before you check
 
 ## Simplicity
 
+* Meet Customer Need
+* Safe to Change
+* Clearly Express Intent
+* No Duplicate Code
+* Concise as Possible
+
 Simple does not mean easy.
 Do not be impressed by how clever code looks.
 The best solutions look like they took almost no thinking or effort at all, but this is deceptive.
