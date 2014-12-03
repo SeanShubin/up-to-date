@@ -11,11 +11,11 @@ The most important things to learn first are broken down into 3 categories.
 
 ## Critical Thinking
 
-* not innate in humans
-* what a problem really is
-* appeal to authority
-* appeal to ignorance
-* confirmation bias
+* Critical thinking must be is learned, it is not innate
+* Before creating a solution, understand what it means to be a problem
+* Logical fallacy of "Appeal to Authority"
+* Logical fallacy of "Appeal to Ignorance"
+* Confirmation Bias
 
 Software engineering is “thought work”.
 Your goal is to solve a customer’s problem, and your tool is your brain;  not code, not computers, your brain.
@@ -25,12 +25,12 @@ So, creative, critical thinking is the name of the game; your first inclination 
 Don’t assume that the problem is the same as one you’ve encountered before.
 Don’t assume the experts know better.
 
-### critical thinking is not innate in humans
+### Critical thinking must be is learned, it is not innate
 
 Critical thinking is a skill that requires discipline and training over a lifetime.
 It is not natural and has very little to do with how smart you are.
 
-### what a problem really is
+### Before creating a solution, understand what it means to be a problem
 
 Quote from "Are Your Lights On?", by Donald C. Gause and Gerald M. Weinberg
 
@@ -38,7 +38,7 @@ Quote from "Are Your Lights On?", by Donald C. Gause and Gerald M. Weinberg
     BETWEEN THINGS AS DESIRED
     AND THINGS AS PERCEIVED
 
-### appeal to authority
+### Logical fallacy of "Appeal to Authority"
 
 When you are new, it can be hard to tell the difference between genuine experts and pontificating blowhards.
 Developers that know what they are talking about
@@ -53,12 +53,12 @@ Developers you cannot learn from
 * want you to "trust" that they "know" what they are talking about without explaining why
 * point to unrelated personal accomplishments rather than related evidence 
 
-### appeal to ignorance
+### Logical fallacy of "Appeal to Ignorance"
 
 A correct form of this is to not rely on untested and unproven technologies in production.
 The incorrect form will be arguments that we should not take steps to know more.
 
-### confirmation bias
+### Confirmation Bias
 
 We humans tend to see what we expect to see.
 Try to decide what would be evidence for and against your guess before you check the facts.
