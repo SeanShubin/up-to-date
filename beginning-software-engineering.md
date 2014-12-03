@@ -11,6 +11,12 @@ The most important things to learn first are broken down into 3 categories.
 
 ## Critical Thinking
 
+* not innate in humans
+* definition of a problem
+* appeal to authority
+* appeal to ignorance
+* confirmation bias
+
 Software engineering is “thought work”.
 Your goal is to solve a customer’s problem, and your tool is your brain;  not code, not computers, your brain.
 In fact, the best solutions you come up with will be the ones where no code was written.
@@ -118,6 +124,13 @@ It is especially important to note that this is lower priority than clearly expr
 Make sure you are not writing anything that does not meet the customer need.
 
 ## Skills
+
+* Test driven design
+* Design by contract
+* Extract method
+* Replace conditional with polymorphism
+* Don’t optimize early
+
 ### Test driven design
 
 If you write the code before you write the test you are coding backwards.
@@ -160,4 +173,4 @@ Optimizations will also never do better than designing away the need to invoke a
 If there is a problem that seems to require optimization, put in metrics to verify where the problem really is.
 Make sure the customer really needs the problem to be solved, sometimes an alternative design or flow will make the optimization unnecessary.
 If the customer actually need the code to go faster, this becomes part of the requirements, and is treated accordingly.
-In this sense, the section should have been titled "Don't optimize at all", because you will still have to get the application to perform according to customer need, but that freaks out anyone I ask to proof read it.
+In this sense, the section should have been titled "Don't optimize at all", because you will still have to get the application to perform according to customer need, but phrasing the section heading that way would freak out anyone I ask to help me proof read.
