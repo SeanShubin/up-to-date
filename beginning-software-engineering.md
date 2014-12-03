@@ -69,7 +69,7 @@ It is ok not rely on untested and unproven technologies in production, but to re
 We humans tend to see what we expect to see.
 Try to decide what would be evidence for and against your guess before you check the facts.
 
-## Simplicity
+## Simplicity (in priority order)
 
 * Meet Customer Need
 * Safe to Change
@@ -95,7 +95,8 @@ My paraphrasing to relate this to software engineering is:
 
     It does not make any difference how beautiful your code is.
     It does not make any difference how smart you are, who wrote the code, or what their name is.
-    It does not matter how closely it matches the specification, or if it is exactly what the customer asked for.
+    It does not matter how closely it matches the specification,
+    or if it is exactly what the customer asked for.
     If it does not meet the customer need, it is wrong.
     That is all there is to it.
 
@@ -103,7 +104,8 @@ My paraphrasing to relate this to software engineering is:
 
 If you make a change to the code which introduces unintended consequences, you should get feedback about that as soon as possible.
 This means your code will need automated tests.
-The best times to get feedback, in order, are:
+
+The best times to get feedback (in priority order)
 
 * Instant (for example, your Integrated Development Environment may be able to detect typos in statically typed languages)
 * Compile Time
