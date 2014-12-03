@@ -2,7 +2,7 @@
 
 This is targeted to those who are thinking of becoming software engineers, but don’t have much experience writing code.
 I will be focusing on what you really need to know early to accelerate your rate of learning as much as possible.
-I also want to help you avoid mistakes and bad habits common in even very experienced software engineers.
+I also want to help you avoid mistakes and bad habits common in even experienced software engineers.
 The most important things to learn first are broken down into 3 categories.
 
 * Critical Thinking
@@ -38,6 +38,11 @@ Quote from "Are Your Lights On?", by Donald C. Gause and Gerald M. Weinberg
     BETWEEN THINGS AS DESIRED
     AND THINGS AS PERCEIVED
 
+A common mistake is to underrate the importance in perception.
+Sometimes you can fix a problem simply by having a sensible error message.
+This can shift perception from "the program isn't working" to "oops, I should go back and fix my mistake". 
+Other times you can make a web page seem more performant by loading what data you have now, and using spinners to indicate the rest is on its way.
+
 ### Logical fallacy of "Appeal to Authority"
 
 When you are new, it can be hard to tell the difference between genuine experts and pontificating blowhards.
@@ -55,8 +60,9 @@ Developers you cannot learn from
 
 ### Logical fallacy of "Appeal to Ignorance"
 
-A correct form of this is to not rely on untested and unproven technologies in production.
-The incorrect form will be arguments that we should not take steps to know more.
+One common bad habit is to assume we aren't smart enough to solve a problem, so we copy & paste code we don't understand, or use a framework/library we don't understand, figuring the implementers must have known what they were doing.
+Sometimes the implementers were solving a different problem, or sometimes they were wrong, so what this habit does is cause bad code to replicate throughout the code base.
+It is ok not rely on untested and unproven technologies in production, but to rely on code you don't even understand is even worse.
 
 ### Confirmation Bias
 
