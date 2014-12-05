@@ -130,6 +130,8 @@ It is especially important to note that this is lower priority than clearly expr
 ### Concise as Possible
 
 Make sure you are not writing anything that does not meet the customer need.
+If code is not used anymore, throw it out.
+You can always get it back with version control, but it is usually better to rewrite it if you need to because you will have more information later.
 
 ## Skills
 
