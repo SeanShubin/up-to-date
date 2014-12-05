@@ -81,6 +81,8 @@ Simple does not mean easy.
 Do not be impressed by how clever code looks.
 The best solutions look like they took almost no thinking or effort at all, but this is deceptive.
 It takes quite a bit of skill and discipline to ensure a solution is as simple as it can be. 
+Another common mistake is to focus on what makes code easier to write rather than easier to maintain.
+This is wrong because you only write code once, but you maintain it continually.
 
 ### Meet Customer need
 
