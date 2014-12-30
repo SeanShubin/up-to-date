@@ -46,6 +46,7 @@ Other times you can make a web page seem more performant by loading what data yo
 ### Logical fallacy of "Appeal to Authority"
 
 When you are new, it can be hard to tell the difference between genuine experts and pontificating blowhards.
+
 Developers that know what they are talking about
 
 * will be able to give you reasons for their claims
@@ -61,8 +62,8 @@ Developers you cannot learn from
 ### Logical fallacy of "Appeal to Ignorance"
 
 One common bad habit is to assume we aren't smart enough to solve a problem, so we copy & paste code we don't understand, or use a framework/library we don't understand, figuring the implementers must have known what they were doing.
-Sometimes the implementers were solving a different problem, or sometimes they were wrong, so what this habit does is cause bad code to replicate throughout the code base.
-It is ok not rely on untested and unproven technologies in production, but to rely on code you don't even understand is even worse.
+Sometimes the implementers were solving a different problem, or sometimes they were wrong, so this habit causes bad code to replicate throughout the code base.
+It is not ok to rely on untested and unproven technologies in production, but to rely on code you don't even understand is even worse.
 
 ### Confirmation Bias
 
@@ -90,7 +91,7 @@ This can be well expressed by a slight modification to a quote by Richard Feynma
 
     It does not make any difference how beautiful your guess is.
     It does not make any difference how smart you are, who made the guess, or what his name is.
-    If it disagrees with experiment it is wrong.
+    If it disagrees with experiment, it is wrong.
     That is all there is to it.
 
 My paraphrasing to relate this to software engineering is:
@@ -181,8 +182,8 @@ In fact, the object oriented designs you naturally evolve will be better than pl
 ### Don’t Optimize Early
 
 Instead focus on simple, clean, easy to understand code.
-Humans are terrible at predicting which code will be the real problem.
-Optimizations will also never do better than designing away the need to invoke any code at all.
+Humans are terrible at predicting which code will solve the real problem.
+Optimizations will never do better than designing away the need to invoke any code at all.
 If there is a problem that seems to require optimization, add metrics to verify where the problem really is.
 Make sure the customer really needs the problem to be solved, sometimes an alternative design or flow will make the optimization unnecessary.
 If the customer actually needs the code to go faster, this becomes part of the requirements, and is treated accordingly.
