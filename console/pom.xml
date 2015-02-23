@@ -11,12 +11,12 @@
         <dependency>
             <groupId>com.seanshubin</groupId>
             <artifactId>up_to_date-logic</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin</groupId>
             <artifactId>up_to_date-integration</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
     <build>
