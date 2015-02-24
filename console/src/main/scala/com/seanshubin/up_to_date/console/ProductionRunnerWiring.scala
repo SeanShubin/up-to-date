@@ -9,13 +9,13 @@ trait ProductionRunnerWiring {
   def configuration: ValidConfiguration
 
   lazy val reportNames: ReportNames = ReportNames(
-    pom = "pom.json",
-    repository = "repository.json",
-    inconsistency = "inconsistency.json",
-    upgradesToApply = "apply.json",
-    upgradesToIgnore = "ignore.json",
-    statusQuo = "status-quo.json",
-    notFound = "not-found.json"
+    pom = "pom",
+    repository = "repository",
+    inconsistency = "inconsistency",
+    upgradesToApply = "apply",
+    upgradesToIgnore = "ignore",
+    statusQuo = "status-quo",
+    notFound = "not-found"
   )
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)

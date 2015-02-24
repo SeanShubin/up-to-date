@@ -17,7 +17,7 @@ object StringUtil {
 
   def doubleQuote(target: String) = s""""${escape(target)}""""
 
-  def getNewlineSeparator(targetName:String, target: String, default: String): String = {
+  def getNewlineSeparator(targetName: String, target: String, default: String): String = {
     val histogram: Map[String, Int] = "\r\n|\r|\n".r.findAllIn(target).foldLeft(Map[String, Int]())(addToHistogram)
     if (histogram.values.sum == 0) {
       default

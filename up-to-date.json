@@ -1,15 +1,16 @@
 {
-    "pomFileName": "pom.xml",
-    "directoryNamesToSkip": ["target"],
-    "directoriesToSearch": ["."],
-    "mavenRepositories": [
-        "http://repo.maven.apache.org/maven2",
-        "http://onejar-maven-plugin.googlecode.com/svn/mavenrepo",
-        "http://oss.sonatype.org/content/groups/scala-tools"],
-    "doNotUpgradeTo": [],
-    "doNotUpgradeFrom": [],
-    "automaticallyUpgrade": true,
-    "reportDirectory": "generated/up-to-date",
-    "cacheDirectory": "generated/cache",
-    "cacheExpire": "5 days"
+  "pomFileName": "pom.xml",
+  "directoryNamesToSkip": ["target"],
+  "directoriesToSearch": ["."],
+  "mavenRepositories": [
+    "http://repo.maven.apache.org/maven2",
+    "http://onejar-maven-plugin.googlecode.com/svn/mavenrepo",
+    "http://oss.sonatype.org/content/groups/scala-tools"
+  ],
+  "doNotUpgradeTo": [],
+  "doNotUpgradeFrom": [],
+  "automaticallyUpgrade": true,
+  "reportDirectory": "generated/up-to-date",
+  "cacheDirectory": "generated/cache",
+  "cacheExpire": "5 days"
 }
