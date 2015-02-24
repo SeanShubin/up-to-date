@@ -2,56 +2,49 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Path
 
+import com.seanshubin.devon.core.devon.DevonMarshaller
+
 class ReporterImpl(reportPath: Path,
                    reportNames: ReportNames,
                    fileSystem: FileSystem,
-                   jsonMarshaller: JsonMarshaller) extends Reporter {
+                   jsonMarshaller: JsonMarshaller,
+                   devonMarshaller: DevonMarshaller) extends Reporter {
   override def reportStatusQuo(upgrades: Seq[Upgrade]): Unit = {
     val upgradesAsGroupArtifactSeq = upgrades.map(_.toGroupArtifactSeq)
-    val jsonReport = jsonMarshaller.toJson(upgradesAsGroupArtifactSeq)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.statusQuo), jsonReport)
+    generateReport(upgradesAsGroupArtifactSeq, reportNames.statusQuo)
   }
 
   override def reportUpgradesToApply(upgrades: Seq[Upgrade]): Unit = {
     val upgradesByPom = Upgrade.groupByLocation(upgrades)
-    val jsonReport = jsonMarshaller.toJson(upgradesByPom)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.upgradesToApply), jsonReport)
+    generateReport(upgradesByPom, reportNames.upgradesToApply)
   }
 
   override def reportUpgradesToIgnore(upgrades: Seq[Upgrade]): Unit = {
     val upgradesByPom = Upgrade.groupByLocation(upgrades)
-    val jsonReport = jsonMarshaller.toJson(upgradesByPom)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.upgradesToIgnore), jsonReport)
+    generateReport(upgradesByPom, reportNames.upgradesToIgnore)
   }
 
   override def reportInconsistencies(inconsistencies: Map[GroupAndArtifact, Seq[Dependency]]): Unit = {
-    val jsonReport = jsonMarshaller.toJson(inconsistencies)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.inconsistency), jsonReport)
+    generateReport(inconsistencies, reportNames.inconsistency)
   }
 
   override def reportPom(poms: Seq[Pom]): Unit = {
     val pomByLocation = Pom.groupByLocation(poms)
-    val jsonReport = jsonMarshaller.toJson(pomByLocation)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.pom), jsonReport)
+    generateReport(pomByLocation, reportNames.pom)
   }
 
   override def reportRepository(libraries: Seq[Library]): Unit = {
     val librariesByLocation = Library.groupByLocation(libraries)
-    val jsonReport = jsonMarshaller.toJson(librariesByLocation)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.repository), jsonReport)
+    generateReport(librariesByLocation, reportNames.repository)
   }
 
   override def reportNotFound(notFound: Seq[GroupAndArtifact]): Unit = {
-    val jsonReport = jsonMarshaller.toJson(notFound)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(jsonPath(reportNames.notFound), jsonReport)
+    generateReport(notFound, reportNames.notFound)
   }
 
-  private def jsonPath(name: String): Path = reportPath.resolve(name + ".json")
+  private def generateReport[T](value:T, reportName:String):Unit = {
+    val jsonReport = jsonMarshaller.toJson(value)
+    fileSystem.ensureDirectoriesExist(reportPath)
+    fileSystem.storeString(reportPath.resolve(reportName + ".json"), jsonReport)
+  }
 }

@@ -2,6 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.{Path, Paths}
 
+import com.seanshubin.devon.core.devon.DefaultDevonMarshaller
 import org.scalatest.FunSuite
 
 class ReporterTest extends FunSuite {
@@ -17,11 +18,13 @@ class ReporterTest extends FunSuite {
 
   def createReporter(fileSystem: FileSystem): Reporter = {
     val jsonMarshaller = new JsonMarshallerImpl
+    val devonMarshaller = new DefaultDevonMarshaller
     val reporter = new ReporterImpl(
       reportPath,
       reportNames,
       fileSystem,
-      jsonMarshaller)
+      jsonMarshaller,
+      devonMarshaller)
     reporter
   }
 

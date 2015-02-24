@@ -2,6 +2,7 @@ package com.seanshubin.up_to_date.console
 
 import java.nio.charset.Charset
 
+import com.seanshubin.devon.core.devon.{DefaultDevonMarshaller, DevonMarshaller}
 import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic._
 
@@ -39,8 +40,9 @@ trait ProductionRunnerWiring {
   lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(
     fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
   lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
+  lazy val devonMarshaller: DevonMarshaller = new DefaultDevonMarshaller
   lazy val reporter: Reporter = new ReporterImpl(
-    configuration.reportDirectory, reportNames, fileSystem, jsonMarshaller)
+    configuration.reportDirectory, reportNames, fileSystem, jsonMarshaller, devonMarshaller)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
   lazy val runner: Runner = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom,

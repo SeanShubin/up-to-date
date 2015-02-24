@@ -20,6 +20,10 @@
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.seanshubin</groupId>
+            <artifactId>devon-core</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
