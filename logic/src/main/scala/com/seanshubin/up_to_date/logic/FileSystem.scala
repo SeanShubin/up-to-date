@@ -12,6 +12,8 @@ trait FileSystem {
 
   def storeString(path: Path, content: String)
 
+  def storeLines(path: Path, lines: Seq[String])
+
   def pathToInputStream(path: Path): InputStream
 
   def pathToReader(path: Path): Reader

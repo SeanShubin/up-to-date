@@ -1,0 +1,3 @@
+Split filesystem into logic and integration
+Integration test for FileSystem.storeLines
+Rewrite reporter test

@@ -32,6 +32,8 @@ class ReporterTest extends FunSuite {
     var actualPath: Path = null
     var actualContent: String = null
     var actualReportDirectory: Path = null
+    var actualDevonPath: Path = null
+    var actualDevonLines: Seq[String] = null
 
     override def storeString(path: Path, content: String): Unit = {
       actualPath = path
@@ -40,6 +42,11 @@ class ReporterTest extends FunSuite {
 
     override def ensureDirectoriesExist(path: Path): Unit = {
       actualReportDirectory = path
+    }
+
+    override def storeLines(path: Path, lines: Seq[String]): Unit = {
+      actualDevonPath = path
+      actualDevonLines = lines
     }
   }
 

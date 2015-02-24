@@ -6,6 +6,8 @@ import java.nio.file.{FileVisitor, Files, Path}
 
 import com.seanshubin.up_to_date.logic._
 
+import scala.collection.JavaConversions
+
 class FileSystemImpl(charset: Charset) extends FileSystem {
   override def fileExists(path: Path): Boolean = Files.exists(path)
 
@@ -14,6 +16,8 @@ class FileSystemImpl(charset: Charset) extends FileSystem {
   override def loadString(path: Path): String = new String(Files.readAllBytes(path), charset)
 
   override def storeString(path: Path, content: String): Unit = Files.write(path, content.getBytes(charset))
+
+  override def storeLines(path: Path, lines: Seq[String]): Unit = Files.write(path, JavaConversions.asJavaIterable(lines))
 
   override def pathToInputStream(path: Path): InputStream = Files.newInputStream(path)
 

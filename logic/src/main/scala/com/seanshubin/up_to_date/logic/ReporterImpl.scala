@@ -4,6 +4,8 @@ import java.nio.file.Path
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
+import scala.reflect.runtime.universe
+
 class ReporterImpl(reportPath: Path,
                    reportNames: ReportNames,
                    fileSystem: FileSystem,
@@ -42,9 +44,12 @@ class ReporterImpl(reportPath: Path,
     generateReport(notFound, reportNames.notFound)
   }
 
-  private def generateReport[T](value:T, reportName:String):Unit = {
+  private def generateReport[T: universe.TypeTag](value: T, reportName: String): Unit = {
     val jsonReport = jsonMarshaller.toJson(value)
+    val devon = devonMarshaller.fromValue(value)
+    val devonReport = devonMarshaller.toPretty(devon)
     fileSystem.ensureDirectoriesExist(reportPath)
     fileSystem.storeString(reportPath.resolve(reportName + ".json"), jsonReport)
+    fileSystem.storeLines(reportPath.resolve(reportName + ".txt"), devonReport)
   }
 }

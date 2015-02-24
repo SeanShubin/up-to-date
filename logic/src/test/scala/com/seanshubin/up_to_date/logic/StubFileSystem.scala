@@ -14,6 +14,8 @@ abstract class StubFileSystem extends FileSystem {
 
   override def storeString(path: Path, content: String): Unit = ???
 
+  override def storeLines(path: Path, lines: Seq[String]): Unit = ???
+
   override def lastModified(path: Path): Long = ???
 
   override def dataInputFor(path: Path): DataInputStreamWrapper = ???
