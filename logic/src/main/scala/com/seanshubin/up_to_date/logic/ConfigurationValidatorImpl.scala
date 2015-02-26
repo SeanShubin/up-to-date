@@ -2,8 +2,11 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.{Path, Paths}
 
+import com.seanshubin.devon.core.devon.DevonMarshaller
+
 class ConfigurationValidatorImpl(fileSystem: FileSystem,
-                                 jsonMarshaller: JsonMarshaller) extends ConfigurationValidator {
+                                 jsonMarshaller: JsonMarshaller,
+                                 devonMarshaller: DevonMarshaller) extends ConfigurationValidator {
   override def validate(commandLineArguments: Seq[String]): Either[Seq[String], ValidConfiguration] = {
     if (commandLineArguments.size < 1) {
       Left(Seq("at least one command line argument required"))
@@ -26,6 +29,9 @@ class ConfigurationValidatorImpl(fileSystem: FileSystem,
   private def validateJson(json: String): Either[Seq[String], ValidConfiguration] = {
     try {
       val configurationJson = jsonMarshaller.fromJson(json, classOf[ConfigurationJson])
+      val devon = devonMarshaller.fromValue(configurationJson)
+      val prettyDevon = devonMarshaller.toPretty(devon)
+      prettyDevon.foreach(println)
       configurationJson.validate()
     } catch {
       case ex: Exception =>
