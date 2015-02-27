@@ -1,0 +1,43 @@
+{
+  "searchPaths": [
+    [
+      "console",
+      "target",
+      "up-to-date.jar"
+    ]
+  ],
+  "styleSheet": ["dependency.css"],
+  "relevantDependencyPattern": {
+    "includeRegex": ["com/seanshubin/up_to_date/.*"],
+    "excludeRegex": []
+  },
+  "trimRegex": "^com/seanshubin/up_to_date/",
+  "classFileNamePattern": {
+    "includeRegex": [".*\\.class"],
+    "excludeRegex": []
+  },
+  "zipFileNamePattern": {
+    "includeRegex": [
+      ".*\\.zip",
+      ".*\\.war",
+      ".*\\.jar"
+    ],
+    "excludeRegex": []
+  },
+  "generatedReportDirectory": [
+    "console",
+    "target",
+    "dependency-report"
+  ],
+  "classLimits": {
+    "depth": 8,
+    "complexity": 100,
+    "cycleCount": 0
+  },
+  "packageLimits": {
+    "depth": 3,
+    "complexity": 10,
+    "cycleCount": 0
+  },
+  "failIfAnyLimitExceeded": true
+}

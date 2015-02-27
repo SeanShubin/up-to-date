@@ -14,6 +14,16 @@
         <module>integration</module>
         <module>console</module>
     </modules>
+    <repositories>
+        <repository>
+            <id>sean</id>
+            <name>sean</name>
+            <url>http://thoughtfulcraftsmanship.com/nexus/content/repositories/sean-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>onejar</id>
