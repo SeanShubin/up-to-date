@@ -2,7 +2,17 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Path
 
-class LineEmittingNotifications(systemClock: SystemClock, emitLine: String => Unit) extends Notifications {
+import com.seanshubin.devon.core.devon.DevonMarshaller
+
+class LineEmittingNotifications(systemClock: SystemClock, devonMarshaller: DevonMarshaller, emitLine: String => Unit) extends Notifications {
+  override def effectiveConfiguration(configuration: Configuration): Unit = {
+    val devon = devonMarshaller.fromValue(configuration)
+    val pretty = devonMarshaller.toPretty(devon)
+    emitLine("Effective configuration:")
+    pretty.foreach(emitLine)
+
+  }
+
   override def errorWithConfiguration(commandLineArguments: Seq[String], errorReport: Seq[String]): Unit = {
     emitLine(commandLineArguments.mkString(" "))
     emitLine("Unable to launch application due to configuration validation errors")

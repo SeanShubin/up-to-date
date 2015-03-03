@@ -3,6 +3,8 @@ package com.seanshubin.up_to_date.logic
 import java.nio.file.Path
 
 trait Notifications {
+  def effectiveConfiguration(configuration: Configuration)
+
   def errorWithConfiguration(commandLineArguments: Seq[String], errorReport: Seq[String])
 
   def timeTaken[T](caption: String)(block: => T): T

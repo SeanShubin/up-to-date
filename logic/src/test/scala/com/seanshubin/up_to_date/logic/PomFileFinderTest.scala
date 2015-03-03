@@ -22,7 +22,7 @@ class PomFileFinderTest extends FunSuite {
         visitResults.append(visitor.visitFile(file, dummyAttributes))
       }
     }
-    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(directory), "pom.xml", Seq("target"))
+    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(directory), "pom.xml", Set("target"))
     val found = finder.relevantPomFiles()
     assert(found === Seq(file))
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
@@ -37,7 +37,7 @@ class PomFileFinderTest extends FunSuite {
         visitResults.append(visitor.preVisitDirectory(importantDirectory, dummyAttributes))
       }
     }
-    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
+    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Set("target"))
     val found = finder.relevantPomFiles()
     assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
@@ -52,7 +52,7 @@ class PomFileFinderTest extends FunSuite {
         visitResults.append(visitor.preVisitDirectory(targetDirectory, dummyAttributes))
       }
     }
-    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
+    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Set("target"))
     val found = finder.relevantPomFiles()
     assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.SKIP_SUBTREE))
@@ -66,7 +66,7 @@ class PomFileFinderTest extends FunSuite {
         visitResults.append(visitor.visitFileFailed(dummyFile, dummyException))
       }
     }
-    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
+    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Set("target"))
     val found = finder.relevantPomFiles()
     assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
@@ -81,7 +81,7 @@ class PomFileFinderTest extends FunSuite {
         visitResults.append(visitor.visitFile(notPom, dummyAttributes))
       }
     }
-    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
+    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Set("target"))
     val found = finder.relevantPomFiles()
     assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))
@@ -95,7 +95,7 @@ class PomFileFinderTest extends FunSuite {
         visitResults.append(visitor.postVisitDirectory(dummyFile, dummyException))
       }
     }
-    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Seq("target"))
+    val finder: PomFileFinder = new PomFileFinderImpl(fileTreeWalker, Seq(baseDirectory), "pom.xml", Set("target"))
     val found = finder.relevantPomFiles()
     assert(found === Seq())
     assert(visitResults === Seq(FileVisitResult.CONTINUE))

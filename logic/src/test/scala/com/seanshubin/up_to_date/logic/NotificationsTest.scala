@@ -1,5 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
+import com.seanshubin.devon.core.devon.DevonMarshaller
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
@@ -7,11 +8,12 @@ import scala.collection.mutable.ArrayBuffer
 
 class NotificationsTest extends FunSuite with EasyMockSugar {
   private val dummySystemClock: SystemClock = null
+  private val dummyDevonMarshaller: DevonMarshaller = null
   test("configuration error") {
     //given
     val lines = new ArrayBuffer[String]()
     def emitLine(line: String) = lines.append(line)
-    val notifications = new LineEmittingNotifications(dummySystemClock, emitLine)
+    val notifications = new LineEmittingNotifications(dummySystemClock, dummyDevonMarshaller, emitLine)
 
     //when
     notifications.errorWithConfiguration(Seq("config.json"), Seq("line 1", "line 2"))
@@ -29,7 +31,7 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     val lines = new ArrayBuffer[String]()
     val systemClock = mock[SystemClock]
     def emitLine(line: String) = lines.append(line)
-    val notifications = new LineEmittingNotifications(systemClock, emitLine)
+    val notifications = new LineEmittingNotifications(systemClock, dummyDevonMarshaller, emitLine)
 
     expecting {
       systemClock.currentTimeMillis.andReturn(4000)
@@ -50,7 +52,7 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     //given
     val lines = new ArrayBuffer[String]()
     def emitLine(line: String) = lines.append(line)
-    val notifications = new LineEmittingNotifications(dummySystemClock, emitLine)
+    val notifications = new LineEmittingNotifications(dummySystemClock, dummyDevonMarshaller, emitLine)
 
     //when
     notifications.httpGet("http://localhost")

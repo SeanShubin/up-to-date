@@ -2,15 +2,11 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Path
 
-import com.seanshubin.devon.core.devon.DevonMarshaller
-
 import scala.reflect.runtime.universe
 
 class ReporterImpl(reportPath: Path,
                    reportNames: ReportNames,
-                   fileSystem: FileSystem,
-                   jsonMarshaller: JsonMarshaller,
-                   devonMarshaller: DevonMarshaller) extends Reporter {
+                   fileSystemReportGenerator: FileSystemReportGenerator) extends Reporter {
   override def reportStatusQuo(upgrades: Seq[Upgrade]): Unit = {
     val upgradesAsGroupArtifactSeq = upgrades.map(_.toGroupArtifactSeq)
     generateReport(upgradesAsGroupArtifactSeq, reportNames.statusQuo)
@@ -45,11 +41,6 @@ class ReporterImpl(reportPath: Path,
   }
 
   private def generateReport[T: universe.TypeTag](value: T, reportName: String): Unit = {
-    val jsonReport = jsonMarshaller.toJson(value)
-    val devon = devonMarshaller.fromValue(value)
-    val devonReport = devonMarshaller.toPretty(devon)
-    fileSystem.ensureDirectoriesExist(reportPath)
-    fileSystem.storeString(reportPath.resolve(reportName + ".json"), jsonReport)
-    fileSystem.storeLines(reportPath.resolve(reportName + ".txt"), devonReport)
+    fileSystemReportGenerator.sendReportToFileSystem(value, reportName)
   }
 }

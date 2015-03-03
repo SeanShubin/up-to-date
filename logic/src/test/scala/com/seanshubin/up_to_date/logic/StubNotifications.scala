@@ -17,4 +17,6 @@ class StubNotifications extends Notifications {
   override def httpGet(uriString: String): Unit = ???
 
   override def httpGetFromCache(uriString: String, path: Path): Unit = ???
+
+  override def effectiveConfiguration(configuration: Configuration): Unit = ???
 }

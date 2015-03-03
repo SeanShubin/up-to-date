@@ -9,7 +9,7 @@ import scala.collection.mutable.ArrayBuffer
 class PomFileFinderImpl(fileSystem: FileSystem,
                         directoriesToSearch: Seq[Path],
                         pomFileName: String,
-                        excludedDirectories: Seq[String]) extends PomFileFinder {
+                        excludedDirectories: Set[String]) extends PomFileFinder {
   override def relevantPomFiles(): Seq[Path] = {
     val relevantPomFilesSeq = directoriesToSearch.flatMap(relevantPomFilesFromPath)
     relevantPomFilesSeq

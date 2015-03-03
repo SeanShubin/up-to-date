@@ -4,10 +4,11 @@ import java.nio.charset.Charset
 
 import com.seanshubin.devon.core.devon.{DefaultDevonMarshaller, DevonMarshaller}
 import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemClockImpl}
+import com.seanshubin.up_to_date.logic.DurationFormat.MillisecondsFormat
 import com.seanshubin.up_to_date.logic._
 
-trait ProductionRunnerWiring {
-  def configuration: ValidConfiguration
+trait RunnerWiring {
+  def configuration: Configuration
 
   lazy val reportNames: ReportNames = ReportNames(
     pom = "pom",
@@ -30,7 +31,7 @@ trait ProductionRunnerWiring {
   lazy val httpDelegate: Http = new HttpImpl(charset, notifications)
   lazy val oneWayHash: OneWayHash = new Sha256(charset)
   lazy val http: Http = new HttpCache(
-    httpDelegate, oneWayHash, fileSystem, configuration.cacheDirectory, configuration.cacheExpireMilliseconds,
+    httpDelegate, oneWayHash, fileSystem, configuration.cacheDirectory, MillisecondsFormat.parse(configuration.cacheExpire),
     systemClock, notifications)
   lazy val metadataParser: MetadataParser = new MetadataParserImpl(charset)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
@@ -39,18 +40,19 @@ trait ProductionRunnerWiring {
   lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(charset)
   lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(
     fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
-  lazy val jsonMarshaller: JsonMarshaller = new JsonMarshallerImpl
   lazy val devonMarshaller: DevonMarshaller = new DefaultDevonMarshaller
+  lazy val reportGenerator: FileSystemReportGenerator = new FileSystemReportGeneratorImpl(
+    configuration.reportDirectory, fileSystem, devonMarshaller)
   lazy val reporter: Reporter = new ReporterImpl(
-    configuration.reportDirectory, reportNames, fileSystem, jsonMarshaller, devonMarshaller)
-  lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, emitLine)
+    configuration.reportDirectory, reportNames, reportGenerator)
+  lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, devonMarshaller, emitLine)
   lazy val runner: Runner = new RunnerImpl(
-    pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom,
-    configuration.doNotUpgradeTo, upgrader, reporter, notifications)
+    pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom.toSet,
+    configuration.doNotUpgradeTo.toSet, upgrader, reporter, notifications)
 }
 
-object ProductionRunnerWiring {
-  def apply(theValidConfiguration: ValidConfiguration) = new ProductionRunnerWiring {
-    override def configuration: ValidConfiguration = theValidConfiguration
+object RunnerWiring {
+  def apply(theValidConfiguration: Configuration) = new RunnerWiring {
+    override def configuration: Configuration = theValidConfiguration
   }
 }
