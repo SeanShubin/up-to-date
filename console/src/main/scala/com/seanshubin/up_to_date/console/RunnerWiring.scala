@@ -40,7 +40,7 @@ trait RunnerWiring {
   lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(charset)
   lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(
     fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
-  lazy val devonMarshaller: DevonMarshaller = new DefaultDevonMarshaller
+  lazy val devonMarshaller: DevonMarshaller = DefaultDevonMarshaller
   lazy val reportGenerator: FileSystemReportGenerator = new FileSystemReportGeneratorImpl(
     configuration.reportDirectory, fileSystem, devonMarshaller)
   lazy val reporter: Reporter = new ReporterImpl(

@@ -12,7 +12,7 @@ class FileSystemReportGeneratorImplTest extends FunSuite with EasyMockSugar {
     val reportName = "foo"
     val reportPath = reportDir.resolve(reportName + ".txt")
     val fileSystem = mock[FileSystem]
-    val devonMarshaller = new DefaultDevonMarshaller
+    val devonMarshaller = DefaultDevonMarshaller
     val generator: FileSystemReportGenerator = new FileSystemReportGeneratorImpl(reportDir, fileSystem, devonMarshaller)
     val report = Point(1, 2)
     val expected = Seq(
