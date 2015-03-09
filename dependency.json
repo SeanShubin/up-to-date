@@ -6,6 +6,7 @@
       "up-to-date.jar"
     ]
   ],
+  "scrubGroupingPattern": "com/seanshubin/([^/]+).*",
   "styleSheet": ["dependency.css"],
   "relevantDependencyPattern": {
     "includeRegex": ["com/seanshubin/up_to_date/.*"],
@@ -32,12 +33,20 @@
   "classLimits": {
     "depth": 8,
     "complexity": 100,
-    "cycleCount": 0
+    "cycleCount": 0,
+    "cycleSize": 0
   },
   "packageLimits": {
     "depth": 3,
     "complexity": 10,
-    "cycleCount": 0
+    "cycleCount": 0,
+    "cycleSize": 0
+  },
+  "groupingLimits": {
+    "depth": 1,
+    "complexity": 0,
+    "cycleCount": 0,
+    "cycleSize": 0
   },
   "failIfAnyLimitExceeded": true
 }
