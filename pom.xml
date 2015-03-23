@@ -49,9 +49,9 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.4</version>
+                <groupId>com.google.http-client</groupId>
+                <artifactId>google-http-client</artifactId>
+                <version>1.19.0</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
@@ -143,4 +143,10 @@
             </plugins>
         </pluginManagement>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>sean</id>
+            <url>http://thoughtfulcraftsmanship.com/nexus/content/repositories/sean-snapshots</url>
+        </repository>
+    </distributionManagement>
 </project>

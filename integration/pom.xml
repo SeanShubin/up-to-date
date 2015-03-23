@@ -18,8 +18,8 @@
             <artifactId>easymock</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>

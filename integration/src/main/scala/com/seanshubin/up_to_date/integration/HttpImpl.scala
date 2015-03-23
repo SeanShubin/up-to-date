@@ -5,19 +5,22 @@ import java.net.URI
 import java.nio.charset.Charset
 
 import com.seanshubin.up_to_date.logic.{Http, Notifications, ReaderIterator}
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.HttpClients
+import com.google.api.client.http._
+import com.google.api.client.http.javanet.NetHttpTransport
 
 class HttpImpl(charset: Charset, notifications: Notifications) extends Http {
+  val httpTransport: HttpTransport = new NetHttpTransport()
+  val factory: HttpRequestFactory = httpTransport.createRequestFactory()
+
   override def get(uriString: String): (Int, String) = {
     notifications.timeTaken("GET TIME") {
       notifications.httpGet(uriString)
       val uri: URI = new URI(uriString)
-      val request = new HttpGet(uri)
-      val httpClient = HttpClients.createDefault()
-      val httpResponse = httpClient.execute(request)
-      val statusCode = httpResponse.getStatusLine.getStatusCode
-      val inputStream = httpResponse.getEntity.getContent
+      val request = factory.buildGetRequest(new GenericUrl(uri))
+      request.setThrowExceptionOnExecuteError(false)
+      val httpResponse = request.execute()
+      val statusCode = httpResponse.getStatusCode
+      val inputStream = httpResponse.getContent
       val reader = new InputStreamReader(inputStream, charset)
       val content = new ReaderIterator(reader).toSeq.mkString
       (statusCode, content)

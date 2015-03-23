@@ -47,8 +47,8 @@ trait RunnerWiring {
     configuration.reportDirectory, reportNames, reportGenerator)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, devonMarshaller, emitLine)
   lazy val runner: Runner = new RunnerImpl(
-    pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom.toSet,
-    configuration.doNotUpgradeTo.toSet, upgrader, reporter, notifications)
+    pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom,
+    configuration.doNotUpgradeTo, upgrader, reporter, notifications)
 }
 
 object RunnerWiring {
