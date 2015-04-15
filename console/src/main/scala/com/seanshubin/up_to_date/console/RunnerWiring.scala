@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.console
 
 import java.nio.charset.Charset
 
-import com.seanshubin.devon.core.devon.{DefaultDevonMarshaller, DevonMarshaller}
+import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic.DurationFormat.MillisecondsFormat
 import com.seanshubin.up_to_date.logic._
@@ -40,7 +40,7 @@ trait RunnerWiring {
   lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(charset)
   lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(
     fileSystem, pomXmlUpgrader, configuration.automaticallyUpgrade)
-  lazy val devonMarshaller: DevonMarshaller = DefaultDevonMarshaller
+  lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   lazy val reportGenerator: FileSystemReportGenerator = new FileSystemReportGeneratorImpl(
     configuration.reportDirectory, fileSystem, devonMarshaller)
   lazy val reporter: Reporter = new ReporterImpl(

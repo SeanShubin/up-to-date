@@ -4,9 +4,9 @@ import java.io.InputStreamReader
 import java.net.URI
 import java.nio.charset.Charset
 
-import com.seanshubin.up_to_date.logic.{Http, Notifications, ReaderIterator}
 import com.google.api.client.http._
 import com.google.api.client.http.javanet.NetHttpTransport
+import com.seanshubin.up_to_date.logic.{Http, Notifications, ReaderIterator}
 
 class HttpImpl(charset: Charset, notifications: Notifications) extends Http {
   val httpTransport: HttpTransport = new NetHttpTransport()

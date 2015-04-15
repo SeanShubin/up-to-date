@@ -23,8 +23,8 @@ class PomParserImpl(charset: Charset) extends PomParser {
       if childNode.getNodeType == Node.ELEMENT_NODE
       element = childNode.asInstanceOf[Element]
     } yield {
-      (element.getNodeName, element.getTextContent)
-    }
+        (element.getNodeName, element.getTextContent)
+      }
     val childNodeMap = childNodeMapEntries.toMap
     if (hasNecessaryFields(childNodeMap)) Some(pomNameAndFieldsToDependency(pomName, childNodeMap))
     else None

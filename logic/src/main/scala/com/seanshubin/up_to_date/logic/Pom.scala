@@ -23,8 +23,8 @@ object Pom {
       Pom(location, dependencies) = pom
       dependency <- dependencies
     } yield {
-      GroupAndArtifact(dependency.group, dependency.artifact)
-    }
+        GroupAndArtifact(dependency.group, dependency.artifact)
+      }
     groupAndArtifact.toSet
   }
 }
