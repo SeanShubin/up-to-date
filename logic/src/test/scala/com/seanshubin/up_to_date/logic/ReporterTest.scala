@@ -99,7 +99,9 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       upgradesToIgnore = "ignore",
       inconsistency = "inconsistencies",
       statusQuo = "status-quo",
-      notFound = "not-found")
+      notFound = "not-found",
+      byDependency = "by-dependency"
+    )
     lazy val fileSystemReportGenerator = mock[FileSystemReportGenerator]
     lazy val reporter = new ReporterImpl(reportPath, reportNames, fileSystemReportGenerator)
 

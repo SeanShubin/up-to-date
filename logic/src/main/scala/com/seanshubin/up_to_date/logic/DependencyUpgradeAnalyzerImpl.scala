@@ -33,6 +33,17 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
     dependenciesByGroupAndArtifact.filter(hasInconsistency)
   }
 
+  override def byDependency(upgrades: Seq[Upgrade]): Map[GroupAndArtifact, List[Upgrade]] = {
+    def accumulateUpgrade(accumulator:Map[GroupAndArtifact, List[Upgrade]], upgrade:Upgrade):Map[GroupAndArtifact, List[Upgrade]] = {
+      val key = upgrade.groupAndArtifact
+      val oldValue = accumulator.getOrElse(key, Nil)
+      val newValue = upgrade :: oldValue
+      accumulator + (key -> newValue)
+    }
+    val empty = Map[GroupAndArtifact, List[Upgrade]]()
+    upgrades.foldLeft(empty)(accumulateUpgrade)
+  }
+
   private def hasInconsistency(entry: (GroupAndArtifact, Seq[Dependency])): Boolean = {
     val (_, dependencies) = entry
     val expectedVersion = dependencies.head.version

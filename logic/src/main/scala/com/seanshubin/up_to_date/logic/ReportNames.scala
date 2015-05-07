@@ -6,4 +6,5 @@ case class ReportNames(pom: String,
                        upgradesToApply: String,
                        upgradesToIgnore: String,
                        statusQuo: String,
-                       notFound: String)
+                       notFound: String,
+                       byDependency: String)
