@@ -7,4 +7,5 @@ case class ReportNames(pom: String,
                        upgradesToIgnore: String,
                        statusQuo: String,
                        notFound: String,
-                       byDependency: String)
+                       byDependency: String,
+                       summary: String)

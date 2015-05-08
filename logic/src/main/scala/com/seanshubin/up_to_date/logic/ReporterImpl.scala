@@ -40,9 +40,12 @@ class ReporterImpl(reportPath: Path,
     generateReport(notFound, reportNames.notFound)
   }
 
-
   override def reportByDependency(artifactToUpgrade: Map[GroupAndArtifact, List[Upgrade]]): Unit = {
     generateReport(artifactToUpgrade, reportNames.byDependency)
+  }
+
+  override def reportSummary(summary: SummaryReport): Unit = {
+    generateReport(summary, reportNames.summary)
   }
 
   private def generateReport[T: universe.TypeTag](value: T, reportName: String): Unit = {

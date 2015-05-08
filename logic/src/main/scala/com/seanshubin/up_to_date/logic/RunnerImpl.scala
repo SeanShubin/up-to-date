@@ -24,6 +24,9 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
       reporter.reportUpgradesToIgnore(ignore)
       val byDependency = dependencyUpgradeAnalyzer.byDependency(apply)
       reporter.reportByDependency(byDependency)
+      val alreadyUpToDate = dependencyUpgradeAnalyzer.alreadyUpToDate(poms, libraries)
+      val summary = dependencyUpgradeAnalyzer.summary(poms, byDependency, notFound, apply,  ignore, alreadyUpToDate)
+      reporter.reportSummary(summary)
       upgrader.performAutomaticUpgradesIfApplicable(apply)
     }
   }

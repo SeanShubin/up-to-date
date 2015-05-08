@@ -18,7 +18,8 @@ trait RunnerWiring {
     upgradesToIgnore = "ignore",
     statusQuo = "status-quo",
     notFound = "not-found",
-    byDependency = "by-dependency"
+    byDependency = "by-dependency",
+    summary = "summary"
   )
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)

@@ -1,6 +1,8 @@
 package com.seanshubin.up_to_date.logic
 
 trait Reporter {
+  def reportSummary(summary: SummaryReport)
+
   def reportByDependency(artifactToUpgrade: Map[GroupAndArtifact, List[Upgrade]])
 
   def reportUpgradesToApply(upgrades: Seq[Upgrade])
