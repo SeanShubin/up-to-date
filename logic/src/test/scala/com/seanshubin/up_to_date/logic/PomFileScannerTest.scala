@@ -11,7 +11,7 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
     val pomFileFinder = mock[PomFileFinder]
     val pomParser = mock[PomParser]
     val fileSystem = mock[FileSystem]
-    val pomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser, fileSystem)
+    val pomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser, fileSystem, Map())
     val samplePom1 = Paths.get("foo", "pom.xml")
     val samplePom2 = Paths.get("bar", "pom.xml")
     val path1 = samplePom1.toString

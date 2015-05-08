@@ -29,7 +29,8 @@ trait RunnerWiring {
   lazy val pomFileFinder: PomFileFinder = new PomFileFinderImpl(
     fileSystem, configuration.directoriesToSearch, configuration.pomFileName, configuration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(charset)
-  lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser, fileSystem)
+  lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(
+    pomFileFinder, pomParser, fileSystem, configuration.substitutions)
   lazy val httpDelegate: Http = new HttpImpl(charset, notifications)
   lazy val oneWayHash: OneWayHash = new Sha256(charset)
   lazy val http: Http = new HttpCache(

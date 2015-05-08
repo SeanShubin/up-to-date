@@ -19,7 +19,11 @@ class LauncherTest extends FunSuite with EasyMockSugar {
     automaticallyUpgrade = true,
     reportDirectory = Paths.get("generated", "sample", "report"),
     cacheDirectory = Paths.get("generated", "cache"),
-    cacheExpire = "5 days")
+    cacheExpire = "5 days",
+    substitutions = Map(
+      "${scala.major}" -> "2.11",
+      "${scala.major.minor}" -> "2.11.6")
+  )
 
   test("if configuration if valid, launcher will create a runner and execute the run method") {
     val commandLineArguments = Seq("some-configuration-file")

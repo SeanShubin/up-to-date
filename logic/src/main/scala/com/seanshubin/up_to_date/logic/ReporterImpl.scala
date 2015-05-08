@@ -2,6 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Path
 
+import scala.collection.immutable.ListMap
 import scala.reflect.runtime.universe
 
 class ReporterImpl(reportPath: Path,
@@ -41,7 +42,12 @@ class ReporterImpl(reportPath: Path,
   }
 
   override def reportByDependency(artifactToUpgrade: Map[GroupAndArtifact, List[Upgrade]]): Unit = {
-    generateReport(artifactToUpgrade, reportNames.byDependency)
+    def addEntry(map:Map[GroupAndArtifact, List[Upgrade]], key:GroupAndArtifact): Map[GroupAndArtifact, List[Upgrade]] = {
+      map + (key -> artifactToUpgrade(key))
+    }
+    val empty:Map[GroupAndArtifact, List[Upgrade]] = ListMap.empty
+    val artifactsInKeyOrder = artifactToUpgrade.keys.toSeq.sorted.foldLeft(empty)(addEntry)
+    generateReport(artifactsInKeyOrder, reportNames.byDependency)
   }
 
   override def reportSummary(summary: SummaryReport): Unit = {

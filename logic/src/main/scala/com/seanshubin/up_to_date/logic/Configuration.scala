@@ -11,4 +11,5 @@ case class Configuration(pomFileName: String,
                          automaticallyUpgrade: Boolean,
                          reportDirectory: Path,
                          cacheDirectory: Path,
-                         cacheExpire: String)
+                         cacheExpire: String,
+                          substitutions:Map[String, String])
