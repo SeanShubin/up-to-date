@@ -1,5 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
+import java.net.URI
 import java.nio.file.Path
 
 import scala.collection.mutable.ArrayBuffer
@@ -14,9 +15,11 @@ class StubNotifications extends Notifications {
 
   override def errorWithConfiguration(commandLineArguments: Seq[String], errorReport: Seq[String]): Unit = ???
 
-  override def httpGet(uriString: String): Unit = ???
+  override def httpGet(uri: URI): Unit = ???
 
-  override def httpGetFromCache(uriString: String, path: Path): Unit = ???
+  override def httpGetFromCache(uri: URI, path: Path): Unit = ???
 
   override def effectiveConfiguration(configuration: Configuration): Unit = ???
+
+  override def uriSyntaxException(uriString: String): Unit = ???
 }

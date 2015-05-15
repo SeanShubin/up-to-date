@@ -18,4 +18,8 @@ trait Reporter {
   def reportStatusQuo(upgrades: Seq[Upgrade])
 
   def reportNotFound(notFound: Seq[GroupAndArtifact])
+
+  def reportUnexpandedPom(unexpandedPoms: Seq[Pom])
+
+  def reportPropertyConflicts(propertyConflicts: Map[String, Set[String]])
 }

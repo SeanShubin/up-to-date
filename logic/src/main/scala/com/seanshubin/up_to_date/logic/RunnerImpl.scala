@@ -10,8 +10,11 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
                  notifications: Notifications) extends Runner {
   override def run(): Unit = {
     notifications.timeTaken("Total Time Taken") {
-      val poms = pomFileScanner.scanPomFiles()
+      val unexpandedPoms = pomFileScanner.scanPomFiles()
+      reporter.reportUnexpandedPom(unexpandedPoms)
+      val (poms, propertyConflicts) = Pom.applyExpansions(unexpandedPoms)
       reporter.reportPom(poms)
+      reporter.reportPropertyConflicts(propertyConflicts)
       val (libraries, notFound) = mavenRepositoryScanner.scanLatestDependencies(poms)
       reporter.reportRepository(libraries)
       reporter.reportNotFound(notFound)
@@ -25,7 +28,7 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
       val byDependency = dependencyUpgradeAnalyzer.byDependency(apply)
       reporter.reportByDependency(byDependency)
       val alreadyUpToDate = dependencyUpgradeAnalyzer.alreadyUpToDate(poms, libraries)
-      val summary = dependencyUpgradeAnalyzer.summary(poms, byDependency, notFound, apply,  ignore, alreadyUpToDate)
+      val summary = dependencyUpgradeAnalyzer.summary(poms, byDependency, notFound, apply, ignore, alreadyUpToDate)
       reporter.reportSummary(summary)
       upgrader.performAutomaticUpgradesIfApplicable(apply)
     }

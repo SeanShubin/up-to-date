@@ -24,7 +24,7 @@ class PomParserTest extends FunSuite {
     val pomName = "foo/bar/pom.xml"
     val expectedDependency1 = Dependency(pomName, "org.scala-lang", "scala-library", "2.11.1")
     val expectedDependency2 = Dependency(pomName, "joda-time", "joda-time", "2.3")
-    val expected = Pom(pomName, Seq(expectedDependency1, expectedDependency2))
+    val expected = Pom(pomName, Seq(expectedDependency1, expectedDependency2), properties)
     val actual = pomParser.parseDependencies(pomName, sampleData)
     assert(actual === expected)
   }
@@ -57,8 +57,14 @@ class PomParserTest extends FunSuite {
     val pomParser = new PomParserImpl(charset)
     val pomName = "foo/bar/pom.xml"
     val expectedDependency = Dependency(pomName.toString, "ddd", "eee", "fff")
-    val expected = Pom(pomName.toString, Seq(expectedDependency))
+    val expected = Pom(pomName.toString, Seq(expectedDependency), properties)
     val actual = pomParser.parseDependencies(pomName, sampleData)
     assert(actual === expected)
   }
+  val properties = Map(
+    """'\$\{scala\.major\}'""" -> "2.11",
+    """'\$\{scala\.major\.minor\}'""" -> "2.11.6",
+    """'\$\{scala\.version\}'""" -> "2.11",
+    """'\$\{scala\.compat\.version\}'""" -> "2.11"
+  )
 }

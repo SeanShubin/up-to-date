@@ -1,5 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
+import java.net.URI
 import java.nio.file.Paths
 
 import org.scalatest.FunSuite
@@ -7,7 +8,8 @@ import org.scalatest.mock.EasyMockSugar
 
 class HttpCacheTest extends FunSuite with EasyMockSugar {
   test("load from filesystem when in cache and not expired") {
-    val uri: String = s"http://localhost:12345/foo"
+    val uriString: String = "http://localhost:12345/foo"
+    val uri: URI = new URI(uriString)
     val cacheFileName = "hashed-uri"
     val expireCache = DurationFormat.MillisecondsFormat.parse("5 days")
     val cacheDirectoryName = "cache"
@@ -27,7 +29,7 @@ class HttpCacheTest extends FunSuite with EasyMockSugar {
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
 
     expecting {
-      oneWayHash.toHexString(uri).andReturn(cacheFileName)
+      oneWayHash.toHexString(uriString).andReturn(cacheFileName)
       fileSystem.fileExists(cacheFilePath).andReturn(true)
       fileSystem.lastModified(cacheFilePath).andReturn(oneDayAgo)
       systemClock.currentTimeMillis.andReturn(rightNow)
@@ -46,7 +48,8 @@ class HttpCacheTest extends FunSuite with EasyMockSugar {
   }
 
   test("load from uri and update cache when in cache and expired") {
-    val uri: String = s"http://localhost:12345/foo"
+    val uriString: String = "http://localhost:12345/foo"
+    val uri: URI = new URI(uriString)
     val cacheFileName = "hashed-uri"
     val expireCache = DurationFormat.MillisecondsFormat.parse("5 days")
     val cacheDirectoryName = "cache"
@@ -66,7 +69,7 @@ class HttpCacheTest extends FunSuite with EasyMockSugar {
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
 
     expecting {
-      oneWayHash.toHexString(uri).andReturn(cacheFileName)
+      oneWayHash.toHexString(uriString).andReturn(cacheFileName)
       fileSystem.fileExists(cacheFilePath).andReturn(true)
       fileSystem.lastModified(cacheFilePath).andReturn(sixDaysAgo)
       systemClock.currentTimeMillis.andReturn(rightNow)
@@ -85,7 +88,8 @@ class HttpCacheTest extends FunSuite with EasyMockSugar {
   }
 
   test("load from uri and update cache when not in cache") {
-    val uri: String = s"http://localhost:12345/foo"
+    val uriString: String = "http://localhost:12345/foo"
+    val uri: URI = new URI(uriString)
     val cacheFileName = "hashed-uri"
     val expireCache = DurationFormat.MillisecondsFormat.parse("5 days")
     val cacheDirectoryName = "cache"
@@ -102,7 +106,7 @@ class HttpCacheTest extends FunSuite with EasyMockSugar {
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
 
     expecting {
-      oneWayHash.toHexString(uri).andReturn(cacheFileName)
+      oneWayHash.toHexString(uriString).andReturn(cacheFileName)
       fileSystem.fileExists(cacheFilePath).andReturn(false)
       delegate.get(uri).andReturn((200, """{ "result": "ok" }"""))
       fileSystem.ensureDirectoriesExist(cacheDirectory)

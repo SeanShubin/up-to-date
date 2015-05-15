@@ -93,7 +93,7 @@ class ReporterTest extends FunSuite with EasyMockSugar {
   trait Helper {
     lazy val reportPath: Path = Paths.get("report", "path")
     lazy val reportNames = ReportNames(
-      pom = "pom",
+      pom = "expanded-pom",
       repository = "repository",
       upgradesToApply = "apply",
       upgradesToIgnore = "ignore",
@@ -101,7 +101,9 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       statusQuo = "status-quo",
       notFound = "not-found",
       byDependency = "by-dependency",
-      summary = "summary"
+      summary = "summary",
+      unexpandedPom = "pom",
+      propertyConflict = "property-conflict"
     )
     lazy val fileSystemReportGenerator = mock[FileSystemReportGenerator]
     lazy val reporter = new ReporterImpl(reportPath, reportNames, fileSystemReportGenerator)

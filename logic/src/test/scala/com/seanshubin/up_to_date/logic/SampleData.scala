@@ -7,7 +7,17 @@ object SampleData {
 
   def pom(index: Int): Pom = {
     val location = s"location-$index"
-    Pom(s"location-$index", dependencies(index, location))
+    Pom(s"location-$index", dependencies(index, location), properties(index, 3))
+  }
+
+  def properties(index: Int, quantity: Int): Map[String, String] = {
+    (for {
+      i <- 1 to index
+      key = s"substitute-from-$index-$i"
+      value = s"substitute-to-$index-$i"
+    } yield {
+        (key, value)
+      }).toMap
   }
 
   def dependencies(index: Int, location: String): Seq[Dependency] = {

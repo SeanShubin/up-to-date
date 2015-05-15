@@ -1,5 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
+import java.net.URI
 import java.nio.file.{Path, Paths}
 
 class HttpCache(delegate: Http,
@@ -9,8 +10,8 @@ class HttpCache(delegate: Http,
                 expireCache: Long,
                 systemClock: SystemClock,
                 notifications: Notifications) extends Http {
-  override def get(uri: String): (Int, String) = {
-    val fileName = oneWayHash.toHexString(uri)
+  override def get(uri: URI): (Int, String) = {
+    val fileName = oneWayHash.toHexString(uri.toString)
     val filePath = cacheDirectory.resolve(Paths.get(fileName))
     if (fileSystem.fileExists(filePath)) {
       val lastModified = fileSystem.lastModified(filePath)

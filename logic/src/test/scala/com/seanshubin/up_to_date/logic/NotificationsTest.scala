@@ -1,5 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
+import java.net.URI
+
 import com.seanshubin.devon.core.devon.DevonMarshaller
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
@@ -55,7 +57,7 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     val notifications = new LineEmittingNotifications(dummySystemClock, dummyDevonMarshaller, emitLine)
 
     //when
-    notifications.httpGet("http://localhost")
+    notifications.httpGet(new URI("http://localhost"))
 
     //then
     assert(lines.size === 1)

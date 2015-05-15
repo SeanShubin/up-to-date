@@ -7,11 +7,14 @@ import org.w3c.dom.{Element, Node, NodeList}
 class PomParserImpl(charset: Charset) extends PomParser {
   override def parseDependencies(pomName: String, pomContents: String): Pom = {
     val document = DocumentUtil.stringToDocument(pomContents, charset)
-    val nodeList = document.getElementsByTagName("dependency")
-    val traversableNodeList: Traversable[Node] = nodeListToTraversable(nodeList)
+    val dependencyList = document.getElementsByTagName("dependency")
+    val propertyList = document.getElementsByTagName("properties")
+    val traversableDependencyList: Traversable[Node] = nodeListToTraversable(dependencyList)
+    val traversableProperties: Traversable[Node] = nodeListToTraversable(propertyList)
     val nodeToDependency: Node => Option[Dependency] = pomNameAndNodeToDependency(pomName, _: Node)
-    val dependencies = traversableNodeList.map(nodeToDependency).toSeq.flatten
-    val pom = Pom(pomName, dependencies)
+    val dependencies = traversableDependencyList.map(nodeToDependency).toSeq.flatten
+    val properties = traversableProperties.flatMap(propertiesToMap).toMap
+    val pom = Pom(pomName, dependencies, properties)
     pom
   }
 
@@ -30,6 +33,20 @@ class PomParserImpl(charset: Charset) extends PomParser {
     else None
   }
 
+  private def propertiesToMap(node: Node): Map[String, String] = {
+    val childNodeList = node.getChildNodes
+    val childNodes = nodeListToTraversable(childNodeList)
+    val childNodeMapEntries = for {
+      childNode <- childNodes
+      if childNode.getNodeType == Node.ELEMENT_NODE
+      element = childNode.asInstanceOf[Element]
+    } yield {
+        (element.getNodeName, element.getTextContent)
+      }
+    val childNodeMap = childNodeMapEntries.toMap
+    childNodeMap
+  }
+
   private def nodeListToTraversable(nodeList: NodeList): Traversable[Node] = new Traversable[Node] {
     def foreach[U](f: (Node) => U) {
       for (i <- 0 until nodeList.getLength) yield f(nodeList.item(i))
@@ -37,7 +54,7 @@ class PomParserImpl(charset: Charset) extends PomParser {
   }
 
   private def hasNecessaryFields(fields: Map[String, String]): Boolean = {
-    def containsValid(name: String): Boolean = fields.contains(name) && !fields(name).startsWith("$")
+    def containsValid(name: String): Boolean = fields.contains(name)
     containsValid("groupId") && containsValid("artifactId") && containsValid("version")
   }
 

@@ -1,5 +1,6 @@
 package com.seanshubin.up_to_date.integration
 
+import java.net.URI
 import java.nio.charset.StandardCharsets
 
 import com.seanshubin.up_to_date.logic.Http
@@ -16,7 +17,8 @@ class HttpTest extends FunSuite with EasyMockSugar {
     testWebServer.charset = charset
     val http: Http = new HttpImpl(charset, notifications)
     val port = testWebServer.start()
-    val uri: String = s"http://localhost:$port/foo"
+    val uriString: String = s"http://localhost:$port/foo"
+    val uri = new URI(uriString)
     val (actualStatusCode, actualContent) = try {
       http.get(uri)
     } finally {

@@ -1,7 +1,9 @@
 package com.seanshubin.up_to_date.logic
 
+import java.net.URI
+
 trait Http {
-  def get(uri: String): (Int, String)
+  def get(uri: URI): (Int, String)
 }
 
 object Http {

@@ -42,16 +42,25 @@ class ReporterImpl(reportPath: Path,
   }
 
   override def reportByDependency(artifactToUpgrade: Map[GroupAndArtifact, List[Upgrade]]): Unit = {
-    def addEntry(map:Map[GroupAndArtifact, List[Upgrade]], key:GroupAndArtifact): Map[GroupAndArtifact, List[Upgrade]] = {
+    def addEntry(map: Map[GroupAndArtifact, List[Upgrade]], key: GroupAndArtifact): Map[GroupAndArtifact, List[Upgrade]] = {
       map + (key -> artifactToUpgrade(key))
     }
-    val empty:Map[GroupAndArtifact, List[Upgrade]] = ListMap.empty
+    val empty: Map[GroupAndArtifact, List[Upgrade]] = ListMap.empty
     val artifactsInKeyOrder = artifactToUpgrade.keys.toSeq.sorted.foldLeft(empty)(addEntry)
     generateReport(artifactsInKeyOrder, reportNames.byDependency)
   }
 
   override def reportSummary(summary: SummaryReport): Unit = {
     generateReport(summary, reportNames.summary)
+  }
+
+  override def reportUnexpandedPom(unexpandedPoms: Seq[Pom]): Unit = {
+    val pomByLocation = Pom.groupByLocation(unexpandedPoms)
+    generateReport(pomByLocation, reportNames.unexpandedPom)
+  }
+
+  override def reportPropertyConflicts(propertyConflicts: Map[String, Set[String]]): Unit = {
+    generateReport(propertyConflicts, reportNames.propertyConflict)
   }
 
   private def generateReport[T: universe.TypeTag](value: T, reportName: String): Unit = {

@@ -1,5 +1,6 @@
 package com.seanshubin.up_to_date.logic
 
+import java.net.URI
 import java.nio.file.Path
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
@@ -29,12 +30,16 @@ class LineEmittingNotifications(systemClock: SystemClock, devonMarshaller: Devon
     result
   }
 
-  override def httpGet(uriString: String): Unit = {
-    emitLine(s"GET: $uriString")
+  override def httpGet(uri: URI): Unit = {
+    emitLine(s"GET: $uri")
   }
 
-  override def httpGetFromCache(uriString: String, path: Path): Unit = {
-    httpGet(uriString)
+  override def httpGetFromCache(uri: URI, path: Path): Unit = {
+    httpGet(uri)
     emitLine(s"GET(cache): $path")
+  }
+
+  override def uriSyntaxException(uriString: String): Unit = {
+    emitLine(s"BAD URI: $uriString")
   }
 }

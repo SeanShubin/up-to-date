@@ -11,7 +11,7 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
     val pomFileFinder = mock[PomFileFinder]
     val pomParser = mock[PomParser]
     val fileSystem = mock[FileSystem]
-    val pomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser, fileSystem, Map())
+    val pomFileScanner = new PomFileScannerImpl(pomFileFinder, pomParser, fileSystem)
     val samplePom1 = Paths.get("foo", "pom.xml")
     val samplePom2 = Paths.get("bar", "pom.xml")
     val path1 = samplePom1.toString
@@ -25,8 +25,14 @@ class PomFileScannerTest extends FunSuite with EasyMockSugar {
     val sampleDependencies2 = Seq(
       Dependency(path2, "group 3", "artifact 3", "version 3"),
       Dependency(path2, "group 4", "artifact 4", "version 4"))
-    val expectedPom1 = Pom(path1, sampleDependencies1)
-    val expectedPom2 = Pom(path2, sampleDependencies2)
+    val properties = Map(
+      """'\$\{scala\.major\}'""" -> "2.11",
+      """'\$\{scala\.major\.minor\}'""" -> "2.11.6",
+      """'\$\{scala\.version\}'""" -> "2.11",
+      """'\$\{scala\.compat\.version\}'""" -> "2.11"
+    )
+    val expectedPom1 = Pom(path1, sampleDependencies1, properties)
+    val expectedPom2 = Pom(path2, sampleDependencies2, properties)
     val expected = Seq(expectedPom1, expectedPom2)
 
     expecting {

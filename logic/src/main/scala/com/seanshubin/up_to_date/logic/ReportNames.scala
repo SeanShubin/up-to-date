@@ -8,4 +8,6 @@ case class ReportNames(pom: String,
                        statusQuo: String,
                        notFound: String,
                        byDependency: String,
-                       summary: String)
+                       summary: String,
+                       unexpandedPom: String,
+                       propertyConflict: String)

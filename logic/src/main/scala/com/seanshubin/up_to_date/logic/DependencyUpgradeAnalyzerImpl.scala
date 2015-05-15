@@ -13,6 +13,7 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
       Upgrade(dependency.location, dependency.group, dependency.artifact, dependency.version, newVersion)
     }
   }
+
   override def alreadyUpToDate(poms: Seq[Pom], libraries: Seq[Library]): Seq[Dependency] = {
     val dependencies = Pom.toDependencies(poms)
     val libraryByGroupAndArtifact = Library.groupByGroupAndArtifact(libraries)
@@ -61,7 +62,7 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
                        notFound: Seq[GroupAndArtifact],
                        apply: Seq[Upgrade],
                        ignore: Seq[Upgrade],
-                        alreadyUpToDate:Seq[Dependency]): SummaryReport = {
+                       alreadyUpToDate: Seq[Dependency]): SummaryReport = {
     val totalArtifacts = poms.flatMap(_.dependencies).map(_.groupAndArtifact).toSet.size
     val artifactsToUpgrade = upgrades.size
     val applyCount = apply.map(_.groupAndArtifact).toSet.size

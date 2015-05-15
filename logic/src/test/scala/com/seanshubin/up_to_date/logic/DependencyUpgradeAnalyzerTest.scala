@@ -4,18 +4,24 @@ import org.scalatest.FunSuite
 
 class DependencyUpgradeAnalyzerTest extends FunSuite {
   test("recommend upgrades") {
+    val properties = Map(
+      """'\$\{scala\.major\}'""" -> "2.11",
+      """'\$\{scala\.major\.minor\}'""" -> "2.11.6",
+      """'\$\{scala\.version\}'""" -> "2.11",
+      """'\$\{scala\.compat\.version\}'""" -> "2.11"
+    )
     val poms = Seq(Pom("pom.xml", Seq(
       Dependency("pom.xml", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.2.3"),
       Dependency("pom.xml", "org.scala-lang", "scala-library", "2.11.1"),
-      Dependency("pom.xml", "joda-time", "joda-time", "2.3"))),
+      Dependency("pom.xml", "joda-time", "joda-time", "2.3")), properties),
       Pom("logic/pom.xml", Seq(
         Dependency("logic/pom.xml", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.3-rc1"),
         Dependency("logic/pom.xml", "org.scala-lang", "scala-library", "2.10"),
-        Dependency("logic/pom.xml", "joda-time", "joda-time", "2.3"))),
+        Dependency("logic/pom.xml", "joda-time", "joda-time", "2.3")), properties),
       Pom("integration/pom.xml", Seq(
         Dependency("integration/pom.xml", "com.fasterxml.jackson.module", "jackson-module-scala_2.11", "1.4-rc1"),
         Dependency("integration/pom.xml", "org.scala-lang", "scala-library", "2.11.0"),
-        Dependency("integration/pom.xml", "joda-time", "joda-time", "2.3")))
+        Dependency("integration/pom.xml", "joda-time", "joda-time", "2.3")), properties)
     )
 
     val libraries = Seq(

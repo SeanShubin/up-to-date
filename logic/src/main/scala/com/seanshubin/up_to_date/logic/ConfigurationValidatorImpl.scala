@@ -19,10 +19,7 @@ class ConfigurationValidatorImpl(fileSystem: FileSystem,
     automaticallyUpgrade = true,
     reportDirectory = Paths.get("generated", "sample", "report"),
     cacheDirectory = Paths.get("generated", "cache"),
-    cacheExpire = "5 days",
-    substitutions = Map(
-      "${scala.major}" -> "2.11",
-      "${scala.major.minor}" -> "2.11.6")
+    cacheExpire = "5 days"
   )
 
   override def validate(commandLineArguments: Seq[String]): Either[Seq[String], Configuration] = {

@@ -19,7 +19,9 @@ trait RunnerWiring {
     statusQuo = "status-quo",
     notFound = "not-found",
     byDependency = "by-dependency",
-    summary = "summary"
+    summary = "summary",
+    unexpandedPom = "unexpanded-pom",
+    propertyConflict = "property-conflict"
   )
   lazy val charsetName: String = "utf-8"
   lazy val charset: Charset = Charset.forName(charsetName)
@@ -30,7 +32,7 @@ trait RunnerWiring {
     fileSystem, configuration.directoriesToSearch, configuration.pomFileName, configuration.directoryNamesToSkip)
   lazy val pomParser: PomParser = new PomParserImpl(charset)
   lazy val pomFileScanner: PomFileScanner = new PomFileScannerImpl(
-    pomFileFinder, pomParser, fileSystem, configuration.substitutions)
+    pomFileFinder, pomParser, fileSystem)
   lazy val httpDelegate: Http = new HttpImpl(charset, notifications)
   lazy val oneWayHash: OneWayHash = new Sha256(charset)
   lazy val http: Http = new HttpCache(
@@ -38,7 +40,7 @@ trait RunnerWiring {
     systemClock, notifications)
   lazy val metadataParser: MetadataParser = new MetadataParserImpl(charset)
   lazy val mavenRepositoryScanner: MavenRepositoryScanner = new MavenRepositoryScannerImpl(
-    configuration.mavenRepositories, http, metadataParser)
+    configuration.mavenRepositories, http, metadataParser, notifications)
   lazy val dependencyUpgradeAnalyzer: DependencyUpgradeAnalyzer = new DependencyUpgradeAnalyzerImpl
   lazy val pomXmlUpgrader: PomXmlUpgrader = new PomXmlUpgraderImpl(charset)
   lazy val upgrader: PomFileUpgrader = new PomFileUpgraderImpl(

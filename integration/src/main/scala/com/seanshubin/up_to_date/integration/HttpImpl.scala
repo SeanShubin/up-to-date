@@ -12,10 +12,9 @@ class HttpImpl(charset: Charset, notifications: Notifications) extends Http {
   val httpTransport: HttpTransport = new NetHttpTransport()
   val factory: HttpRequestFactory = httpTransport.createRequestFactory()
 
-  override def get(uriString: String): (Int, String) = {
+  override def get(uri: URI): (Int, String) = {
     notifications.timeTaken("GET TIME") {
-      notifications.httpGet(uriString)
-      val uri: URI = new URI(uriString)
+      notifications.httpGet(uri)
       val request = factory.buildGetRequest(new GenericUrl(uri))
       request.setThrowExceptionOnExecuteError(false)
       val httpResponse = request.execute()
