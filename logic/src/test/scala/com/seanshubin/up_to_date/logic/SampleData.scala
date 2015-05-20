@@ -71,4 +71,18 @@ object SampleData {
   }
 
   def upgrade(index: Int): Upgrade = Upgrade(s"location-$index", s"group-$index", s"artifact-$index", s"fromVersion-$index", s"toVersion-$index")
+
+  def byDependency(): Map[GroupAndArtifact, List[Upgrade]] = {
+    (1 to 3).map(byDependencyTuple).toMap
+  }
+
+  def byDependencyTuple(i: Int): (GroupAndArtifact, List[Upgrade]) = {
+    val groupArtifact = groupAndArtifact(i)
+    val upgrades = (1 to 3).map(j => upgrade(i * 3 + j)).toList
+    (groupArtifact, upgrades)
+  }
+
+  def summary(): SummaryReport = {
+    SummaryReport(1, 2, 3, 4, 5, 6)
+  }
 }

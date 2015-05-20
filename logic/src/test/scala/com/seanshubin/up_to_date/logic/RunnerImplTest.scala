@@ -20,6 +20,9 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val sampleUpgrades = SampleData.upgrades(1, 6)
     val sampleApplyUpgrades = SampleData.upgrades(1, 3)
     val sampleIgnoreUpgrades = SampleData.upgrades(4, 6)
+    val sampleByDependency = SampleData.byDependency()
+    val sampleDependencies = SampleData.dependencies(1, "foo")
+    val sampleSummary = SampleData.summary()
     val runner: Runner = new RunnerImpl(
       pomFileScanner,
       mavenRepositoryScanner,
@@ -31,18 +34,25 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       notifications)
     expecting {
       pomFileScanner.scanPomFiles().andReturn(samplePoms)
-      mavenRepositoryScanner.scanLatestDependencies(samplePoms).andReturn((sampleLibraries, sampleNotFound))
-      dependencyUpgradeAnalyzer.findInconsistencies(samplePoms).andReturn(sampleInconsistencies)
-      dependencyUpgradeAnalyzer.recommendUpgrades(samplePoms, sampleLibraries).andReturn(sampleUpgrades)
-      dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(sampleUpgrades, doNotUpgradeFrom, doNotUpgradeTo).andReturn((sampleApplyUpgrades, sampleIgnoreUpgrades))
-      upgrader.performAutomaticUpgradesIfApplicable(sampleApplyUpgrades)
+      reporter.reportUnexpandedPom(samplePoms)
       reporter.reportPom(samplePoms)
+      reporter.reportPropertyConflicts(Map())
+      mavenRepositoryScanner.scanLatestDependencies(samplePoms).andReturn((sampleLibraries, sampleNotFound))
       reporter.reportRepository(sampleLibraries)
+      reporter.reportNotFound(sampleNotFound)
+      dependencyUpgradeAnalyzer.findInconsistencies(samplePoms).andReturn(sampleInconsistencies)
+      reporter.reportInconsistencies(sampleInconsistencies)
+      dependencyUpgradeAnalyzer.recommendUpgrades(samplePoms, sampleLibraries).andReturn(sampleUpgrades)
+      reporter.reportStatusQuo(sampleUpgrades)
+      dependencyUpgradeAnalyzer.splitIntoApplyAndIgnore(sampleUpgrades, doNotUpgradeFrom, doNotUpgradeTo).andReturn((sampleApplyUpgrades, sampleIgnoreUpgrades))
       reporter.reportUpgradesToApply(sampleApplyUpgrades)
       reporter.reportUpgradesToIgnore(sampleIgnoreUpgrades)
-      reporter.reportInconsistencies(sampleInconsistencies)
-      reporter.reportStatusQuo(sampleUpgrades)
-      reporter.reportNotFound(sampleNotFound)
+      dependencyUpgradeAnalyzer.byDependency(sampleApplyUpgrades).andReturn(sampleByDependency)
+      reporter.reportByDependency(sampleByDependency)
+      dependencyUpgradeAnalyzer.alreadyUpToDate(samplePoms, sampleLibraries).andReturn(sampleDependencies)
+      dependencyUpgradeAnalyzer.summary(samplePoms, sampleByDependency, sampleNotFound, sampleApplyUpgrades, sampleIgnoreUpgrades, sampleDependencies).andReturn(sampleSummary)
+      reporter.reportSummary(sampleSummary)
+      upgrader.performAutomaticUpgradesIfApplicable(sampleApplyUpgrades)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()
@@ -50,3 +60,4 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     assert(notifications.timeTakenCalls === Seq("Total Time Taken"))
   }
 }
+

@@ -29,6 +29,6 @@ class HttpTest extends FunSuite with EasyMockSugar {
     assert(actualStatusCode === 200)
     assert(actualContent === """{ "result": "ok" }""")
     assert(notifications.timeTakenCalls === Seq("GET TIME"))
-    assert(notifications.getCalls === Seq(s"http://localhost:$port/foo"))
+    assert(notifications.getCalls === Seq(uri))
   }
 }
