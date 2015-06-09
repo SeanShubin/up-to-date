@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin</groupId>
     <artifactId>up_to_date</artifactId>
@@ -57,7 +56,7 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
-                <version>9.2.10.v20150310</version>
+                <version>9.2.11.v20150529</version>
             </dependency>
             <dependency>
                 <groupId>com.seanshubin</groupId>
