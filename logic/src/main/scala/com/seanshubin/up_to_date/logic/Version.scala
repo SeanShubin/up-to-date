@@ -74,7 +74,7 @@ object Version {
   private def capture(pattern: String) = "(" + pattern + ")"
 
   private val releaseWords = Set("ga", "final", "patch", "java", "groovy", "r", "v")
-  private val releaseCandidateWords = Set("rc")
+  private val releaseCandidateWords = Set("rc", "SNAPSHOT")
 
   def notReleaseCandidate(word: String): Boolean = !releaseCandidateWords.contains(word)
 
