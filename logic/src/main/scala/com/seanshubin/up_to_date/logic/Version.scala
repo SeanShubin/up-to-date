@@ -7,33 +7,39 @@ case class Version(originalString: String, words: List[String]) extends Ordered[
 
   def isRelease: Boolean = words.forall(Version.isNumberOrReleaseWord)
 
+  def isVariable:Boolean = originalString.contains("$")
+
   def shouldUpgradeTo(that: Version): Boolean = {
-    if (this.isRelease) {
-      if (that.isRelease) {
-        if (this < that) {
-          true
-        } else {
-          false
-        }
-      } else {
-        false
-      }
+    if (this.isVariable || that.isVariable) {
+      false
     } else {
-      if (that.isRelease) {
-        if (this.dropReleaseCandidateParts > that) {
-          false
+      if (this.isRelease) {
+        if (that.isRelease) {
+          if (this < that) {
+            true
+          } else {
+            false
+          }
         } else {
-          true
+          false
         }
       } else {
-        if (this < that) {
-          if (this.dropReleaseCandidateParts < that.dropReleaseCandidateParts) {
+        if (that.isRelease) {
+          if (this.dropReleaseCandidateParts > that) {
             false
           } else {
             true
           }
         } else {
-          false
+          if (this < that) {
+            if (this.dropReleaseCandidateParts < that.dropReleaseCandidateParts) {
+              false
+            } else {
+              true
+            }
+          } else {
+            false
+          }
         }
       }
     }
