@@ -1,34 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <!-- The Basics -->
     <groupId>com.seanshubin</groupId>
     <artifactId>up_to_date</artifactId>
-    <name>up_to_date</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    <modules>
-        <module>logic</module>
-        <module>integration</module>
-        <module>console</module>
-    </modules>
-    <repositories>
-        <repository>
-            <id>sean</id>
-            <name>sean</name>
-            <url>http://thoughtfulcraftsmanship.com/nexus/content/repositories/sean-snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>onejar</id>
-            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.11</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <!--<parent>...</parent>-->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -65,13 +53,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.11</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>logic</module>
+        <module>integration</module>
+        <module>console</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- Build Settings -->
     <build>
         <plugins>
             <plugin>
@@ -143,10 +134,45 @@
             </plugins>
         </pluginManagement>
     </build>
+    <!--<reporting>...</reporting>-->
+
+    <!-- More Project Information -->
+    <name>up_to_date</name>
+    <!--<description>...</description>-->
+    <!--<url>...</url>-->
+    <!--<inceptionYear>...</inceptionYear>-->
+    <!--<licenses>...</licenses>-->
+    <!--<organization>...</organization>-->
+    <!--<developers>...</developers>-->
+    <!--<contributors>...</contributors>-->
+
+    <!-- Environment Settings -->
+    <!--<issueManagement>...</issueManagement>-->
+    <!--<ciManagement>...</ciManagement>-->
+    <!--<mailingLists>...</mailingLists>-->
+    <!--<scm>...</scm>-->
+    <!--<prerequisites>...</prerequisites>-->
+    <repositories>
+        <repository>
+            <id>sean</id>
+            <name>sean</name>
+            <url>http://thoughtfulcraftsmanship.com/nexus/content/repositories/sean-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>onejar</id>
+            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+        </pluginRepository>
+    </pluginRepositories>
     <distributionManagement>
         <repository>
             <id>sean</id>
             <url>http://thoughtfulcraftsmanship.com/nexus/content/repositories/sean-snapshots</url>
         </repository>
     </distributionManagement>
+    <!--<profiles>...</profiles>-->
 </project>

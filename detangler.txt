@@ -1,0 +1,17 @@
+{
+  reportDir generated/detangled
+  searchPaths
+  [
+    console/target/up-to-date.jar
+  ]
+  level 2
+  startsWith
+  {
+    include []
+    exclude []
+    drop []
+  }
+  ignoreFiles []
+  canFailBuild false
+  allowedInCycle []
+}
