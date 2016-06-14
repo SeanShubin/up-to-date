@@ -12,6 +12,6 @@
     drop []
   }
   ignoreFiles []
-  canFailBuild false
+  canFailBuild true
   allowedInCycle []
 }
