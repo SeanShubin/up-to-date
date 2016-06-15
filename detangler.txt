@@ -7,9 +7,9 @@
   level 2
   startsWith
   {
-    include []
+    include [[com seanshubin up_to_date]]
     exclude []
-    drop []
+    drop [[com seanshubin up_to_date]]
   }
   ignoreFiles []
   canFailBuild true
