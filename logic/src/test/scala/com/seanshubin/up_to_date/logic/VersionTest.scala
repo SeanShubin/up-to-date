@@ -1,8 +1,8 @@
 package com.seanshubin.up_to_date.logic
 
-import org.scalatest.{FunSuite, ShouldMatchers}
+import org.scalatest.{FunSuite, Matchers}
 
-class VersionTest extends FunSuite with ShouldMatchers {
+class VersionTest extends FunSuite with Matchers {
   test("version words") {
     assert(Version("2.11.1") === Version("2.11.1", List("2", "11", "1")))
     assert(Version("2.3") === Version("2.3", List("2", "3")))
