@@ -2,8 +2,7 @@ package com.seanshubin.up_to_date.console
 
 import java.nio.charset.Charset
 
-import com.seanshubin.devon.domain.DevonMarshallerWiring
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.domain.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.up_to_date.integration.{FileSystemImpl, SystemClockImpl}
 import com.seanshubin.up_to_date.logic._
 

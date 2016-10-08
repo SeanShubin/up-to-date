@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import java.net.URI
 
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.domain.DevonMarshaller
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
