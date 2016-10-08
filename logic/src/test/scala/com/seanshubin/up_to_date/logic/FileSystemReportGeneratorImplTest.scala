@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Paths
 
-import com.seanshubin.devon.core.devon.DevonMarshallerWiring
+import com.seanshubin.devon.domain.DevonMarshallerWiring
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 

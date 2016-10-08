@@ -2,7 +2,7 @@ package com.seanshubin.up_to_date.logic
 
 import java.nio.file.Path
 
-import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.devon.parserules.DevonMarshaller
 
 import scala.reflect.runtime.universe
 

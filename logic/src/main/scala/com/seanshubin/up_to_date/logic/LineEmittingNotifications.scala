@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.net.URI
 import java.nio.file.Path
 
-import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.devon.parserules.DevonMarshaller
 
 class LineEmittingNotifications(systemClock: SystemClock, devonMarshaller: DevonMarshaller, emitLine: String => Unit) extends Notifications {
   override def effectiveConfiguration(configuration: Configuration): Unit = {

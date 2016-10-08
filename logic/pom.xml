@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.devon</groupId>
-            <artifactId>devon-core</artifactId>
+            <artifactId>devon-domain</artifactId>
         </dependency>
     </dependencies>
     <parent>
