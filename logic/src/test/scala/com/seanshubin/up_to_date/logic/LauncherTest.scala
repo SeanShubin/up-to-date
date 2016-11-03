@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.nio.file.Paths
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class LauncherTest extends FunSuite with EasyMockSugar {
   private val sample = new Configuration(

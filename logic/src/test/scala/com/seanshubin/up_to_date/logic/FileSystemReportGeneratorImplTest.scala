@@ -4,7 +4,7 @@ import java.nio.file.Paths
 
 import com.seanshubin.devon.domain.DevonMarshallerWiring
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class FileSystemReportGeneratorImplTest extends FunSuite with EasyMockSugar {
   test("generate report") {

@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.net.URI
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class MavenRepositoryScannerTest extends FunSuite with EasyMockSugar {
   test("scan latest dependencies") {

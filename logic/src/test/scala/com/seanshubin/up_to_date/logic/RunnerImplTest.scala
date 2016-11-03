@@ -1,7 +1,7 @@
 package com.seanshubin.up_to_date.logic
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class RunnerImplTest extends FunSuite with EasyMockSugar {
   test("application flow") {

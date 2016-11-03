@@ -4,7 +4,7 @@ import java.net.URI
 import java.nio.file.Paths
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class HttpCacheTest extends FunSuite with EasyMockSugar {
   test("load from filesystem when in cache and not expired") {

@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.nio.file.{Path, Paths}
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class ReporterTest extends FunSuite with EasyMockSugar {
   test("pom report") {

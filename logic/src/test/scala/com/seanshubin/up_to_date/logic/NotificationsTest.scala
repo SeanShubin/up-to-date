@@ -4,7 +4,7 @@ import java.net.URI
 
 import com.seanshubin.devon.domain.DevonMarshaller
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 import scala.collection.mutable.ArrayBuffer
 

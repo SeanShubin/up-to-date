@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets
 
 import com.seanshubin.up_to_date.logic.Http
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class HttpTest extends FunSuite with EasyMockSugar {
   test("get") {

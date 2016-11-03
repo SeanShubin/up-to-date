@@ -3,7 +3,7 @@ package com.seanshubin.up_to_date.logic
 import java.nio.file.Paths
 
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class PomFileUpgraderTest extends FunSuite with EasyMockSugar {
   test("automatically update") {
