@@ -8,10 +8,12 @@ class PomFileScannerImpl(pomFileFinder: PomFileFinder,
 
   override def scanPomFiles(): Seq[Pom] = {
     val pomFiles = pomFileFinder.relevantPomFiles()
+
     def scanPomFile(path: Path): Pom = {
       val pomContents = fileSystem.loadString(path)
       pomParser.parseDependencies(path.toString, pomContents)
     }
+
     val poms = pomFiles.map(scanPomFile)
     poms
   }

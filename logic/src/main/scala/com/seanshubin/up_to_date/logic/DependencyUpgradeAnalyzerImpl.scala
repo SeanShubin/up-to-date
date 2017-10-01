@@ -36,6 +36,7 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
       val result = shouldUpgradeFrom && shouldUpgradeTo
       result
     }
+
     val result = upgrades.span(shouldApplyUpgrade)
     result
   }
@@ -53,6 +54,7 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
       val newValue = upgrade :: oldValue
       accumulator + (key -> newValue)
     }
+
     val empty = Map[GroupAndArtifact, List[Upgrade]]()
     upgrades.foldLeft(empty)(accumulateUpgrade)
   }
@@ -74,7 +76,9 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
   private def hasInconsistency(entry: (GroupAndArtifact, Seq[Dependency])): Boolean = {
     val (_, dependencies) = entry
     val expectedVersion = dependencies.head.version
+
     def hasDifferentVersion(dependency: Dependency) = dependency.version != expectedVersion
+
     val result = dependencies.tail.exists(hasDifferentVersion)
     result
   }

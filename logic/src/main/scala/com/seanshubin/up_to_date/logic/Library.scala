@@ -15,8 +15,8 @@ object Library {
       Library(location, group, artifact, versions) = library
       groupAndArtifact = GroupAndArtifact(group, artifact)
     } yield {
-        (groupAndArtifact, library)
-      }
+      (groupAndArtifact, library)
+    }
     val map = entries.toMap
     map
   }

@@ -26,8 +26,8 @@ class PomParserImpl(charset: Charset) extends PomParser {
       if childNode.getNodeType == Node.ELEMENT_NODE
       element = childNode.asInstanceOf[Element]
     } yield {
-        (element.getNodeName, element.getTextContent)
-      }
+      (element.getNodeName, element.getTextContent)
+    }
     val childNodeMap = childNodeMapEntries.toMap
     if (hasNecessaryFields(childNodeMap)) Some(pomNameAndFieldsToDependency(pomName, childNodeMap))
     else None
@@ -41,8 +41,8 @@ class PomParserImpl(charset: Charset) extends PomParser {
       if childNode.getNodeType == Node.ELEMENT_NODE
       element = childNode.asInstanceOf[Element]
     } yield {
-        (element.getNodeName, element.getTextContent)
-      }
+      (element.getNodeName, element.getTextContent)
+    }
     val childNodeMap = childNodeMapEntries.toMap
     childNodeMap
   }
@@ -55,6 +55,7 @@ class PomParserImpl(charset: Charset) extends PomParser {
 
   private def hasNecessaryFields(fields: Map[String, String]): Boolean = {
     def containsValid(name: String): Boolean = fields.contains(name)
+
     containsValid("groupId") && containsValid("artifactId") && containsValid("version")
   }
 

@@ -14,7 +14,9 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
   test("configuration error") {
     //given
     val lines = new ArrayBuffer[String]()
+
     def emitLine(line: String) = lines.append(line)
+
     val notifications = new LineEmittingNotifications(dummySystemClock, dummyDevonMarshaller, emitLine)
 
     //when
@@ -32,7 +34,9 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
     //given
     val lines = new ArrayBuffer[String]()
     val systemClock = mock[SystemClock]
+
     def emitLine(line: String) = lines.append(line)
+
     val notifications = new LineEmittingNotifications(systemClock, dummyDevonMarshaller, emitLine)
 
     expecting {
@@ -53,7 +57,9 @@ class NotificationsTest extends FunSuite with EasyMockSugar {
   test("http get") {
     //given
     val lines = new ArrayBuffer[String]()
+
     def emitLine(line: String) = lines.append(line)
+
     val notifications = new LineEmittingNotifications(dummySystemClock, dummyDevonMarshaller, emitLine)
 
     //when

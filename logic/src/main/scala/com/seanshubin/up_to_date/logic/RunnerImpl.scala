@@ -7,7 +7,7 @@ class RunnerImpl(pomFileScanner: PomFileScanner,
                  doNotUpgradeTo: Set[GroupArtifactVersion],
                  upgrader: PomFileUpgrader,
                  reporter: Reporter,
-                 notifications: Notifications) extends Runner {
+                 notifications: Notifications) extends Runnable {
   override def run(): Unit = {
     notifications.timeTaken("Total Time Taken") {
       val unexpandedPoms = pomFileScanner.scanPomFiles()

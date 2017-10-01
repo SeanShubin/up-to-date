@@ -16,6 +16,7 @@ class MavenRepositoryScannerImpl(repositories: Seq[String],
 
   private def searchRepositoriesForVersions(groupAndArtifact: GroupAndArtifact): Either[GroupAndArtifact, Library] = {
     def searchRepository(repository: String) = searchRepositoryForVersions(repository, groupAndArtifact)
+
     EitherUtil.firstRight(repositories, searchRepository)
   }
 

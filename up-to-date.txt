@@ -1,0 +1,30 @@
+{
+  pomFileName pom.xml
+  directoriesToSearch
+  [
+    ..
+  ]
+  directoryNamesToSkip
+  [
+    target
+  ]
+  mavenRepositories
+  [
+    http://repo.maven.apache.org/maven2
+    http://onejar-maven-plugin.googlecode.com/svn/mavenrepo
+    http://oss.sonatype.org/content/groups/scala-tools
+  ]
+  doNotUpgradeFrom []
+  doNotUpgradeTo
+  [
+    {
+      group com.fasterxml.jackson.module
+      artifact jackson-module-scala_2.12
+      version 2.9.0
+    }
+  ]
+  automaticallyUpgrade true
+  reportDirectory generated/reports/up-to-date/github
+  cacheDirectory generated/reports/up-to-date/cache
+  cacheExpire '12 hours'
+}

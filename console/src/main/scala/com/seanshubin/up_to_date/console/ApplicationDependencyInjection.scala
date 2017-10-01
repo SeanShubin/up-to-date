@@ -7,7 +7,7 @@ import com.seanshubin.up_to_date.integration.{FileSystemImpl, HttpImpl, SystemCl
 import com.seanshubin.up_to_date.logic.DurationFormat.MillisecondsFormat
 import com.seanshubin.up_to_date.logic._
 
-trait RunnerWiring {
+trait ApplicationDependencyInjection {
   def configuration: Configuration
 
   lazy val reportNames: ReportNames = ReportNames(
@@ -51,13 +51,13 @@ trait RunnerWiring {
   lazy val reporter: Reporter = new ReporterImpl(
     configuration.reportDirectory, reportNames, reportGenerator)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, devonMarshaller, emitLine)
-  lazy val runner: Runner = new RunnerImpl(
+  lazy val runner: Runnable = new RunnerImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom,
     configuration.doNotUpgradeTo, upgrader, reporter, notifications)
 }
 
-object RunnerWiring {
-  def apply(theValidConfiguration: Configuration) = new RunnerWiring {
+object ApplicationDependencyInjection {
+  def createRunner: Configuration => Runnable = theValidConfiguration => new ApplicationDependencyInjection {
     override def configuration: Configuration = theValidConfiguration
-  }
+  }.runner
 }

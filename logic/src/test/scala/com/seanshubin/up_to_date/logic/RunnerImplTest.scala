@@ -23,7 +23,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val sampleByDependency = SampleData.byDependency()
     val sampleDependencies = SampleData.dependencies(1, "foo")
     val sampleSummary = SampleData.summary()
-    val runner: Runner = new RunnerImpl(
+    val runner: Runnable = new RunnerImpl(
       pomFileScanner,
       mavenRepositoryScanner,
       dependencyUpgradeAnalyzer,
