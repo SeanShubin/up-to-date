@@ -45,7 +45,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.seanshubin.up_to_date.console.ConsoleApplication</mainClass>
+                            <mainClass>com.seanshubin.up_to_date.console.EntryPoint</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

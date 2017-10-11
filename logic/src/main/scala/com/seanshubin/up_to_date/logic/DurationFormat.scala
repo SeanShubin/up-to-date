@@ -28,12 +28,14 @@ object DurationFormat {
   private case class QuantityAndName(quantity: Long, timeUnit: TimeUnit) {
     def toUnitsAtScale(fullScale: List[TimeUnitAndQuantity]): Long = {
       val scale = fullScale.takeWhile(_.timeUnit != timeUnit)
+
       def accumulateByMultiply(soFar: Long, timeUnitAndQuantity: TimeUnitAndQuantity): Long = {
         timeUnitAndQuantity.maybeQuantity match {
           case Some(currentQuantity) => soFar * currentQuantity
           case None => throw new RuntimeException(s"No multiplier for ${timeUnitAndQuantity.timeUnit.plural}")
         }
       }
+
       val units = scale.foldLeft(quantity)(accumulateByMultiply)
       units
     }
@@ -91,6 +93,7 @@ object DurationFormat {
       def accumulateFormat(soFar: FormattedPartsAndRemainingValue, timeUnitAndQuantity: TimeUnitAndQuantity): FormattedPartsAndRemainingValue = {
         soFar.applyTimeUnit(timeUnitAndQuantity)
       }
+
       val initialValue = FormattedPartsAndRemainingValue(Nil, smallestUnits)
       val finalValue = scale.foldLeft(initialValue)(accumulateFormat)
       val formattedParts = finalValue.formattedParts.flatten
@@ -118,18 +121,20 @@ object DurationFormat {
         numberString = matchData.group("number")
         nameString = matchData.group("name")
       } yield {
-          val name = timeUnitFromString(nameString)
-          val number = numberString.toLong
-          val quantityAndName = QuantityAndName(number, name)
-          quantityAndName.toUnitsAtScale(scale)
-        }
+        val name = timeUnitFromString(nameString)
+        val number = numberString.toLong
+        val quantityAndName = QuantityAndName(number, name)
+        quantityAndName.toUnitsAtScale(scale)
+      }
       val sum = parts.sum
       sum
     }
 
     def timeUnitFromString(asString: String): TimeUnit = {
       val pluralNames = scale.map(_.timeUnit.plural).mkString("(", ", ", ")")
+
       def timeUnitMatches(timeUnit: TimeUnit): Boolean = timeUnit.matchesString(asString)
+
       TimeUnit.values.find(timeUnitMatches) match {
         case Some(timeUnit) => timeUnit
         case None => throw new RuntimeException(s"'$asString' does not match a valid time unit $pluralNames")

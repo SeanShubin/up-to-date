@@ -7,7 +7,7 @@ case class Version(originalString: String, words: List[String]) extends Ordered[
 
   def isRelease: Boolean = words.forall(Version.isNumberOrReleaseWord)
 
-  def isVariable:Boolean = originalString.contains("$")
+  def isVariable: Boolean = originalString.contains("$")
 
   def shouldUpgradeTo(that: Version): Boolean = {
     if (this.isVariable || that.isVariable) {
@@ -58,6 +58,7 @@ case class Version(originalString: String, words: List[String]) extends Ordered[
 
   def selectUpgrade(versions: Set[Version]): Option[Version] = {
     def shouldUpgrade(that: Version) = shouldUpgradeTo(that)
+
     val releases = versions.filter(shouldUpgrade).filter(_.isRelease)
     val potentialUpgrades = if (releases.isEmpty) {
       versions.filter(shouldUpgrade)

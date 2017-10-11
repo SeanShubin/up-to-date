@@ -16,12 +16,13 @@ object SampleData {
       key = s"substitute-from-$index-$i"
       value = s"substitute-to-$index-$i"
     } yield {
-        (key, value)
-      }).toMap
+      (key, value)
+    }).toMap
   }
 
   def dependencies(index: Int, location: String): Seq[Dependency] = {
     def dependencyWithLocation(i: Int) = dependency(i, location)
+
     (1 to 3).map(dependencyWithLocation)
   }
 

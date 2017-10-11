@@ -14,6 +14,7 @@ object Pom {
 
   def groupByLocation(poms: Seq[Pom]): Map[String, Pom] = {
     def toEntry(pom: Pom) = (pom.location, pom)
+
     poms.map(toEntry).toMap
   }
 
@@ -23,8 +24,8 @@ object Pom {
       Pom(location, dependencies, properties) = pom
       dependency <- dependencies
     } yield {
-        GroupAndArtifact(dependency.group, dependency.artifact)
-      }
+      GroupAndArtifact(dependency.group, dependency.artifact)
+    }
     groupAndArtifact.toSet
   }
 
@@ -42,6 +43,7 @@ object Pom {
         version = PropertyUtil.expand(dependency.version, properties)
       )
     }
+
     val expandedDependencies = pom.dependencies.map(updateDependency)
     pom.copy(dependencies = expandedDependencies)
   }

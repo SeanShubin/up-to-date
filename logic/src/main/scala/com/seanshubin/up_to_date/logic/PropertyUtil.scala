@@ -12,6 +12,7 @@ object PropertyUtil {
       val replaceWith = properties(propertyKey)
       soFar.replace(toReplace, replaceWith)
     }
+
     if (target.contains("$")) {
       properties.keys.foldLeft(target)(expandProperty)
     } else {

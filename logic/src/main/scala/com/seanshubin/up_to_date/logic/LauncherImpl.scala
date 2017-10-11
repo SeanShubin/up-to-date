@@ -3,9 +3,9 @@ package com.seanshubin.up_to_date.logic
 
 class LauncherImpl(commandLineArguments: Seq[String],
                    configurationValidator: ConfigurationValidator,
-                   createRunner: Configuration => Runner,
-                   notifications: Notifications) extends Launcher {
-  override def launch(): Unit = {
+                   createRunner: Configuration => Runnable,
+                   notifications: Notifications) extends Runnable {
+  override def run(): Unit = {
     configurationValidator.validate(commandLineArguments) match {
       case Left(errorReport) =>
         notifications.errorWithConfiguration(commandLineArguments, errorReport)

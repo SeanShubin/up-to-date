@@ -10,11 +10,13 @@ class PomXmlUpgraderImpl(charset: Charset) extends PomXmlUpgrader {
     val document = DocumentUtil.stringToDocument(oldXml, charset)
     val nodeList = document.getElementsByTagName("dependency")
     val nodes = DocumentUtil.nodeListToTraversable(nodeList)
+
     def upgradeNode(node: Node) {
       val childNodes = DocumentUtil.nodeListToTraversable(node.getChildNodes)
       var groupNode: Option[Node] = None
       var artifactNode: Option[Node] = None
       var versionNode: Option[Node] = None
+
       def findParts(childNode: Node) {
         if (childNode.getNodeType == Node.ELEMENT_NODE) {
           if (childNode.getNodeName == "groupId") {
@@ -26,6 +28,7 @@ class PomXmlUpgraderImpl(charset: Charset) extends PomXmlUpgrader {
           }
         }
       }
+
       childNodes.foreach(findParts)
       (groupNode, artifactNode, versionNode) match {
         case (Some(g), Some(a), Some(v)) =>
@@ -39,6 +42,7 @@ class PomXmlUpgraderImpl(charset: Charset) extends PomXmlUpgrader {
         case _ =>
       }
     }
+
     nodes.foreach(upgradeNode)
     val newXml = DocumentUtil.documentToString(document, charset)
     newXml

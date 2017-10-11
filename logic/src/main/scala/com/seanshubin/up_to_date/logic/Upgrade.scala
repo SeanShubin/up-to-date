@@ -20,8 +20,8 @@ object Upgrade {
       upgrade <- upgrades
       groupArtifactVersion = upgrade.groupArtifactVersionFrom
     } yield {
-        (groupArtifactVersion, upgrade)
-      }
+      (groupArtifactVersion, upgrade)
+    }
     val map = entries.toMap
     map
   }

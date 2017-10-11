@@ -4,8 +4,8 @@ Will help keep your maven project dependencies up to date
 
 Make sure it works
 =
-    mvn clean install
-    java -jar console/target/up-to-date.jar up-to-date.json
+    mvn clean package
+    java -jar console/target/up-to-date.jar up-to-date.txt
 You should see various reports in the generated/up-to-date directory
 
 Configuration

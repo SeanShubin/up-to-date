@@ -45,6 +45,7 @@ class ReporterImpl(reportPath: Path,
     def addEntry(map: Map[GroupAndArtifact, List[Upgrade]], key: GroupAndArtifact): Map[GroupAndArtifact, List[Upgrade]] = {
       map + (key -> artifactToUpgrade(key))
     }
+
     val empty: Map[GroupAndArtifact, List[Upgrade]] = ListMap.empty
     val artifactsInKeyOrder = artifactToUpgrade.keys.toSeq.sorted.foldLeft(empty)(addEntry)
     generateReport(artifactsInKeyOrder, reportNames.byDependency)
