@@ -6,7 +6,7 @@
     <!-- The Basics -->
     <groupId>com.seanshubin.uptodate</groupId>
     <artifactId>up-to-date-parent</artifactId>
-    <version>0.9</version>
+    <version>0.9.0</version>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
