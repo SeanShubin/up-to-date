@@ -1,5 +1,5 @@
 {
-  reportDir generated/detangled
+  reportDir console/target/detangled
   searchPaths
   [
     console/target/up-to-date.jar
@@ -7,9 +7,9 @@
   level 2
   startsWith
   {
-    include [[com seanshubin up_to_date]]
+    include [[com seanshubin uptodate]]
     exclude []
-    drop [[com seanshubin up_to_date]]
+    drop [[com seanshubin uptodate]]
   }
   ignoreFiles []
   canFailBuild true

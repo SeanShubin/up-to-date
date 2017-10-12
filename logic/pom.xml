@@ -6,7 +6,7 @@
 
     <!-- The Basics -->
     <!--<groupId>...</groupId>-->
-    <artifactId>up_to_date-logic</artifactId>
+    <artifactId>up-to-date-logic</artifactId>
     <!--<version>...</version>-->
     <!--<packaging>...</packaging>-->
     <dependencies>
@@ -24,9 +24,9 @@
         </dependency>
     </dependencies>
     <parent>
-        <groupId>com.seanshubin</groupId>
-        <artifactId>up_to_date</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>com.seanshubin.uptodate</groupId>
+        <artifactId>up-to-date-parent</artifactId>
+        <version>0.9</version>
     </parent>
     <!--<dependencyManagement>...</dependencyManagement>-->
     <!--<modules>...</modules>-->
@@ -46,7 +46,7 @@
     <!--<reporting>...</reporting>-->
 
     <!-- More Project Information -->
-    <name>up_to_date-logic</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <!--<description>...</description>-->
     <!--<url>...</url>-->
     <!--<inceptionYear>...</inceptionYear>-->
@@ -66,3 +66,4 @@
     <!--<distributionManagement>...</distributionManagement>-->
     <!--<profiles>...</profiles>-->
 </project>
+

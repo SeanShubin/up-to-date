@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- The Basics -->
-    <groupId>com.seanshubin</groupId>
-    <artifactId>up_to_date</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.seanshubin.uptodate</groupId>
+    <artifactId>up-to-date-parent</artifactId>
+    <version>0.9</version>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
@@ -63,9 +65,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.2</version>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -90,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -106,7 +108,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.7</version>
+                <version>2.20</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
@@ -139,20 +141,35 @@
     <!--<reporting>...</reporting>-->
 
     <!-- More Project Information -->
-    <name>up_to_date</name>
-    <!--<description>...</description>-->
-    <!--<url>...</url>-->
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Automatically update maven dependencies to latest</description>
+    <url>https://github.com/SeanShubin/up-to-date</url>
     <!--<inceptionYear>...</inceptionYear>-->
-    <!--<licenses>...</licenses>-->
+    <licenses>
+        <license>
+            <name>Unlicense</name>
+            <url>http://unlicense.org/</url>
+        </license>
+    </licenses>
     <!--<organization>...</organization>-->
-    <!--<developers>...</developers>-->
+    <developers>
+        <developer>
+            <name>Sean Shubin</name>
+            <organization>Sean Shubin</organization>
+            <organizationUrl>http://seanshubin.com/</organizationUrl>
+        </developer>
+    </developers>
     <!--<contributors>...</contributors>-->
 
     <!-- Environment Settings -->
     <!--<issueManagement>...</issueManagement>-->
     <!--<ciManagement>...</ciManagement>-->
     <!--<mailingLists>...</mailingLists>-->
-    <!--<scm>...</scm>-->
+    <scm>
+        <connection>scm:git:git@github.com:SeanShubin/up-to-date.git</connection>
+        <developerConnection>scm:git:git@github.com:SeanShubin/up-to-date.git</developerConnection>
+        <url>https://github.com/SeanShubin/up-to-date</url>
+    </scm>
     <!--<prerequisites>...</prerequisites>-->
     <repositories>
         <repository>
@@ -172,9 +189,45 @@
     </pluginRepositories>
     <distributionManagement>
         <repository>
-            <id>sean</id>
-            <url>http://thoughtfulcraftsmanship.com/nexus/content/repositories/sean-snapshots</url>
+            <id>maven-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
-    <!--<profiles>...</profiles>-->
+    <profiles>
+        <profile>
+            <id>stage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <executions>
+                            <execution>
+                                <id>generate-dummy-javadoc-per-maven-central-requirements</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
