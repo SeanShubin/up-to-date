@@ -5,9 +5,8 @@ import java.nio.charset.StandardCharsets
 
 import com.seanshubin.uptodate.logic.Http
 import org.scalatest.FunSuite
-import org.scalatest.easymock.EasyMockSugar
 
-class HttpTest extends FunSuite with EasyMockSugar {
+class HttpTest extends FunSuite {
   test("get") {
     val charset = StandardCharsets.UTF_8
     val testWebServer = new TestWebServer
