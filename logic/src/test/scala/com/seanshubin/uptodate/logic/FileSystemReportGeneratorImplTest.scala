@@ -10,6 +10,7 @@ class FileSystemReportGeneratorImplTest extends FunSuite {
     // given
     val reportDir = Paths.get("report", "path")
     val reportName = "foo"
+    val reportFile = Paths.get("report/path/foo.txt")
     val fileSystem = new FileSystemStub(Set("report/path"))
     val devonMarshaller = DevonMarshallerWiring.Default
     val generator: FileSystemReportGenerator = new FileSystemReportGeneratorImpl(reportDir, fileSystem, devonMarshaller)
@@ -24,18 +25,18 @@ class FileSystemReportGeneratorImplTest extends FunSuite {
     generator.sendReportToFileSystem(report, reportName)
 
     // then
-    assert(fileSystem.linesStored("report/path/foo.txt") === expected)
+    assert(fileSystem.linesStored(reportFile) === expected)
   }
 
   class FileSystemStub(val existingDirectories: Set[String]) extends FileSystemNotImplemented {
-    var linesStored: Map[String, Seq[String]] = Map()
+    var linesStored: Map[Path, Seq[String]] = Map()
 
     override def ensureDirectoriesExist(path: Path): Unit = {
       existingDirectories.contains(path.toString)
     }
 
     override def storeLines(path: Path, lines: Seq[String]): Unit = {
-      linesStored = linesStored.updated(path.toString, lines)
+      linesStored = linesStored.updated(path, lines)
     }
   }
 
