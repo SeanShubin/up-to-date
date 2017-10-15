@@ -25,7 +25,7 @@ class HttpCacheTest extends FunSuite {
     val cacheFileInfo = new FileInfo(oneDayAgo, dataInput, null)
     val delegate = new HttpStub
     val oneWayHash = new OneWayHashStub(uriString -> cacheFileName)
-    val fileSystem = new FileSystemStub(Map(cacheFilePath -> cacheFileInfo))
+    val fileSystem = new FileSystemStub(Set(cacheFilePath), Map(cacheFilePath -> cacheFileInfo))
     val systemClock = new SystemClockStub(rightNow)
     val notifications = new NotificationsStub
 
@@ -37,7 +37,11 @@ class HttpCacheTest extends FunSuite {
     // then
     assert(actualStatusCode === 200)
     assert(actualContent === """{ "result": "ok" }""")
-    assert(notifications.invocations === Seq("httpGetFromCache(http://localhost:12345/foo, cache/hashed-uri)"))
+    val expectedUri = new URI("http://localhost:12345/foo")
+    val expectedPath = Paths.get("cache/hashed-uri")
+    assert(notifications.httpGetFromCacheInvocations.size === 1)
+    assert(notifications.httpGetFromCacheInvocations(0).uri === expectedUri)
+    assert(notifications.httpGetFromCacheInvocations(0).path === expectedPath)
     assert(dataInput.closed === true)
   }
 
@@ -57,7 +61,7 @@ class HttpCacheTest extends FunSuite {
     val oneWayHash = new OneWayHashStub(uriString -> cacheFileName)
     val dataOutput = new DataOutputStreamWrapperStub()
     val cacheFileInfo = new FileInfo(sixDaysAgo, null, dataOutput)
-    val fileSystem = new FileSystemStub(Map(cacheFilePath -> cacheFileInfo))
+    val fileSystem = new FileSystemStub(Set(cacheFilePath), Map(cacheFilePath -> cacheFileInfo))
     val systemClock = new SystemClockStub(rightNow)
     val notifications: Notifications = null
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
@@ -88,7 +92,7 @@ class HttpCacheTest extends FunSuite {
     val oneWayHash = new OneWayHashStub(uriString -> cacheFileName)
     val dataOutput = new DataOutputStreamWrapperStub()
     val cacheFileInfo = new FileInfo(0, null, dataOutput)
-    val fileSystem = new FileSystemStub(Map())
+    val fileSystem = new FileSystemStub(Set(), Map(cacheFilePath -> cacheFileInfo))
     val rightNow = 0
     val systemClock = new SystemClockStub(rightNow)
     val notifications = new NotificationsStub
@@ -96,7 +100,7 @@ class HttpCacheTest extends FunSuite {
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
 
     //      expecting {
-    //        oneWayHash.toHexString(uriString).andReturn(cacheFileName)
+    //        **oneWayHash.t♠oHexString(uriString).andReturn(cacheFileName)
     //        fileSystem.fileExists(cacheFilePath).andReturn(false)
     //        delegate.get(uri).andReturn((200, """{ "result": "ok" }"""))
     //        fileSystem.ensureDirectoriesExist(cacheDirectory)
@@ -129,9 +133,10 @@ class HttpCacheTest extends FunSuite {
     override def toHexString(source: String): String = map(source)
   }
 
-  class FileSystemStub(fileInfoMap: Map[Path, FileInfo]) extends FileSystemNotImplemented {
-    val ensureDirectoriesExistInvocations:ArrayBuffer[Path] = new ArrayBuffer[Path]()
-    override def fileExists(path: Path): Boolean = fileInfoMap.contains(path)
+  class FileSystemStub(existingFiles: Set[Path], fileInfoMap: Map[Path, FileInfo]) extends FileSystemNotImplemented {
+    val ensureDirectoriesExistInvocations: ArrayBuffer[Path] = new ArrayBuffer[Path]()
+
+    override def fileExists(path: Path): Boolean = existingFiles.contains(path)
 
     override def lastModified(path: Path): Long = fileInfoMap(path).lastModified
 
@@ -147,13 +152,15 @@ class HttpCacheTest extends FunSuite {
   }
 
   class NotificationsStub extends NotificationsNotImplemented {
-    val invocations = new ArrayBuffer[String]
+    val httpGetFromCacheInvocations = new ArrayBuffer[HttpGetFromCacheInvocation]
 
     override def httpGetFromCache(uri: URI, path: Path): Unit = {
-      invocations.append(s"httpGetFromCache($uri, $path)")
+      httpGetFromCacheInvocations.append(HttpGetFromCacheInvocation(uri, path))
     }
   }
 
   class FileInfo(val lastModified: Long, val dataInput: DataInputStreamWrapper, val dataOutput: DataOutputStreamWrapper)
+
+  case class HttpGetFromCacheInvocation(uri: URI, path: Path)
 
 }
