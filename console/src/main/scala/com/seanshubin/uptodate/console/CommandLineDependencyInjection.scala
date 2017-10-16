@@ -24,7 +24,8 @@ trait CommandLineDependencyInjection {
 }
 
 object CommandLineDependencyInjection {
-  def createRunner: Seq[String] => Runnable = theCommandLineArguments => new CommandLineDependencyInjection {
+  def apply(theCommandLineArguments:Seq[String]):CommandLineDependencyInjection = new CommandLineDependencyInjection {
     override def commandLineArguments: Seq[String] = theCommandLineArguments
-  }.launcher
+  }
+  def createRunner: Seq[String] => Runnable = theCommandLineArguments => apply(theCommandLineArguments).launcher
 }

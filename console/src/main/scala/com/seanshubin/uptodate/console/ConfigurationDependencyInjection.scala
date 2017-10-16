@@ -58,7 +58,8 @@ trait ConfigurationDependencyInjection {
 }
 
 object ConfigurationDependencyInjection {
-  def createRunner: Configuration => Runnable = theValidConfiguration => new ConfigurationDependencyInjection {
+  def apply(theValidConfiguration:Configuration):ConfigurationDependencyInjection =new ConfigurationDependencyInjection {
     override def configuration: Configuration = theValidConfiguration
-  }.runner
+  }
+  def createRunner: Configuration => Runnable = theValidConfiguration => apply(theValidConfiguration).runner
 }
