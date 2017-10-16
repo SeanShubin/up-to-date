@@ -51,9 +51,10 @@ trait ApplicationDependencyInjection {
   lazy val reporter: Reporter = new ReporterImpl(
     configuration.reportDirectory, reportNames, reportGenerator)
   lazy val notifications: Notifications = new LineEmittingNotifications(systemClock, devonMarshaller, emitLine)
-  lazy val runner: Runnable = new RunnerImpl(
+  lazy val flow:Flow = new FlowImpl(
     pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, configuration.doNotUpgradeFrom,
     configuration.doNotUpgradeTo, upgrader, reporter, notifications)
+  lazy val runner: Runnable = new RunnerImpl(flow)
 }
 
 object ApplicationDependencyInjection {

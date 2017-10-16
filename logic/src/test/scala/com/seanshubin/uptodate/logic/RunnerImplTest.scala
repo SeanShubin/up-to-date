@@ -22,8 +22,9 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
     val sampleIgnoreUpgrades = SampleData.upgrades(4, 6)
     val sampleByDependency = SampleData.byDependency()
     val sampleDependencies = SampleData.dependencies(1, "foo")
+    val upgradesWereApplied = true
     val sampleSummary = SampleData.summary()
-    val runner: Runnable = new RunnerImpl(
+    val flow:Flow = new FlowImpl(
       pomFileScanner,
       mavenRepositoryScanner,
       dependencyUpgradeAnalyzer,
@@ -32,6 +33,7 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       upgrader,
       reporter,
       notifications)
+    val runner: Runnable = new RunnerImpl(flow)
     expecting {
       pomFileScanner.scanPomFiles().andReturn(samplePoms)
       reporter.reportUnexpandedPom(samplePoms)
@@ -50,9 +52,9 @@ class RunnerImplTest extends FunSuite with EasyMockSugar {
       dependencyUpgradeAnalyzer.byDependency(sampleApplyUpgrades).andReturn(sampleByDependency)
       reporter.reportByDependency(sampleByDependency)
       dependencyUpgradeAnalyzer.alreadyUpToDate(samplePoms, sampleLibraries).andReturn(sampleDependencies)
-      dependencyUpgradeAnalyzer.summary(samplePoms, sampleByDependency, sampleNotFound, sampleApplyUpgrades, sampleIgnoreUpgrades, sampleDependencies).andReturn(sampleSummary)
+      upgrader.performAutomaticUpgradesIfApplicable(sampleApplyUpgrades).andReturn(upgradesWereApplied)
+      dependencyUpgradeAnalyzer.summary(samplePoms, sampleByDependency, sampleNotFound, sampleApplyUpgrades, sampleIgnoreUpgrades, sampleDependencies, upgradesWereApplied).andReturn(sampleSummary)
       reporter.reportSummary(sampleSummary)
-      upgrader.performAutomaticUpgradesIfApplicable(sampleApplyUpgrades)
     }
     whenExecuting(pomFileScanner, mavenRepositoryScanner, dependencyUpgradeAnalyzer, upgrader, reporter) {
       runner.run()

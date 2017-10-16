@@ -6,7 +6,8 @@ trait DependencyUpgradeAnalyzer {
               notFound: Seq[GroupAndArtifact],
               apply: Seq[Upgrade],
               ignore: Seq[Upgrade],
-              alreadyUpToDate: Seq[Dependency]): SummaryReport
+              alreadyUpToDate: Seq[Dependency],
+              upgradesWereApplied: Boolean): SummaryReport
 
   def byDependency(upgrades: Seq[Upgrade]): Map[GroupAndArtifact, List[Upgrade]]
 

@@ -64,13 +64,14 @@ class DependencyUpgradeAnalyzerImpl extends DependencyUpgradeAnalyzer {
                        notFound: Seq[GroupAndArtifact],
                        apply: Seq[Upgrade],
                        ignore: Seq[Upgrade],
-                       alreadyUpToDate: Seq[Dependency]): SummaryReport = {
+                       alreadyUpToDate: Seq[Dependency],
+                       upgradesWereApplied:Boolean): SummaryReport = {
     val totalArtifacts = poms.flatMap(_.dependencies).map(_.groupAndArtifact).toSet.size
     val artifactsToUpgrade = upgrades.size
     val applyCount = apply.map(_.groupAndArtifact).toSet.size
     val ignoreCount = ignore.map(_.groupAndArtifact).toSet.size
     val alreadyUpToDateCount = alreadyUpToDate.map(_.groupAndArtifact).toSet.size
-    SummaryReport(totalArtifacts, artifactsToUpgrade, notFound.size, applyCount, ignoreCount, alreadyUpToDateCount)
+    SummaryReport(totalArtifacts, artifactsToUpgrade, notFound.size, applyCount, ignoreCount, alreadyUpToDateCount, upgradesWereApplied)
   }
 
   private def hasInconsistency(entry: (GroupAndArtifact, Seq[Dependency])): Boolean = {

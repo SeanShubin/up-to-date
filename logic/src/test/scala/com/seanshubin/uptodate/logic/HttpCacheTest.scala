@@ -28,7 +28,6 @@ class HttpCacheTest extends FunSuite {
     val fileSystem = new FileSystemStub(Set(cacheFilePath), Map(cacheFilePath -> cacheFileInfo))
     val systemClock = new SystemClockStub(rightNow)
     val notifications = new NotificationsStub
-
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
 
     // when
@@ -80,6 +79,7 @@ class HttpCacheTest extends FunSuite {
 
 
   test("load from uri and update cache when not in cache") {
+    // given
     val uriString: String = "http://localhost:12345/foo"
     val uri: URI = new URI(uriString)
     val cacheFileName = "hashed-uri"
@@ -87,7 +87,6 @@ class HttpCacheTest extends FunSuite {
     val cacheDirectoryName = "cache"
     val cacheDirectory = Paths.get(cacheDirectoryName)
     val cacheFilePath = Paths.get(cacheDirectoryName, cacheFileName)
-
     val delegate = new HttpStub(uri -> (200, """{ "result": "ok" }"""))
     val oneWayHash = new OneWayHashStub(uriString -> cacheFileName)
     val dataOutput = new DataOutputStreamWrapperStub()
@@ -96,21 +95,12 @@ class HttpCacheTest extends FunSuite {
     val rightNow = 0
     val systemClock = new SystemClockStub(rightNow)
     val notifications = new NotificationsStub
-
     val http: Http = new HttpCache(delegate, oneWayHash, fileSystem, cacheDirectory, expireCache, systemClock, notifications)
 
-    //      expecting {
-    //        **oneWayHash.t♠oHexString(uriString).andReturn(cacheFileName)
-    //        fileSystem.fileExists(cacheFilePath).andReturn(false)
-    //        delegate.get(uri).andReturn((200, """{ "result": "ok" }"""))
-    //        fileSystem.ensureDirectoriesExist(cacheDirectory)
-    //        fileSystem.dataOutputFor(cacheFilePath).andReturn(dataOutputStreamWrapper)
-    //        dataOutputStreamWrapper.writeInt(200)
-    //        dataOutputStreamWrapper.writeUTF( """{ "result": "ok" }""")
-    //        dataOutputStreamWrapper.close()
-    //      }
-
+    // when
     val (actualStatusCode, actualContent) = http.get(uri)
+
+    // then
     assert(actualStatusCode === 200)
     assert(actualContent === """{ "result": "ok" }""")
     assert(dataOutput.written.size === 2)

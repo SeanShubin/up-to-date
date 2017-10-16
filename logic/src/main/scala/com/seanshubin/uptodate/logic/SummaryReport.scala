@@ -5,4 +5,5 @@ case class SummaryReport(totalArtifacts: Int,
                          notFound: Int,
                          apply: Int,
                          ignore: Int,
-                         alreadyUpToDateCount: Int)
+                         alreadyUpToDateCount: Int,
+                         updatesWereApplied: Boolean)
