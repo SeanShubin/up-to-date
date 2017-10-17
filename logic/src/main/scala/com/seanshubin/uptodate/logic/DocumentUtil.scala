@@ -11,7 +11,6 @@ import org.w3c.dom.{Document, Node, NodeList}
 
 object DocumentUtil {
   private val documentBuilderFactory: DocumentBuilderFactory = DocumentBuilderFactory.newInstance()
-  private val documentBuilder: DocumentBuilder = documentBuilderFactory.newDocumentBuilder()
 
   def stringToDocument(s: String, charset: Charset): Document = closeAfter(stringToInputStream(s, charset))(inputStreamToDocument)
 
@@ -33,7 +32,14 @@ object DocumentUtil {
     }
   }
 
-  private def inputStreamToDocument(inputStream: InputStream): Document = documentBuilder.parse(inputStream)
+  private def inputStreamToDocument(inputStream: InputStream): Document = {
+    // DocumentBuilder is apparently not thread safe
+    // so creating a separate instance each time
+    // error message was:
+    // org.xml.sax.SAXException: FWK005 parse may not be called while parsing
+    val documentBuilder: DocumentBuilder = documentBuilderFactory.newDocumentBuilder()
+    documentBuilder.parse(inputStream)
+  }
 
   private def stringToInputStream(s: String, charset: Charset): InputStream = new ByteArrayInputStream(s.getBytes(charset))
 
